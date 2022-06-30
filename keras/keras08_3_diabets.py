@@ -27,14 +27,14 @@ x_train, x_test, y_train, y_test = train_test_split(
 model = Sequential()
 model.add(Dense(10, input_dim=10))
 model.add(Dense(100))
-model.add(Dense(50))
+model.add(Dense(80))
 model.add(Dense(60))
 model.add(Dense(20))
 model.add(Dense(1))
 
 #3 컴파일, 훈련
 model.compile(loss ='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs =100, batch_size = 2)
+model.fit(x_train, y_train, epochs =600, batch_size = 3)
 
 #4 평가 예측
 loss = model.evaluate(x_test, y_test)
@@ -47,8 +47,8 @@ r2 = r2_score(y_test,y_predict)
 
 print('r2 스코어 :', r2)
 
-# loss :  38.613189697265625
-# r2 스코어 : 0.6038616739044914
+# loss :  38.2158203125
+# r2 스코어 : 0.6074803349862943
 
 # x_train, x_test, y_train, y_test = train_test_split(
 #     x,y, train_size =0.7,                                
@@ -59,11 +59,12 @@ print('r2 스코어 :', r2)
 # model = Sequential()
 # model.add(Dense(10, input_dim=10))
 # model.add(Dense(100))
-# model.add(Dense(50))
+# model.add(Dense(80))
 # model.add(Dense(60))
 # model.add(Dense(20))
 # model.add(Dense(1))
 
 # #3 컴파일, 훈련
 # model.compile(loss ='mae', optimizer='adam')
-# model.fit(x_train, y_train, epochs =100, batch_size = 2)
+# model.fit(x_train, y_train, epochs =80, batch_size = 15)
+
