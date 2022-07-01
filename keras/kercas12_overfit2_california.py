@@ -65,7 +65,7 @@ plt.figure(figsize=(9,6))
 plt.plot(hist.history['loss'], marker = '.', c ='red', label= 'loss')   # x빼고 y만 넣어주면 됨(순차적).
 plt.plot(hist.history['val_loss'], marker = '.', c ='blue', label= 'val_loss')  
 plt.grid()
-plt.title('이결바보')
+plt.title('제목')
 plt.ylabel('loss')
 plt.xlabel('epochs')
 plt.legend(loc='upper right')

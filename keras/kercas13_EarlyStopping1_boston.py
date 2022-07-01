@@ -1,4 +1,5 @@
 
+from gc import callbacks
 from tabnanny import verbose
 from sklearn. datasets import load_boston        
 import numpy as np 
@@ -18,10 +19,10 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2,
  
 #2. 모델구성
 model = Sequential()
-model.add(Dense(5, input_dim=13))
-model.add(Dense(4))
-model.add(Dense(3))
-model.add(Dense(2))
+model.add(Dense(10, input_dim=13))
+model.add(Dense(120))
+model.add(Dense(80))
+model.add(Dense(25))
 model.add(Dense(1))
 
 
@@ -30,9 +31,21 @@ import time
 #3 컴파일, 훈련
 model.compile(loss ='mse', optimizer='adam')
 
+from tensorflow.python.keras.callbacks import EarlyStopping
+earlystopping =EarlyStopping(monitor='loss', patience=10, mode='min', 
+              verbose=1, restore_best_weights = True)     
+   
+   
+   
+   
+# EarlyStopping 일찍멈추겠다. (monitor-보겠다.='val_loss', patience=10-참겠다., 
+# mode=(min)최소값)-(max)최대값 auto(자동), verbose=1 - 0으로 지정하면 10뒤에 값을 가져오게됨.)         
+
 start_time = time.time()
 
-hist = model.fit(x_train, y_train, epochs =100, batch_size = 1, verbose=1, validation_split = 0.2)     
+hist = model.fit(x_train, y_train, epochs =1000, batch_size = 1, 
+                 verbose=1, validation_split = 0.2,
+                 callbacks = [earlystopping])      # callbacks으로 불러온다 erlystopping   
 
 end_time = time.time() - start_time
 
@@ -54,13 +67,20 @@ print(hist.history['val_loss'])
 
 print("걸린시간 : ", end_time)
 
+y_predict = model.predict(x_test)
+
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test,y_predict)
+
+print('r2 스코어 :', r2)
+
 import matplotlib.pyplot as plt
 plt.figure(figsize=(9,6))
 plt.plot(hist.history['loss'], marker = '.', c ='red', label= 'loss')   # x빼고 y만 넣어주면 됨(순차적).
 plt.plot(hist.history['val_loss'], marker = '.', c ='blue', label= 'val_loss')  
 plt.grid()
 plt.rc('font', family='NanumGothic') # For Windows
-plt.title('이결바보')
+plt.title('제목')
 plt.ylabel('loss')
 plt.xlabel('epochs')
 #plt.legend(loc='upper right')
@@ -76,4 +96,5 @@ plt.show()
 
 # print('r2 스코어 :', r2)
 
-
+# 걸린시간 :  26.212913990020752
+# r2 스코어 : 0.5560903677199707
