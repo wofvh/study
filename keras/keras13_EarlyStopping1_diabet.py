@@ -8,7 +8,7 @@ from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 
 #1. 데이터
-datasets =  load_diabetes ()
+datasets =  load_diabetes()
 
 x = datasets.data
 y = datasets.target
@@ -107,6 +107,7 @@ plt.show()
 # 걸린시간 :  26.04082202911377
 # r2 스코어 : 0.47916690101617054
 
+# loss :  3006.47119140625
 # 걸린시간 :  67.58005595207214
 # r2 스코어 : 0.4215967611191327
 
