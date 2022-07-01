@@ -32,7 +32,7 @@ import time
 model.compile(loss ='mse', optimizer='adam')
 
 from tensorflow.python.keras.callbacks import EarlyStopping
-earlystopping =EarlyStopping(monitor='loss', patience=10, mode='min', 
+earlystopping =EarlyStopping(monitor='loss', patience=80, mode='min', 
               verbose=1, restore_best_weights = True)     
    
    
@@ -43,7 +43,7 @@ earlystopping =EarlyStopping(monitor='loss', patience=10, mode='min',
 
 start_time = time.time()
 
-hist = model.fit(x_train, y_train, epochs =1000, batch_size = 1, 
+hist = model.fit(x_train, y_train, epochs =10000, batch_size = 20, 
                  verbose=1, validation_split = 0.2,
                  callbacks = [earlystopping])      # callbacks으로 불러온다 erlystopping   
 
@@ -79,12 +79,10 @@ plt.figure(figsize=(9,6))
 plt.plot(hist.history['loss'], marker = '.', c ='red', label= 'loss')   # x빼고 y만 넣어주면 됨(순차적).
 plt.plot(hist.history['val_loss'], marker = '.', c ='blue', label= 'val_loss')  
 plt.grid()
-plt.rc('font', family='NanumGothic') # For Windows
 plt.title('제목')
 plt.ylabel('loss')
 plt.xlabel('epochs')
-#plt.legend(loc='upper right')
-plt.legend()
+plt.legend(loc='upper right')
 plt.show()
 
 
@@ -96,5 +94,5 @@ plt.show()
 
 # print('r2 스코어 :', r2)
 
-# 걸린시간 :  26.212913990020752
-# r2 스코어 : 0.5560903677199707
+# 걸린시간 :  18.955581426620483
+# r2 스코어 : 0.6350744842085428

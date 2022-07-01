@@ -43,7 +43,7 @@ earlystopping =EarlyStopping(monitor='loss', patience=100, mode='min',
 
 start_time = time.time()
 
-hist = model.fit(x_train, y_train, epochs =1000, batch_size = 50, 
+hist = model.fit(x_train, y_train, epochs =2000, batch_size = 50, 
                  verbose=1, validation_split = 0.2,
                  callbacks = [earlystopping])      # callbacks으로 불러온다 erlystopping   
 
@@ -83,18 +83,10 @@ plt.grid()
 plt.title('제목')
 plt.ylabel('loss')
 plt.xlabel('epochs')
-#plt.legend(loc='upper right')
-plt.legend()
+plt.legend(loc='upper right')
 plt.show()
 
 
 
-# y_predict = model.predict(x)
-
-# from sklearn.metrics import r2_score
-# r2 = r2_score(y,y_predict)
-
-# print('r2 스코어 :', r2)
-
-# 걸린시간 :  26.212913990020752
-# r2 스코어 : 0.5560903677199707
+# 걸린시간 :  271.85394382476807
+# r2 스코어 : 0.5632192166276898

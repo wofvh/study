@@ -73,14 +73,5 @@ plt.xlabel('epochs')
 plt.legend(loc='upper right')
 plt.show()
 
-
-
-# y_predict = model.predict(x)
-
-# from sklearn.metrics import r2_score
-# r2 = r2_score(y,y_predict)
-
-# print('r2 스코어 :', r2)
-
-
 # loss와 val_loss의 차이가 적을수록 좋은 값. loss가 적어도 val_loss와의 차이가 많이나면 좋지 않은 것. 
+

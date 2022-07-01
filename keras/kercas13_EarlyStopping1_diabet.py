@@ -15,12 +15,14 @@ y = datasets.target
 
      
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2,                                
-    shuffle=True, random_state =90)
+    shuffle=True, random_state =58525)
  
 #2. 모델구성
 model = Sequential()
 model.add(Dense(10, input_dim=10))
-model.add(Dense(120))
+model.add(Dense(80))
+model.add(Dense(99))
+model.add(Dense(25))
 model.add(Dense(80))
 model.add(Dense(25))
 model.add(Dense(1))
@@ -32,7 +34,7 @@ import time
 model.compile(loss ='mse', optimizer='adam')
 
 from tensorflow.python.keras.callbacks import EarlyStopping
-earlystopping =EarlyStopping(monitor='loss', patience=10, mode='min', 
+earlystopping =EarlyStopping(monitor='loss', patience=1500, mode='min', 
               verbose=1, restore_best_weights = True)     
    
    
@@ -43,7 +45,7 @@ earlystopping =EarlyStopping(monitor='loss', patience=10, mode='min',
 
 start_time = time.time()
 
-hist = model.fit(x_train, y_train, epochs =1000, batch_size = 1, 
+hist = model.fit(x_train, y_train, epochs =10000, batch_size = 30, 
                  verbose=1, validation_split = 0.2,
                  callbacks = [earlystopping])      # callbacks으로 불러온다 erlystopping   
 
@@ -87,7 +89,6 @@ plt.grid()
 plt.title('제목')
 plt.ylabel('loss')
 plt.xlabel('epochs')
-#plt.legend(loc='upper right')
 plt.legend()
 plt.show()
 
@@ -102,3 +103,16 @@ plt.show()
 
 # 걸린시간 :  26.212913990020752
 # r2 스코어 : 0.5560903677199707
+
+# 걸린시간 :  26.04082202911377
+# r2 스코어 : 0.47916690101617054
+
+# 걸린시간 :  67.58005595207214
+# r2 스코어 : 0.4215967611191327
+
+# 걸린시간 :  6.532713174819946
+# r2 스코어 : 0.3583914115018041
+
+# 걸린시간 :  28.196189641952515
+# r2 스코어 : 0.2570309185075803
+
