@@ -24,9 +24,9 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2,
 #2. 모델구성
 model = Sequential()
 model.add(Dense(10, activation= 'linear', input_dim=30))
-model.add(Dense(80, activation= 'linear'))
+model.add(Dense(80, activation= 'sigmoid'))
 model.add(Dense(90, activation= 'linear'))
-model.add(Dense(25, activation= 'linear'))
+model.add(Dense(25, activation= 'relu'))        # relu 강력한놈
 model.add(Dense(85, activation= 'linear'))
 model.add(Dense(25, activation= 'linear'))      # linear = 기본값으로 생략 가능(회귀모델) 
 model.add(Dense(1, activation= 'sigmoid'))      # sigmoid = 0~1 사이로 숫자를 축소해줌. 아웃풋에 sigmoid 입력.
@@ -41,15 +41,18 @@ model.compile(loss ='binary_crossentropy', optimizer='adam',
               metrics=['accuracy','mse'],)                             # 이진분류 binary_crossentropy 반올림.
                                                                 # 회귀 - mse,mae ~ / 이진 binary_crossentropy
                                                                 # 분류모델 loss에 accuracy(정확도) 같이씀.
-                                                                # 2개 이상은 list 
+                                                                # 2개 이상은 list           
+                                                                # 'mse'는 분류모델에서는 잘 맞지 않는다. 
+                                                                # 회귀모델 > mitrics=['mae']
+                                                                
 from tensorflow.python.keras.callbacks import EarlyStopping
-earlystopping =EarlyStopping(monitor='loss', patience=500, mode='min', 
+earlystopping =EarlyStopping(monitor='loss', patience=50, mode='min', 
               verbose=1, restore_best_weights = True)          
             
 
 start_time = time.time()
 
-hist = model.fit(x_train, y_train, epochs =20000, batch_size = 30, 
+hist = model.fit(x_train, y_train, epochs =500, batch_size = 30, 
                  verbose=1, 
                  validation_split = 0.2,
                  callbacks = [earlystopping])      # callbacks으로 불러온다 erlystopping   
@@ -74,13 +77,16 @@ print("걸린시간 : ", end_time)
 loss = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 
-# y_predict = model.predict(x_test)
-
-# from sklearn.metrics import r2_score
-# r2 = r2_score(y_test,y_predict)                         #회귀모델 / 분류모델에서는 r2를 사용하지 않음 
+y_predict = model.predict(x_test)
 
 
-# print('r2 스코어 :', r2)
+
+# from sklearn.metrics import r2_score, accuracy_score
+# # r2 = r2_score(y_test,y_predict)                         #회귀모델 / 분류모델에서는 r2를 사용하지 않음 
+# acc = accuracy_score(y_test, y_predict)
+# print('acc 스코어 :', acc)
+print(y_predict)
+
 
 import matplotlib.pyplot as plt
 
@@ -127,3 +133,10 @@ plt.show()
 
 # loss :  0.10784229636192322
 # r2 스코어 : 0.8576890179113299
+
+
+
+####
+# [과제1. accuracy_score 완성 ]
+# [과제2. boston, california, diabet,ddareuge, bike, house ]
+
