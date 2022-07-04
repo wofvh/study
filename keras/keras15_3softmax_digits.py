@@ -4,7 +4,7 @@ from sklearn.datasets import load_digits
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
-from sqlalchemy import true
+# from sqlalchemy import true
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from tensorflow.python.keras.callbacks import EarlyStopping
@@ -70,3 +70,9 @@ y_predict = to_categorical(y_predict)
 
 acc= accuracy_score(y_test, y_predict) 
 print('acc : ', acc) 
+
+
+# loss :  0.2669298052787781
+# accuracy :  0.9194444417953491
+
+# acc :  0.95
