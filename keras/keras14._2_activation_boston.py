@@ -60,7 +60,6 @@ from tensorflow.python.keras.callbacks import EarlyStopping
 earlystopping =EarlyStopping(monitor='val_loss', patience=50, mode='auto', 
               verbose=1, restore_best_weights = True)          
             
-
 start_time = time.time()
 
 hist = model.fit(x_train, y_train, epochs =500, batch_size = 30, 
@@ -69,7 +68,6 @@ hist = model.fit(x_train, y_train, epochs =500, batch_size = 30,
                  callbacks = [earlystopping])      # callbacks으로 불러온다 erlystopping   
 
 end_time = time.time() - start_time
-
 
 #4 평가 예측
 
@@ -86,8 +84,6 @@ print('====================')
 print(hist.history['val_loss'])  
 
 print("걸린시간 : ", end_time)
-
-
 
 y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score
@@ -112,9 +108,6 @@ plt.xlabel('epochs')
 plt.legend()
 plt.show()
 
-
-
-
 # loss :  0.09925220161676407
 # 걸린시간 :  29.047028303146362
 # r2 스코어 : 0.5845791785548424
@@ -127,7 +120,6 @@ plt.show()
 # earlystopping =EarlyStopping(monitor='loss', patience=300, mode='min', 
 #               verbose=1, restore_best_weights = True)     
             
-
 # start_time = time.time()
 
 # hist = model.fit(x_train, y_train, epochs =20000, batch_size = 30, 
@@ -138,15 +130,9 @@ plt.show()
 # sigmoid 0과 1사이에 한정시킨다.   0 ~ 1 까지 정의  0.7,0.5,0.3 가능 
 # 레어어에 적용시킨다. 
 
-
 # loss :  0.10784229636192322
 # r2 스코어 : 0.8576890179113299
-
-
 
 ####
 # [과제1. accuracy_score 완성 ]
 # [과제2. boston, california, diabet,ddareuge, bike, house ]
-
-
-

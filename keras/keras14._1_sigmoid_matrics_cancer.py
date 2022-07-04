@@ -28,22 +28,23 @@ model.add(Dense(80, activation= 'sigmoid'))
 model.add(Dense(90, activation= 'linear'))
 model.add(Dense(25, activation= 'relu'))        # relu 강력한놈
 model.add(Dense(85, activation= 'linear'))
-model.add(Dense(25, activation= 'linear'))      # linear = 기본값으로 생략 가능(회귀모델) 
+model.add(Dense(25, activation= 'linear'))      # linear = 기본값 / 생략 가능(회귀모델) 
 model.add(Dense(1, activation= 'sigmoid'))      # sigmoid = 0~1 사이로 숫자를 축소해줌. 아웃풋에 sigmoid 입력.
                                                 # 회귀모델은 output = linear 자연수치 그데로 나와야 함. 디폴트.
-                                                # 분류모델은 이진 > sigmoid / 
+                                                # * 분류모델은 이진 > 마지막 activation = sigmoid 
 
 
 import time
 
 #3 컴파일, 훈련
 model.compile(loss ='binary_crossentropy', optimizer='adam',
-              metrics=['accuracy','mse'],)                             # 이진분류 binary_crossentropy 반올림.
+              metrics=['accuracy','mse'],)                      # * 이진분류 할 때 binary_crossentropy 반올림.
                                                                 # 회귀 - mse,mae ~ / 이진 binary_crossentropy
                                                                 # 분류모델 loss에 accuracy(정확도) 같이씀.
                                                                 # 2개 이상은 list           
                                                                 # 'mse'는 분류모델에서는 잘 맞지 않는다. 
                                                                 # 회귀모델 > mitrics=['mae']
+                                                                # 분류모델 > metrics=['accuracy','mse']) 
                                                                 
 from tensorflow.python.keras.callbacks import EarlyStopping
 earlystopping =EarlyStopping(monitor='loss', patience=50, mode='min', 
