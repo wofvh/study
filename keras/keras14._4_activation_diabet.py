@@ -36,8 +36,8 @@ print(datasets.DESCR)
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(10, input_dim=10))
-model.add(Dense(80))
+model.add(Dense(100, input_dim=10))
+model.add(Dense(85))
 model.add(Dense(100))
 model.add(Dense(80,activation='relu'))
 model.add(Dense(15))
