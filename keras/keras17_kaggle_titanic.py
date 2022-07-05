@@ -162,11 +162,12 @@ print('acc1 : ', acc1)
 
 
 #############################################################################
+# submission = pd.read_csv(path + 'submission.csv',index_col=0)
 # test_set = pd.read_csv(path + 'gender_submission.csv', index_col=0)
 
 # y_summit = model.predict(test_set)
 
-# submission = pd.read_csv(path + 'submission.csv')
+
 
 # submission['count'] = y_summit 
 
