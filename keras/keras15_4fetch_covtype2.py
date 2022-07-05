@@ -15,16 +15,28 @@ from sklearn.metrics import r2_score, accuracy_score
 #1. 데이터
 datasets = fetch_covtype()
 x = datasets.data
-y = datasets.target.reshape(-1,1)
+y = datasets.target
+
 print(x.shape, y.shape)
-print(np.unique(y, return_counts=True))
+print(np.unique(y))
+
+#겟더미
+y = pd.get_dummies(y)
+print(y)
+
+#원핫인코더
+df = pd.DataFrame(y)
+print(df)
+oh = OneHotEncoder(sparse=False) # sparse=true 는 매트릭스반환 False는 array 반환
+y = oh.fit_transform(df)
+print(y)
+
+
 # (581012, 54) (581012,)
 # (array([1, 2, 3, 4, 5, 6, 7]), array([211840, 283301,  35754,   2747,   9493,  17367,  20510],
 #       dtype=int64))
-from sklearn.preprocessing import OneHotEncoder
-encoder = OneHotEncoder()
-encoder.fit(y)
-y = encoder.transform(y).toarray()
+#######################################################################
+
 # datasets = fetch_covtype()
 # x = datasets.data
 # y = datasets.target

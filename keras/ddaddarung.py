@@ -14,9 +14,7 @@ train_set = pd.read_csv(path + "train.csv", index_col=0)
 
 print(train_set.info())
 print(train_set.isnull().sum())
-
 train_set = train_set.dropna()
-
 print(train_set.isnull().sum())
 
 
