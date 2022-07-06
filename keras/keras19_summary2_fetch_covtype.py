@@ -61,13 +61,17 @@ model.add(Dense(700,activation ='relu'))
 model.add(Dense(7,activation ='softmax')) #소프트맥스는 모든 연산값의 합이 1.0,그중 가장 큰값(퍼센트)을 선택,so 마지막 노드3개* y의 라벨의 갯수
 #softmax는 아웃풋만 가능 히든에서 x
 
+model.summary()       
+
+
+
 import time
 #3.컴파일,훈련
 model.compile(loss= 'categorical_crossentropy', optimizer ='adam', metrics='accuracy') #다중분류는 무조건 loss에 categorical_crossentropy
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.3,shuffle=True,
                                                      random_state=58) #분류모델에서 셔플 중요! ,false로 하면 순차적으로 나와서 2가 아예 안나옴.
 
-start_time = time.time()
+Total params: 11,205
 
 earlyStopping= EarlyStopping(monitor='val_loss',patience=10,mode='min',restore_best_weights=True,verbose=1)
 
@@ -109,7 +113,6 @@ print(bbb,"걸린시간 :",end_time)
 # loss :  0.5900264382362366
 # acc :  0.7511072608775473
 
-
 # loss :  0.34670257568359375
 # acc :  0.8539563062236093
 # gpu 걸린시간 : 145.17509007453918
@@ -117,3 +120,5 @@ print(bbb,"걸린시간 :",end_time)
 # loss :  0.3196728229522705
 # acc :  0.8654993574444648
 # cpu 걸린시간 : 210.87031078338623
+
+
