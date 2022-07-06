@@ -59,10 +59,10 @@ start_time = time.time()
 model.compile(loss='categorical_crossentropy', optimizer='adam', # 다중 분류에서는 로스함수를 'categorical_crossentropy' 로 써준다 (99퍼센트로)
               metrics=['accuracy'])
 
-earlyStopping = EarlyStopping(monitor='val_loss', patience=350, mode='auto', verbose=1, 
+earlyStopping = EarlyStopping(monitor='val_loss', patience=80, mode='auto', verbose=1, 
                               restore_best_weights=True)   
 
-model.fit(x_train, y_train, epochs=5000, batch_size=32,
+model.fit(x_train, y_train, epochs=500, batch_size=32,
                  validation_split=0.2,
                  callbacks=[earlyStopping],
                  verbose=1)

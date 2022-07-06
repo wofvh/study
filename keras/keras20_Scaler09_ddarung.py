@@ -1,3 +1,4 @@
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # 데이콘 따릉이 문제풀이
 import numpy as np
 import pandas as pd
@@ -6,7 +7,7 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
-
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
 path = './_data/ddarung/'
@@ -48,6 +49,16 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.8,
                                                     random_state=58525
                                                     )
+scaler = MinMaxScaler()
+# scaler = StandardScaler()
+scaler.fit(x_train)
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_train))      # 1
+print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_test))
 
 #2. 모델구성
 model = Sequential()
@@ -58,20 +69,19 @@ model.add(Dense(70, activation='relu'))
 model.add(Dense(50, activation='relu'))
 model.add(Dense(15, activation='relu'))
 model.add(Dense(1))
-
 import time
-strat_time = time.time()
+start_time = time.time()
 
 #3. 컴파일, 훈련
 
 from tensorflow.python.keras.callbacks import EarlyStopping
-earlyStopping = EarlyStopping(monitor='val_loss', patience=80, mode='min', verbose=1, 
+earlyStopping = EarlyStopping(monitor='val_loss', patience=200, mode='min', verbose=1, 
                               restore_best_weights=True)
 
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 model.fit(x_train, y_train, epochs=100, batch_size=32, verbose=1, validation_split=0.2, callbacks=[earlyStopping])
 
-end_time = time.time() -strat_time
+end_time = time.time() - start_time
 
 #4. 평가, 예측
 loss = model.evaluate(x, y) 
@@ -91,33 +101,28 @@ r2 = r2_score(y_test, y_predict)
 print('loss : ', loss)
 print("RMSE : ", rmse)
 print('r2스코어 : ', r2)
-print('걸린시간' , end_time)
-# loss :  2817.2021484375
-# RMSE :  55.043381747129075
-# r2스코어 :  0.5676858327700348
 
-##################activation전후#################
+print("걸린시간 :",end_time)
 
-# loss :  1494.78271484375
-# RMSE :  48.01730189120935
-# r2스코어 :  0.6710084389225455
+#1. scaler 하기전 
+# loss :  [2908.28369140625, 38.6513557434082]
+# RMSE :  54.3672388222273
+# r2스코어 :  0.5347344878463346
+# 걸린시간 17.20372724533081
 
-###################################################
+#2. minmaxscaler
+# loss :  [22632249344.0, 137282.1875]
+# RMSE :  47.043659364789434
+# r2스코어 :  0.6516398240019491
+# 걸린시간 : 16.97996473312378ㅕ
 
-# y_summit = model.predict(test_set)
+#3. standardscaler 
+# loss :  [6064847872.0, 72929.5703125]
+# RMSE :  48.63075566109219
+# r2스코어 :  0.6277383105401756
+# 걸린시간 : 16.828097343444824
 
-# print(y_summit)
-# print(y_summit.shape) # (715, 1)
-
-# submission_set = pd.read_csv(path + 'submission.csv', # + 명령어는 문자를 앞문자와 더해줌
-#                              index_col=0) # index_col=n n번째 컬럼을 인덱스로 인식
-
-# print(submission_set)
-
-# submission_set['count'] = y_summit
-# print(submission_set)
+#4. MaxAbsScaler
 
 
-# submission_set.to_csv('./_data/ddarung/submission.csv', index = True)
-
-# y_predict = model.predict(test_set)
+#5. RobustScaler

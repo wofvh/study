@@ -16,7 +16,10 @@ from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import r2_score, mean_squared_error
 from tqdm import tqdm_notebook
+from sklearn.preprocessing import MinMaxScaler, StandardScaler  # 대문자 class  암시가능.
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler  
 import matplotlib
+
 matplotlib.rcParams['font.family']='Malgun Gothic'
 matplotlib.rcParams['axes.unicode_minus']=False
 #1. 데이터
@@ -47,13 +50,13 @@ for col in tqdm_notebook(cols):
     test_set[col]=le.fit_transform(test_set[col])
 
 
-print(test_set)
-print(train_set.shape) #(1460,76)
-print(test_set.shape) #(1459, 75) #train_set과 열 값이 '1'차이 나는 건 count를 제외했기 때문이다.예측 단계에서 값을 대입
+# print(test_set)
+# print(train_set.shape) #(1460,76)
+# print(test_set.shape) #(1459, 75) #train_set과 열 값이 '1'차이 나는 건 count를 제외했기 때문이다.예측 단계에서 값을 대입
 
-print(train_set.columns)
-print(train_set.info()) #null은 누락된 값이라고 하고 "결측치"라고도 한다.
-print(train_set.describe()) 
+# print(train_set.columns)
+# print(train_set.info()) #null은 누락된 값이라고 하고 "결측치"라고도 한다.
+# print(train_set.describe()) 
 
 ###### 결측치 처리 1.제거##### dropna 사용
 print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
@@ -70,9 +73,21 @@ y = train_set['SalePrice']
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, train_size = 0.89, shuffle = True, random_state = 68
  )
-print(y)
-print(y.shape) # (1460,)
 
+import time
+
+scaler = MaxAbsScaler()
+# scaler = RobustScaler()
+# scaler = MinMaxScaler()
+# scaler = StandardScaler()
+scaler.fit(x_train)
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_train))      # 1
+print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_test))
 
 #2. 모델구성
 model = Sequential()
@@ -85,16 +100,19 @@ model.summary()
 # Trainable params: 21,201
 # Non-trainable params: 0
 
+start_time = time.time()
+
 3. #컴파일,훈련
-earlyStopping = EarlyStopping(monitor='loss', patience=100, mode='min', 
+earlyStopping = EarlyStopping(monitor='loss', patience=80, mode='min', 
                               verbose=1,restore_best_weights=True)
 model.compile(loss='mae', optimizer='adam')
-hist = model.fit(x_train, y_train, epochs=1010, batch_size=100, 
+hist = model.fit(x_train, y_train, epochs=500, batch_size=100, 
                 validation_split=0.3,
                 callbacks = [earlyStopping],
                 verbose=1
                 )
 
+end_time = time.time() - start_time
 
 #verbose = 0으로 할 시 출력해야할 데이터가 없어 속도가 빨라진다.강제 지연 발생을 막는다.
 #4. 평가,예측
@@ -104,25 +122,26 @@ y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print('r2스코어 :', r2)
-print("============")
-print(hist) #<tensorflow.python.keras.callbacks.History object at 0x000001B6B522F0A0>
-print("============")
-# print(hist.history) #(지정된 변수,history)를 통해 딕셔너리 형태의 데이터 확인 가능 
-print("============")
-print(hist.history['loss'])
-print("============")
-print(hist.history['val_loss'])
-# y_predict = model.predict(x_test)
-plt.figure(figsize=(9,6))
-plt.plot(hist.history['loss'],marker='.',c='red',label='loss') #순차적으로 출력이므로  y값 지정 필요 x
-plt.plot(hist.history['val_loss'],marker='.',c='blue',label='val_loss')
-plt.grid()
-plt.title('영어싫어') #맥플러립 한글 깨짐 현상 알아서 해결해라 
-plt.ylabel('loss')
-plt.xlabel('epochs')
-# plt.legend(loc='upper right')
-plt.legend()
-plt.show()
+print('걸린시간 :', end_time)
+# print("============")
+# print(hist) #<tensorflow.python.keras.callbacks.History object at 0x000001B6B522F0A0>
+# print("============")
+# # print(hist.history) #(지정된 변수,history)를 통해 딕셔너리 형태의 데이터 확인 가능 
+# print("============")
+# print(hist.history['loss'])
+# print("============")
+# print(hist.history['val_loss'])
+# # y_predict = model.predict(x_test)
+# plt.figure(figsize=(9,6))
+# plt.plot(hist.history['loss'],marker='.',c='red',label='loss') #순차적으로 출력이므로  y값 지정 필요 x
+# plt.plot(hist.history['val_loss'],marker='.',c='blue',label='val_loss')
+# plt.grid()
+# plt.title('영어싫어') #맥플러립 한글 깨짐 현상 알아서 해결해라 
+# plt.ylabel('loss')
+# plt.xlabel('epochs')
+# # plt.legend(loc='upper right')
+# plt.legend()
+# plt.show()
 # loss : 356.1080
 # RMSE :  50.77395531000674
 ###################
@@ -130,3 +149,26 @@ plt.show()
 # loss : 97.37265014648438
 # r2스코어 : 0.36341653990677303
 
+
+#1. scaler 하기전 
+# loss : 22447.236328125
+# r2스코어 : 0.8030313409843283
+# 걸린시간 : 27.819988489151
+
+#2. minmaxscaler
+# loss : 18647.244140625
+# r2스코어 : 0.8582561014333256
+# 걸린시간 : 28.330313682556152
+
+#3. standardscaler 
+# loss : 17357.09765625
+# r2스코어 : 0.8722186190233313
+# 걸린시간 : 28.241273164749146
+
+#4. MaxAbsScaler
+
+
+#5. RobustScaler
+# loss : 20073.732421875
+# r2스코어 : 0.8527188569267865
+# 걸린시간 : 28.14387083053589

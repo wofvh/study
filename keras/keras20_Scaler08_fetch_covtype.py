@@ -1,3 +1,4 @@
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 #[과제] 속도 비교 
 # gpu와 cpuimport numpy as np 
 
@@ -8,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score,accuracy_score
 from tensorflow.python.keras.callbacks import EarlyStopping
 import tensorflow as tf
-
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 import pandas as pd
 import numpy as np
 
@@ -47,9 +48,22 @@ y = y.reshape(-1,1)
 one.fit(y)
 y = one.transform(y)
 
-print(y)
-print(y.shape)
+x_train, x_test, y_train, y_test = train_test_split(x,y,
+                                                    test_size=0.2,
+                                                    shuffle=True,
+                                                    random_state=58525
+                                                    )
 
+scaler = MinMaxScaler()
+# scaler = StandardScaler()
+scaler.fit(x_train)
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_train))      # 1
+print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_test))
 
 #2.모델
 model = Sequential()
@@ -72,7 +86,9 @@ start_time = time.time()
 earlyStopping= EarlyStopping(monitor='val_loss',patience=10,mode='min',restore_best_weights=True,verbose=1)
 
 
-model.fit(x_train, y_train, epochs=30, batch_size=1000,validation_split=0.2,callbacks=earlyStopping, verbose=1) #batch default :32
+model.fit(x_train, y_train, epochs=10, batch_size=1000,validation_split=0.2,callbacks=earlyStopping, verbose=1) #batch default :32
+
+end_time = time.time() - start_time
 
 end_time = time.time() - start_time
 
@@ -101,19 +117,23 @@ print(y_predict)
 print(y_test)
 print("걸린시간 :",end_time)
 
-#겟더미
-# loss :  0.6037192344665527
-# acc :  0.7528570772902515
 
-#사이킷런
-# loss :  0.5900264382362366
-# acc :  0.7511072608775473
+#1. scaler 하기전 
+# loss :  0.2693009674549103
+# acc :  0.8896984578667156
+# 걸린시간 : 52.980239152908325
+
+#2. minmaxscaler
+# loss :  0.3631349205970764
+# acc :  0.8439737470167065
+# 걸린시간 : 18.23297667503357
+
+#3. standardscaler 
+# loss :  0.5262272357940674
+# acc :  0.7712158068661649
+# 걸린시간 : 18.054161310195923
+
+#4. MaxAbsScaler
 
 
-# loss :  0.34670257568359375
-# acc :  0.8539563062236093
-# gpu 걸린시간 : 145.17509007453918
-
-# loss :  0.3196728229522705
-# acc :  0.8654993574444648
-# cpu 걸린시간 : 210.87031078338623
+#5. RobustScaler

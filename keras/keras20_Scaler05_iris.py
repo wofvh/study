@@ -1,3 +1,6 @@
+
+
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_iris
@@ -14,7 +17,7 @@ import matplotlib.pyplot as plt
 # rc('font', family=font)
 from tensorflow.keras.utils import to_categorical # https://wikidocs.net/22647 케라스 원핫인코딩
 from sklearn.preprocessing import OneHotEncoder  # https://psystat.tistory.com/136 싸이킷런 원핫인코딩
-
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 import tensorflow as tf
 tf.random.set_seed(66)  # y=wx 할때 w는 랜덤으로 돌아가는데 여기서 랜덤난수를 지정해줄수있음
@@ -38,9 +41,17 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.8,
                                                     random_state=66
                                                     )
+# scaler = MinMaxScaler()
+scaler = StandardScaler()
+scaler.fit(x_train)
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_train))      # 1
+print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_test))
 
-print(y_test)
-print(y_train)
 
 
 #2. 모델
@@ -52,6 +63,7 @@ model.add(Dense(20, activation='relu'))               # relu : 히든에서만 �
 model.add(Dense(20, activation='linear'))               
 model.add(Dense(3, activation='softmax'))             # softmax : 다중분류일때 아웃풋에 활성화함수로 넣어줌, 아웃풋에서 소프트맥스 활성화 함수를 씌워 주면 그 합은 무조건 1로 변함
                                                                  # ex 70, 20, 10 -> 0.7, 0.2, 0.1
+import time
 
 #3. 컴파일 훈련
 
@@ -61,16 +73,21 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', # 다중 분류
 earlyStopping = EarlyStopping(monitor='val_loss', patience=100, mode='auto', verbose=1, 
                               restore_best_weights=True)   
 
+start_time = time.time()
+
 model.fit(x_train, y_train, epochs=200, batch_size=32,
                  validation_split=0.2,
                  callbacks=[earlyStopping],
                  verbose=1)
 
+end_time = time.time() - start_time
+
+
 #4. 평가, 예측
 # loss, acc= model.evaluate(x_test, y_test)
 # print('loss : ', loss)
 # print('accuracy : ', acc)
-
+print("걸린시간 : ", end_time)
 results= model.evaluate(x_test, y_test)
 print('loss : ', results[0])
 print('accuracy : ', results[1])
@@ -88,3 +105,26 @@ print('acc스코어 : ', acc)
 
 # loss :  0.0530550517141819
 # accuracy :  1.0
+
+
+
+
+
+#1. scaler 하기전 
+# loss :  0.07969877123832703
+# accuracy :  1.0
+
+#2. minmaxscaler
+# loss :  0.09077339619398117
+# acc스코어 :  0.9666666666666667
+# 걸린시간 :  8.01612901687622
+
+#3. standardscaler 
+# loss :  0.06145345792174339
+# accuracy :  1.0
+# 걸린시간 :  7.872552871704102
+
+#4. MaxAbsScaler
+
+
+#5. RobustScaler

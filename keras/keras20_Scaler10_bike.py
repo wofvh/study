@@ -1,14 +1,15 @@
 # 캐글 자전거 문제풀이
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
 import pandas as pd
 from sqlalchemy import true #pandas : 엑셀땡겨올때 씀
-from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.models import Sequential           #
 from tensorflow.python.keras.layers import Dense
 from keras.layers.recurrent import LSTM, SimpleRNN
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 import datetime as dt
-
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 #1. 데이터
 path = './_data/bike/'
 train_set = pd.read_csv(path + 'train.csv') # + 명령어는 문자를 앞문자와 더해줌  index_col=n n번째 컬럼을 인덱스로 인식
@@ -65,6 +66,18 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.75,
                                                     random_state=31
                                                     )
+
+# scaler = MinMaxScaler()
+scaler = StandardScaler()
+scaler.fit(x_train)
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_train))      # 1
+print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
+print(np.max(x_test))
+
 #2. 모델구성
 model = Sequential()
 model.add(Dense(100, activation='swish', input_dim=12))
@@ -72,12 +85,18 @@ model.add(Dense(100, activation='elu'))
 model.add(Dense(100, activation='swish'))
 model.add(Dense(100, activation='elu'))
 model.add(Dense(1))
+
+import time
+start_time = time.time()
 #3. 컴파일, 훈련
 from tensorflow.python.keras.callbacks import EarlyStopping
 earlyStopping = EarlyStopping(monitor='val_loss', patience=500, mode='min', verbose=1, 
                               restore_best_weights=True)
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 model.fit(x_train, y_train, epochs=800, batch_size=100, verbose=1,validation_split=0.2, callbacks=[earlyStopping])
+
+end_time = time.time() - start_time
+
 #4. 평가, 예측
 loss = model.evaluate(x, y) 
 print('loss : ', loss)
@@ -90,6 +109,7 @@ r2 = r2_score(y_test, y_predict)
 print('loss : ', loss)
 print("RMSE : ", rmse)
 print('r2스코어 : ', r2)
+print("걸린시간 : ", end_time)
 # loss :  20049.21484375
 # RMSE :  140.3344816795905
 # r2스코어 :  0.3978910778053413
@@ -107,5 +127,20 @@ submission_set['count'] = y_summit
 print(submission_set)
 submission_set.to_csv(path + 'submission.csv', index = True)
 
+#1. scaler 하기전 
 # RMSE :  41.828562563130546
 # r2스코어 :  0.9465075913710187
+
+#2. minmaxscaler
+# RMSE :  41.828562563130546
+# r2스코어 :  0.9465075913710187
+
+#3. standardscaler 
+# RMSE :  41.65247565441709
+# r2스코어 :  0.9469570204655092
+
+
+#4. MaxAbsScaler
+
+
+#5. RobustScaler
