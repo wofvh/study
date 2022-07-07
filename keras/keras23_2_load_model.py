@@ -27,15 +27,15 @@ x_test = scaler.transform(x_test)
 x_train = scaler.transform(x_train)
 
 #2. 모델구성
-# model = Sequential()
-# model.add(Dense(64, input_dim=13))
-# model.add(Dense(32, activation= 'relu'))
-# model.add(Dense(16, activation= 'relu'))
-# model.add(Dense(8, activation= 'relu'))
-# model.add(Dense(1))
-# model.summary()                     # () 주의 !!!!
+model = Sequential()
+model.add(Dense(64, input_dim=13))
+model.add(Dense(32, activation= 'relu'))
+model.add(Dense(16, activation= 'relu'))
+model.add(Dense(8, activation= 'relu'))
+model.add(Dense(1))
+model.summary()                     # () 주의 !!!!
 
-# model.save("./_save/keras23_1_save_model.h5")
+model.save("./_save/keras23_1_save_model.h5")
 
 model = load_model("./_save/keras23_1_save_model.h5")   # 저장한 모델 불러오기 
 

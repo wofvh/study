@@ -43,8 +43,8 @@ model.load_weights('./_save/keras23_5_save_weights2.h5')
 
 # model.save("./_save/keras23_1_save_model.h5")     # 모델만 된다. 
 
-# model.save_weights("./_save/keras23_5_save_weights2.h5")
-# model = load_model("./_save/keras23")
+model.save_weights("./_save/keras23_5_save_weights2.h5")
+model = load_model("./_save/keras23")
 
 # import time
 
@@ -69,7 +69,7 @@ model.compile(loss='mse', optimizer='adam')
 # loss = model.evaluate(x_test, y_test)         
 # print('loss : ', loss)
 
-# model = load_model("./_save/keras23_3_save_model.h5")   # 가중치와 모델이 저장이 된다. 
+model = load_model("./_save/keras23_3_save_model.h5")   # 가중치와 모델이 저장이 된다. 
 
 #4 평가 예측
 loss = model.evaluate(x_test, y_test)
