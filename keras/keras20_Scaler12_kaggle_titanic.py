@@ -6,7 +6,8 @@
 # pandas의 y 라벨의 종유가 무엇인지 확인하는 함수 쓸것.
 # numpy에서는 np.unique(y, return_counts= Ture)
 
-                               
+from sklearn.preprocessing import MinMaxScaler, StandardScaler  
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import train_test_split
@@ -124,8 +125,15 @@ print(y_test.shape) # (179, 1)
 # (668, 1)
 # (223, 7)
 # (223, 1)
-
-
+# scaler = MaxAbsScaler()
+# scaler = RobustScaler()
+# scaler = MinMaxScaler()
+scaler = StandardScaler()
+scaler.fit(x_train)
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+import time
 
 #2. 모델구성
 model = Sequential()
@@ -134,18 +142,18 @@ model.add(Dense(100, activation='selu'))
 model.add(Dense(80, activation='selu'))
 model.add(Dense(15, activation='selu'))
 model.add(Dense(1, activation='sigmoid'))
-
+start_time = time.time()
 #3. 컴파일, 훈련
 
 from tensorflow.python.keras.callbacks import EarlyStopping
-earlyStopping = EarlyStopping(monitor='val_loss', patience=80, mode='min', verbose=1, 
+earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1, 
                               restore_best_weights=True)
 
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=1000, batch_size=34, verbose=1, 
+model.fit(x_train, y_train, epochs=100, batch_size=34, verbose=1, 
           validation_split=0.2, callbacks=[earlyStopping])
-
+end_time = time.time() - start_time
 
 #4. 평가, 예측
 
@@ -159,7 +167,7 @@ y_test = np.argmax(y_test, axis= 1)
 
 acc1 = accuracy_score(y_test, y_predict) 
 print('acc1 : ', acc1) 
-
+print('걸린시간 :', end_time)
 
 #############################################################################
 # submission = pd.read_csv(path + 'submission.csv',index_col=0)
@@ -173,3 +181,27 @@ print('acc1 : ', acc1)
 
 # submission.to_csv(path + 'submission.csv', index=False)
 
+
+# 1. scaler = MaxAbsScaler()
+# loss :  0.45674359798431396
+# accuracy :  0.7982062697410583
+# acc1 :  1.0
+# 걸린시간 : 4.285993576049805
+
+# 2. scaler = RobustScaler()
+# loss :  0.4682682752609253
+# accuracy :  0.8026905655860901
+# acc1 :  1.0
+# 걸린시간 : 4.680203199386597
+
+# 3. scaler = MinMaxScaler()
+# loss :  0.4593279957771301
+# accuracy :  0.7937219738960266
+# acc1 :  1.0
+# 걸린시간 : 4.661499738693237
+
+# 4. scaler = StandardScaler()
+# loss :  0.43903303146362305
+# accuracy :  0.7982062697410583
+# acc1 :  1.0
+# 걸린시간 : 4.395852088928223

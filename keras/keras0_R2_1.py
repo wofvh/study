@@ -9,24 +9,18 @@ from sklearn.model_selection import train_test_split
 x = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
 y = np.array([1,2,3,4,6,7,9,10,13,14,15,17,8,16,23,24,26,29,27,30])
 
-
 from sklearn.model_selection import train_test_split     
 x_train, x_test, y_train, y_test = train_test_split(
     x,y, train_size =0.7,                                
     shuffle=True, 
     random_state =66)
- 
-
-
-
 
 #2. 모델구성
 model = Sequential()
-model.add(Dense(100, input_dim=1))
-model.add(Dense(15))
-model.add(Dense(100))
-model.add(Dense(50))
-model.add(Dense(19))
+model.add(Dense(64, input_dim=13))
+model.add(Dense(32, activation= 'relu'))
+model.add(Dense(16, activation= 'relu'))
+model.add(Dense(8, activation= 'relu'))
 model.add(Dense(1))
 
 #3 컴파일, 훈련

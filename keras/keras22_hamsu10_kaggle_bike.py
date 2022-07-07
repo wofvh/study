@@ -1,10 +1,11 @@
+from tensorflow.python.keras.models import Sequential, Model
+from tensorflow.python.keras.layers import Dense, Input
+
 # 캐글 자전거 문제풀이
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
 import pandas as pd
 from sqlalchemy import true #pandas : 엑셀땡겨올때 씀
-from tensorflow.python.keras.models import Sequential           #
-from tensorflow.python.keras.layers import Dense
 from keras.layers.recurrent import LSTM, SimpleRNN
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
@@ -89,6 +90,17 @@ model.add(Dense(50, activation='relu'))
 model.add(Dense(15, activation='relu'))
 model.add(Dense(1))
 
+input1 = Input(shape=(12,))          # 컬럼3개를 받아드린다.
+dense1 = Dense(10)(input1)          # Dense 뒤에 input 부분을 붙여넣는다.
+dense2 = Dense(100, activation='relu')(dense1)
+dense3 = Dense(80)(dense2)
+dense4 = Dense(50, activation='relu')(dense3)
+dense5 = Dense(15, activation='relu')(dense4)
+output1 = Dense(1, activation='relu')(dense5)
+
+model = Model(inputs = input1, outputs = output1)
+
+
 import time
 start_time = time.time()
 #3. 컴파일, 훈련
@@ -159,3 +171,7 @@ submission_set.to_csv(path + 'submission.csv', index = True)
 # r2스코어 :  0.9421554411680493
 # 걸린시간 :  100.76702523231506
 
+#6. model
+# loss: 69619.0469
+# r2스코어 :  0.9447082024123568
+# 걸린시간 :  90.73648834228516

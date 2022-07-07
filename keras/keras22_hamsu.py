@@ -29,9 +29,12 @@ from tensorflow.python.keras.layers import Dense, Input
 
 input1 = Input(shape=(3,))          # 컬럼3개를 받아드린다.
 dense1 = Dense(10)(input1)          # Dense 뒤에 input 부분을 붙여넣는다.
-dense2 = Dense(5, activation='relu')(dense1)
-dense3 = Dense(3, activation='sigmoid')(dense2)
-output1 = Dense(1)(dense3)
+dense2 = Dense(100, activation='relu')(dense1)
+dense3 = Dense(80, activation='relu')(dense2)
+dense4 = Dense(50, activation='relu')(dense3)
+dense5 = Dense(15, activation='relu')(dense4)
+dense6 = Dense(10, activation='relu')(dense5)
+output1 = Dense(1)(dense6)
 
 model = Model(inputs = input1, outputs = output1)
 
@@ -41,7 +44,7 @@ model.summary()         # Total params: 117
 # _________________________________________________________________
 # Layer (type)                 Output Shape              Param #
 # =================================================================
-# input_1 (InputLayer)         [(None, 3)]               0
+# input_1 (InputLayer)         [(None, 3)]               0              # <<< Sequential() 과 다른부분.
 # _________________________________________________________________
 # dense (Dense)                (None, 10)                40
 # _________________________________________________________________
