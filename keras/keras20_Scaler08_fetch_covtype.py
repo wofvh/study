@@ -54,7 +54,7 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     random_state=58525
                                                     )
 
-scaler = MinMaxScaler()
+scaler = RobustScaler()
 # scaler = StandardScaler()
 scaler.fit(x_train)
 # scaler.transform(x_test)
@@ -134,6 +134,11 @@ print("걸린시간 :",end_time)
 # 걸린시간 : 18.054161310195923
 
 #4. MaxAbsScaler
-
+# loss :  0.5210373997688293
+# acc :  0.7746408573526712
+# 걸린시간 : 18.679030179977417
 
 #5. RobustScaler
+# loss :  0.3895469605922699
+# acc :  0.8340887185606756
+# 걸린시간 : 18.881004810333252

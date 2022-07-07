@@ -61,8 +61,7 @@ model.add(Dense(1, activation= 'linear'))      # sigmoid = 0~1 사이로 숫자�
 import time
 
 #3 컴파일, 훈련
-model.compile(loss ='mse', optimizer='adam',
-              metrics=['mae'])                           # 이진분류 binary_crossentropy 반올림.
+model.compile(loss ='mse', optimizer='adam')                           # 이진분류 binary_crossentropy 반올림.
                                                                 # 회귀 - mse,mae ~ / 이진 binary_crossentropy
                                                                 # 분류모델 loss에 accuracy(정확도) 같이씀.
                                                                 # 2개 이상은 list           

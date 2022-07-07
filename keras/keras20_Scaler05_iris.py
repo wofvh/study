@@ -42,7 +42,7 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     random_state=66
                                                     )
 # scaler = MinMaxScaler()
-scaler = StandardScaler()
+scaler = RobustScaler()
 scaler.fit(x_train)
 # scaler.transform(x_test)
 x_test =scaler.transform(x_test)
@@ -125,6 +125,11 @@ print('acc스코어 : ', acc)
 # 걸린시간 :  7.872552871704102
 
 #4. MaxAbsScaler
-
+# oss :  0.0978778824210167
+# accuracy :  0.9666666388511658
+# acc스코어 :  0.9666666666666667
 
 #5. RobustScaler
+# loss :  0.06442131102085114
+# accuracy :  1.0
+# acc스코어 :  1.0
