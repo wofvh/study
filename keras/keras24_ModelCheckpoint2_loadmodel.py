@@ -29,14 +29,14 @@ print(np.max(x_test))
 
 #2. 모델구성
 
-input1 = Input(shape=(13,))                          # 컬럼3개를 받아드린다.
-dense1 = Dense(100)(input1)                            # Dense 뒤에 input 부분을 붙여넣는다.
-dense2 = Dense(50, activation='relu')(dense1)
-dense3 = Dense(30, activation='sigmoid')(dense2)
-output1 = Dense(1)(dense3)
-model = Model(inputs = input1, outputs = output1)
+# input1 = Input(shape=(13,))                          # 컬럼3개를 받아드린다.
+# dense1 = Dense(100)(input1)                            # Dense 뒤에 input 부분을 붙여넣는다.
+# dense2 = Dense(50, activation='relu')(dense1)
+# dense3 = Dense(30, activation='sigmoid')(dense2)
+# output1 = Dense(1)(dense3)
+# model = Model(inputs = input1, outputs = output1)
 
-# #3 컴파일, 훈련
+# # #3 컴파일, 훈련
 model.compile(loss ='mse', optimizer='adam')
 
 from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint    # < fit-callbacks에 있다.
@@ -50,11 +50,13 @@ mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1,               
 import time                               
 start_time = time.time()
         
-hist = model.fit(x_train, y_train, epochs =1000, batch_size = 32, 
-                 verbose=1, validation_split = 0.2,
-                 callbacks = [earlystopping, mcp])                                    # callbacks으로 불러온다 erlystopping   
+# hist = model.fit(x_train, y_train, epochs =100, batch_size = 32, 
+#                  verbose=1, validation_split = 0.2,
+#                  callbacks = [earlystopping, mcp])                                    # callbacks으로 불러온다 erlystopping   
 
 end_time = time.time() - start_time
+
+model = load_model('./_save/_ModelCheckPoint/keras24_ModelCheckPoint.hdf5')
 
 #4 평가 예측
 loss = model.evaluate(x_test, y_test)
@@ -69,4 +71,11 @@ print('r2 스코어 :', r2)
 print('걸린시간 :', end_time)
 
 
+# loss :  105.92610931396484
+# r2 스코어 : -0.28213294996153215
+# 걸린시간 : 9.003702640533447
+
+# loss :  105.92610931396484
+# r2 스코어 : -0.28213294996153215
+# 걸린시간 : 0.0
 

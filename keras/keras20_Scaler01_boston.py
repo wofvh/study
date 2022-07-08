@@ -36,10 +36,11 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 scaler = MinMaxScaler()
 # scaler = StandardScaler()
-scaler.fit(x_train)
+# scaler.fit(x_train)
 # scaler.transform(x_test)
+x_train = scaler.fit_transform    # <동일함. x_train = scaler.transform(x_train)
 x_test =scaler.transform(x_test)
-x_train = scaler.transform(x_train)
+
 print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
 print(np.max(x_train))      # 1
 print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
