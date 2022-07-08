@@ -1,5 +1,5 @@
 from tensorflow.python.keras.models import Sequential, Model
-from tensorflow.python.keras.layers import Dense, Input
+from tensorflow.python.keras.layers import Dense, Input, Dropout
 from sklearn.preprocessing import MinMaxScaler, StandardScaler  
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 from sklearn.model_selection import train_test_split
@@ -130,8 +130,11 @@ import time
 #2. 모델구성
 model = Sequential()
 model.add(Dense(128, activation='relu', input_dim=7))
+model.add(Dropout(0.4))
 model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.3))
 model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(8, activation='relu'))
 model.add(Dense(4, activation='relu'))

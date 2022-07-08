@@ -1,5 +1,5 @@
 from tensorflow.python.keras.models import Sequential, Model
-from tensorflow.python.keras.layers import Dense, Input
+from tensorflow.python.keras.layers import Dense, Input, Dropout
 
 import numpy as np
 import pandas as pd
@@ -77,8 +77,11 @@ print(np.max(x_test))
 #2. 모델구성
 model = Sequential()
 model.add(Dense(128,input_dim=75))
+model.add(Dropout(0.4))
 model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.3))
 model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(8, activation='relu'))
 model.add(Dense(4, activation='relu'))
@@ -103,7 +106,7 @@ earlyStopping = EarlyStopping(monitor='loss', patience=80, mode='min',
                               verbose=1,restore_best_weights=True)
 model.compile(loss='mae', optimizer='adam')
 
-import datetimea
+import datetime
 date = datetime.datetime.now()
 date = date.strftime('%m%d_%H%M')           # 0707_1723
 print(date)

@@ -1,5 +1,5 @@
 from tensorflow.python.keras.models import Sequential,load_model
-from tensorflow.python.keras.layers import Dense
+from tensorflow.python.keras.layers import Dense, Dropout
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_boston
 from tensorflow.python.keras.callbacks import EarlyStopping,ModelCheckpoint
@@ -11,11 +11,13 @@ datasets = load_boston()
 x = datasets.data
 y = datasets.target #데이터를 리스트 형태로 불러올 때 함
 
-
 x_train, x_test ,y_train, y_test = train_test_split(
           x, y, train_size=0.8,shuffle=True,random_state=100)
+
 from sklearn.preprocessing import MaxAbsScaler,RobustScaler 
 from sklearn.preprocessing import MinMaxScaler,StandardScaler
+
+
 scaler = MinMaxScaler()
 # scaler = StandardScaler()
 # scaler = MaxAbsScaler()
@@ -30,8 +32,10 @@ x_test = scaler.transform(x_test)
 #2. 모델구성
 model = Sequential()
 model.add(Dense(64,input_dim=13))
+model.add(Dropout(0.3))                     # 30%만큼 dropout이 적용됨. 
 model.add(Dense(32, activation='relu'))
-model.add(Dense(8, activation='relu'))
+model.add(Dropout(0.2))                     # 20%만큼 dropout이 적용됨. 
+model.add(Dense(16, activation='relu'))
 model.add(Dense(1))
 model.summary()
 
@@ -96,3 +100,7 @@ print("r2 :",r2)
 # 1/4 [======>.......................] - ETA: 0s - l4/4 [==============================] - 0s 3ms/step - loss: 9.4026
 # loss : 9.402571678161621
 # r2 : -0.5285233444774788
+
+# dropout
+# loss : 9.012863159179688
+# r2 : -0.40762565852655896

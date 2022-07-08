@@ -1,9 +1,10 @@
 from tensorflow.python.keras.models import Sequential, Model
-from tensorflow.python.keras.layers import Dense, Input
+from tensorflow.python.keras.layers import Dense, Input, Dropout
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# 데이콘 따릉이 문제풀이
 import numpy as np
 import pandas as pd
-from sqlalchemy import true                                 # pandas : 엑셀땡겨올때 씀 python 지원하는 엑셀을 불러오는 기능.
+from sqlalchemy import true                                 #pandas : 엑셀땡겨올때 씀
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
@@ -35,7 +36,6 @@ print(train_set.shape)   # (1328, 10)
 ############################            
 
 
-
 x = train_set.drop(['count'], axis=1)                    # drop 데이터에서 ''사이 값 빼기
 print(x)
 print(x.columns)
@@ -64,8 +64,11 @@ print(np.max(x_test))
 model = Sequential()
 model.add(Dense(128, activation='relu', input_dim=9))
 model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.4))
 model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.3))
 model.add(Dense(16, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(8, activation='relu'))
 model.add(Dense(4, activation='relu'))
 model.add(Dense(1))
