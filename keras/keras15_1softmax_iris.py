@@ -14,8 +14,6 @@ import matplotlib.pyplot as plt
 # rc('font', family=font)
 from tensorflow.keras.utils import to_categorical # https://wikidocs.net/22647 케라스 원핫인코딩
 from sklearn.preprocessing import OneHotEncoder  # https://psystat.tistory.com/136 싸이킷런 원핫인코딩
-
-
 import tensorflow as tf
 tf.random.set_seed(66)  # y=wx 할때 w는 랜덤으로 돌아가는데 여기서 랜덤난수를 지정해줄수있음
 
