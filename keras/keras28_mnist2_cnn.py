@@ -6,6 +6,9 @@ from tensorflow.keras.utils import to_categorical # https://wikidocs.net/22647 �
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 from tensorflow.python.keras.callbacks import EarlyStopping
+from sklearn.metrics import r2_score, accuracy_score
+import tensorflow as tf
+
 #1. 데이터
 (x_train, y_train), (x_test, y_test) =mnist.load_data()
 
@@ -47,12 +50,12 @@ model.summary()
 
 #3. 컴파일 구성 
 
-model.compile(loss='categorical_crossentropy', optimizer='adam')
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-earlystopping =EarlyStopping(monitor='loss', patience=100, mode='auto', 
+earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
         
-hist = model.fit(x_train, y_train, epochs=1, batch_size=32,verbose=1,
+hist = model.fit(x_train, y_train, epochs=50, batch_size=20,verbose=1,
                  validation_split=0.2, callbacks=[earlystopping])
 
 
@@ -60,13 +63,18 @@ hist = model.fit(x_train, y_train, epochs=1, batch_size=32,verbose=1,
 # model = load_model("./_save/keras23_9_load_diabet.h5")
 
 #4. 평가, 예측\
-loss = model.evaluate(x_test, y_test)
-y_predict = model.predict(x_test)
+results = model.evaluate(x_test,y_test)
+print('loss : ', results[0])
+# print('accuracy : ', results[1])
+############################################
 
-from sklearn.metrics import r2_score
-r2 = r2_score(y_test, y_predict)
-print('loss : ' , loss)
-print('r2스코어 : ', r2)
+# print(y_test)
+y_predict = model.predict(x_test)
+y_predict = tf.argmax(y_predict,axis=1) 
+
+y_test = tf.argmax(y_test,axis=1) 
+acc = accuracy_score(y_test,y_predict)
+print('acc : ',acc)
 
 
 # (kernel_size * channls + bias) * filters(output) = summary Param 개수
