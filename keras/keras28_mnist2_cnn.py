@@ -22,7 +22,7 @@ print(x_train.shape)
 print(np.unique(y_train, return_counts =True))
 #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), 
 # array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949], dtype=int64))
-
+''''''
 y_train = pd.get_dummies((y_train))
 y_test = pd.get_dummies((y_test))
 print(x_train.shape)
@@ -32,7 +32,7 @@ print(x_train.shape)
 #2. 모델구성 
 
 model = Sequential()
-model.add(Conv2D(filters=64, kernel_size=(3, 3),   # 출력(4,4,10)                                       # 자르는 사이즈 (행,렬 규격.) 10= 다음레이어에 주는 데이터
+model.add(Conv2D(filters=64, kernel_size=(5, 5),   # 출력(4,4,10)                                       # 자르는 사이즈 (행,렬 규격.) 10= 다음레이어에 주는 데이터
                  padding='same',
                  input_shape=(28, 28, 1)))    #(batch_size, row, column, channels)       # N(장수) 이미지 5,5 짜리 1 흑백 3 칼라 
                                                                                            # kernel_size(2*2) * 바이어스(3) + 10(output)
@@ -94,5 +94,9 @@ print('acc : ',acc)
 
 #      model.add(Dense(10, activation ='relu', input_dim =8)
 #      2차원일때 input shape ) Dense > (batch_size(행),input_dim(열))
+
+# oss: 0.2821 - accuracy: 0.9779
+# loss :  0.28206199407577515
+# acc :  0.9779
 
 
