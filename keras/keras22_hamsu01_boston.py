@@ -68,5 +68,8 @@ from sklearn.metrics import r2_score
 r2 = r2_score(y_test,y_predict)
 print("r2 :",r2)
 
+# loss : 2.1817049980163574
+# r2 : 0.8656148032741648
+
 
 
