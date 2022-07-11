@@ -42,14 +42,10 @@ x_test = x_test.reshape(10000, 28, 28, 1)
 y_train = pd.get_dummies((y_train))
 y_test = pd.get_dummies((y_test))
 
-
 print(x_train.shape)
 print(y_train.shape)
 # 실습 acc 0.98이상 
 # 원핫인코딩 
-
-
-
 
 #2. 모델구성 
 
@@ -119,4 +115,8 @@ print('acc : ',acc)
 # oss: 0.2821 - accuracy: 0.9779
 # loss :  0.28206199407577515
 # acc :  0.9779
+
+# loss :  0.12605245411396027
+# acc :  0.9853
+
 

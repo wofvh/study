@@ -9,7 +9,7 @@ from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.metrics import r2_score, accuracy_score
 import tensorflow as tf
 from tensorflow.keras.utils import to_categorical
-
+from sklearn.preprocessing import MinMaxScaler, StandardScaler  
 #1. 데이터
 (x_train, y_train), (x_test, y_test) =fashion_mnist.load_data()
 
@@ -17,14 +17,24 @@ print(x_train.shape, y_train.shape)    # (60000, 28, 28) (60000,)
 print(x_test.shape, y_test.shape)      # (10000, 28, 28) (10000,)
 
 
-x_train = x_train.reshape(60000, 28, 28, 1)       
-x_test = x_test.reshape(10000, 28, 28, 1)       
+x_train = x_train.reshape(60000, 28* 28* 1)       
+x_test = x_test.reshape(10000, 28* 28* 1)       
 
 print(x_train.shape)
 print(np.unique(y_train, return_counts =True))
 #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), 
 # array([5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000],dtype=int64))
 
+scaler = StandardScaler()
+scaler.fit(x_train) 
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+# array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949],
+#       dtype=int64))
+
+x_train = x_train.reshape(60000, 28, 28, 1)
+x_test = x_test.reshape(10000, 28, 28, 1)
 
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
@@ -106,5 +116,6 @@ print('acc : ',acc)
 # loss :  0.5226339101791382
 # acc :  0.8775
 
-
+# loss :  0.4803452491760254
+# acc :  0.9074
 

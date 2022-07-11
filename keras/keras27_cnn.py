@@ -2,7 +2,7 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense, Conv2D, Flatten #Flatten평평하게해라.  # 이미지 작업 conv2D 
 
 model = Sequential()
-#model.add(Dense(units=10, input_shape=(3,)))     # batch_size(행),input_dim(열))           # input_shape=(10, 10, 3)
+#model.add(Dense(units=10, input_shape=(3,)))     # batch_size(행),input_dim(열))     # input_shape=(10, 10, 3)
 #    (input_dim + bias) * units = summary Param 개수(Dense모델)
 
 model.add(Conv2D(filters=10, kernel_size=(2, 2),   # 출력(4,4,10)                                       # 자르는 사이즈 (행,렬 규격.) 10= 다음레이어에 주는 데이터

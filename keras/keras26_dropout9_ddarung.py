@@ -1,7 +1,6 @@
 from tensorflow.python.keras.models import Sequential, Model
 from tensorflow.python.keras.layers import Dense, Input, Dropout
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-# 데이콘 따릉이 문제풀이
 import numpy as np
 import pandas as pd
 from sqlalchemy import true                                 #pandas : 엑셀땡겨올때 씀

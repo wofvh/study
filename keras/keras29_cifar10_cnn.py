@@ -21,13 +21,24 @@ print(x_train.shape, y_train.shape)    # (50000, 32, 32, 3) (50000, 1)
 print(x_test.shape, y_test.shape)      # (10000, 32, 32, 3) (10000, 1)
 
 
-x_train = x_train.reshape(50000, 32, 32, 3)       
-x_test = x_test.reshape(10000, 32, 32, 3)        
+x_train = x_train.reshape(50000, 32* 32* 3)       
+x_test = x_test.reshape(10000, 32* 32* 3)        
 
 print(x_train.shape)
 print(np.unique(y_train, return_counts =True))
 #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), 
 # array([5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000],dtype=int64))
+scaler = StandardScaler()
+scaler.fit(x_train) 
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+# array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949],
+#       dtype=int64))
+
+x_train = x_train.reshape(50000, 32, 32, 3)
+x_test = x_test.reshape(10000, 32, 32, 3)
+
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 # y_train = pd.get_dummies(y_train)
@@ -36,13 +47,7 @@ print(x_train.shape)
 print(x_test.shape, x_train.shape)
 
 
-scaler = StandardScaler()
-scaler.fit(x_train) 
-# scaler.transform(x_test)
-x_test =scaler.transform(x_test)
-x_train = scaler.transform(x_train)
-x_train = x_train.reshape(50000, 32, 32, 3)
-x_test = x_test.reshape(10000, 32, 32, 3)
+
 
 
 # 원핫인코딩 
@@ -116,3 +121,6 @@ print('acc : ',acc)
 
 # loss :  4.3395161628723145
 # acc :  0.519
+
+# loss :  3.9987804889678955
+# acc :  0.6001
