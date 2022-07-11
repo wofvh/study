@@ -61,12 +61,7 @@ model.compile(loss ='mse', optimizer='adam')
 from tensorflow.python.keras.callbacks import EarlyStopping
 earlystopping =EarlyStopping(monitor='loss', patience=100, mode='min', 
               verbose=1, restore_best_weights = True)     
-   
-
-   
-   
-# EarlyStopping 일찍멈추겠다. (monitor-보겠다.='val_loss', patience=10-참겠다., 
-# mode=(min)최소값)-(max)최대값 auto(자동), verbose=1 - 0으로 지정하면 10뒤에 값을 가져오게됨.)         
+            
 
 start_time = time.time()
 
