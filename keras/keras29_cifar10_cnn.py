@@ -1,11 +1,3 @@
-#칼라
-#분류 
-# 32
-
-
-
-#1. 데이터
-
 
 
 from tensorflow.python.keras.models import Sequential
@@ -18,6 +10,9 @@ from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.metrics import r2_score, accuracy_score
 import tensorflow as tf
 from tensorflow.keras.utils import to_categorical
+from sklearn.preprocessing import MinMaxScaler, StandardScaler  
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
+
 
 #1. 데이터
 (x_train, y_train), (x_test, y_test) =cifar10.load_data()
@@ -38,7 +33,16 @@ y_test = to_categorical(y_test)
 # y_train = pd.get_dummies(y_train)
 # y_test = pd.get_dummies(y_test)
 print(x_train.shape)
+print(x_test.shape, x_train.shape)
 
+
+scaler = StandardScaler()
+scaler.fit(x_train) 
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+x_train = x_train.reshape(50000, 32, 32, 3)
+x_test = x_test.reshape(10000, 32, 32, 3)
 
 
 # 원핫인코딩 
@@ -112,4 +116,3 @@ print('acc : ',acc)
 
 # loss :  4.3395161628723145
 # acc :  0.519
-

@@ -8,6 +8,8 @@ import pandas as pd
 from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.metrics import r2_score, accuracy_score
 import tensorflow as tf
+from sklearn.preprocessing import MinMaxScaler, StandardScaler  
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
 (x_train, y_train), (x_test, y_test) =mnist.load_data()
@@ -15,34 +17,53 @@ import tensorflow as tf
 print(x_train.shape, y_train.shape)    # (60000, 28, 28) (60000,)
 print(x_test.shape, y_test.shape)      # (10000, 28, 28) (10000,)
 
-x_train = x_train.reshape(60000, 28, 28,1)  # input 28,28,1 
-x_test = x_test.reshape(10000, 28, 28,1)    # 
+x_train = x_train.reshape(60000, 28* 28*1)  # input 28,28,1 
+x_test = x_test.reshape(10000, 28* 28*1)    # 
 
 print(x_train.shape)
 print(np.unique(y_train, return_counts =True))
 #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), 
 # array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949], dtype=int64))
-''''''
+
+# # scaler = MaxAbsScaler()
+# # scaler = RobustScaler()
+# # scaler = MinMaxScaler()
+scaler = StandardScaler()
+scaler.fit(x_train) 
+# scaler.transform(x_test)
+x_test =scaler.transform(x_test)
+x_train = scaler.transform(x_train)
+# array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949],
+#       dtype=int64))
+
+x_train = x_train.reshape(60000, 28, 28, 1)
+x_test = x_test.reshape(10000, 28, 28, 1)
+
 y_train = pd.get_dummies((y_train))
 y_test = pd.get_dummies((y_test))
+
+
 print(x_train.shape)
+print(y_train.shape)
 # 실습 acc 0.98이상 
 # 원핫인코딩 
+
+
+
 
 #2. 모델구성 
 
 model = Sequential()
-model.add(Conv2D(filters=64, kernel_size=(5, 5),   # 출력(4,4,10)                                       # 자르는 사이즈 (행,렬 규격.) 10= 다음레이어에 주는 데이터
+model.add(Conv2D(filters=64, kernel_size=(5, 5),   # 출력(4,4,10)          # 자르는 사이즈 (행,렬 규격.) 10= 다음레이어에 주는 데이터
                  padding='same',
-                 input_shape=(28, 28, 1)))    #(batch_size, row, column, channels)       # N(장수) 이미지 5,5 짜리 1 흑백 3 칼라 
-                                                                                           # kernel_size(2*2) * 바이어스(3) + 10(output)
-model.add(MaxPooling2D())
-
- #    (kernel_size * channls) * filters = summary Param 개수(CNN모델)  
+                 input_shape=(28, 28, 1)))  #(batch_size, row, column, channels)       # N(장수) 이미지 5,5 짜리 1 흑백 3 칼라 
+                                            # kernel_size(2*2) * 바이어스(3) + 10(output)
+model.add(MaxPooling2D())                   # MaxPooling2D 위에 붙은것과 같고, 자원낭비가 조금 있다. 가장큰값만 반환한다. () 안에 값을 넣을 수 있다.         
+                                            #    (kernel_size * channls) * filters = summary Param 개수(CNN모델)  
 model.add(Conv2D(32, (2,2), 
                  padding = 'valid',         # 디폴트값(안준것과 같다.) 
-                 activation= 'relu'))    # 출력(3,3,7)                                                     
-model.add(Flatten()) # (N, 63)
+                 activation= 'relu'))       # 출력(3,3,7)                                                     
+model.add(Flatten())                        # (N, 63) 위치와 순서가 변경되면 안된다. transpose는 조작으로 Flatten과 헷갈리기 쉬우니 조심. 
 model.add(Dense(16, activation= 'relu'))
 model.add(Dense(8, activation= 'relu'))
 model.add(Dense(10, activation= 'softmax'))
@@ -55,7 +76,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
         
-hist = model.fit(x_train, y_train, epochs=50, batch_size=20,verbose=1,
+hist = model.fit(x_train, y_train, epochs=50, batch_size=32,verbose=1,
                  validation_split=0.2, callbacks=[earlystopping])
 
 
@@ -98,5 +119,4 @@ print('acc : ',acc)
 # oss: 0.2821 - accuracy: 0.9779
 # loss :  0.28206199407577515
 # acc :  0.9779
-
 

@@ -103,5 +103,8 @@ print('acc : ',acc)
 #      model.add(Dense(10, activation ='relu', input_dim =8)
 #      2차원일때 input shape ) Dense > (batch_size(행),input_dim(열))
 
+# loss :  0.5226339101791382
+# acc :  0.8775
+
 
 
