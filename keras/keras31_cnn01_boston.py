@@ -98,5 +98,5 @@ from sklearn.metrics import r2_score
 r2 = r2_score(y_test,y_predict)
 print("r2 :",r2)
 
-
+###########################
 # r2 : 0.8364753069173615
