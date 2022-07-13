@@ -194,7 +194,6 @@ x = train_set.drop(['Weekly_Sales'], axis=1) #axis는 컬럼
 test_set = test_set.drop(['Weekly_Sales'], axis=1) #axis는 컬럼  
 y = train_set['Weekly_Sales']
 
-
 x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.7,
                                                     random_state=66
