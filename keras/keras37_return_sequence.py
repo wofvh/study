@@ -19,7 +19,7 @@ model.add(Dense(1))
 model.summary()                     
 # lstm 2개 엮은거 테스트 
 
-'''''
+
 x = x.reshape(13,3,1)
 
 # x_predict =np.array([50,60,70])
@@ -67,5 +67,3 @@ print('[50,60,70]의 결과', result)
 
 # loss : 0.001789769041351974
 # [8,9,10]의 결과 [[80.51578]]
-
-'''

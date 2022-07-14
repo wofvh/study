@@ -6,21 +6,21 @@ size =5
 def split_x(dataset, size):  
     
     aaa = [] 
-    
-    for i in range(len(dataset) - size +1):     # for 반복 
-       subset = dataset[i : (i +size) ]         # : 범위 
-       aaa.append(subset)                       # 더한다.
-    return np.array(aaa)
+                                                # aaa = [] 빈값 설정.
+    for i in range(len(dataset) - size +1):     # for 반복횟수 range(len)= 10  - size(5) + 1 
+       subset = dataset[i : (i +size) ]         # i = 시작값 : 시작값+5  1:5 
+       aaa.append(subset)                       # aaa []빈값에 subset값을 append(더해준다)  
+    return np.array(aaa)                        # aaa를 반환할거다.
 
-bbb=split_x(a, size)
-print(bbb)
+bbb=split_x(a, size)                            #bbb는 split_x로 a 값과 size을 계산한다.
+print(bbb)                                      
 print(bbb.shape)
-x = bbb[:, :-1]
-y = bbb[:, -1]
+x = bbb[:, :-1]                                 # x= 전체에서 마지막행 빼고 
+y = bbb[:, -1]                                  # y= 전체에서 마지막행 만
 print(x,y)
 print(x.shape, y.shape)
 
-# def split_xy1(dataset, time_steps):                             # def 정의하겠다. 
+# def split_xy1(dataset, time_steps):           # def 정의하겠다. 
 #   x, y = list(), list()
 #   for i in range(len(dataset)):
 #     end_number = i + time_steps
@@ -33,4 +33,3 @@ print(x.shape, y.shape)
 
 # x, y = split_xy1(dataset, 4)
 # print(x, "\n", y)
-print(len(a))
