@@ -81,10 +81,12 @@ print(np.max(x_train))      # 1
 print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
 print(np.max(x_test))
 
-print(x_train.shape,x_test.shape)  #(142, 13) (36, 13)
-'''''
-x_train = x_train.reshape(142, 13,1)
-x_test = x_test.reshape(36, 13,1)
+print(x_train.shape,x_test.shape)  #(8164, 12) (2722, 12)
+
+x_train = x_train.reshape(8164, 12,1)
+x_test = x_test.reshape(2722, 12,1)
+
+print(x_train.shape,x_test.shape)
 
 #2. 모델구성
 model = Sequential()
@@ -94,18 +96,18 @@ model = Sequential()
 # model.add(SimpleRNN(32))                          # RNN은 2차원으로 인식해서 바로 Dense적용가능.
 # model.add(SimpleRNN(units=10, input_length =3, input_dim=1))       
 # model.add(SimpleRNN(units=10, input_dim=1, input_length =3))    # 가독성 떨어짐                                                 # RNN은 2차원으로 인식해서 바로 Dense적용가능.  
-model.add(LSTM(350, input_shape=(8,1)))      # [batch, timesteps(몇개씩 자르는지), feature=1(input_dim)]
+model.add(LSTM(350, input_shape=(12,1)))      # [batch, timesteps(몇개씩 자르는지), feature=1(input_dim)]
 model.add(Dense(128, activation='swish'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='swish'))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(8, activation='swish'))
-model.add(Dense(8, activation='swish'))
+model.add(Dense(4, activation='swish'))
 model.add(Dense(1))
                                          # erorr = ndim=3 3차원으로 바꿔라. 
 model.summary()
 
-
+'''''
 # input1 = Input(shape=(12,))          # 컬럼3개를 받아드린다.
 # dense1 = Dense(10)(input1)          # Dense 뒤에 input 부분을 붙여넣는다.
 # dense2 = Dense(100, activation='relu')(dense1)
@@ -120,29 +122,18 @@ model.summary()
 import time
 start_time = time.time()
 #3. 컴파일, 훈련
-from tensorflow.python.keras.callbacks import EarlyStopping
-
-model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-import datetime
-date = datetime.datetime.now()
-date = date.strftime('%m%d_%H%M')           # 0707_1723
-print(date)
-from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint 
-filepath = './_ModelCheckPoint/10bike/'
-filename = '{epoch:04d}-{val_loss:.4f}.hdf5'    # f > 소수점4자리까지 표현.           
-
-earlystopping =EarlyStopping(monitor='loss', patience=100, mode='min', 
-              verbose=1, restore_best_weights = True)     
+from tensorflow.python.keras.callbacks import EarlyStopping         
+ 
         
-mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1,               # mode acc > max 
-                      save_best_only=True,                                      # patience 필요없음.
-                      filepath ="".join([filepath,'10bike_',date, '_', filename])
-                      ) 
+# mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1,               # mode acc > max 
+#                       save_best_only=True,                                      # patience 필요없음.
+#                       filepath ="".join([filepath,'10bike_',date, '_', filename])
+#                       ) 
 earlyStopping = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, 
                               restore_best_weights=True)
 
 model.fit(x_train, y_train, epochs=500, batch_size=150, verbose=1,
-          validation_split=0.2, callbacks=[earlyStopping, mcp])
+          validation_split=0.2, callbacks=[earlyStopping])
 
 end_time = time.time() - start_time
 
