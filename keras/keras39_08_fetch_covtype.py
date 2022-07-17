@@ -1,83 +1,93 @@
-from tensorflow.python.keras.models import Sequential, Model
-from tensorflow.python.keras.layers import Dense, Input, LSTM
-
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-#[과제] 속도 비교 
-# gpu와 cpuimport numpy as np 
-
+import numpy as np
 from sklearn.datasets import fetch_covtype
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score,accuracy_score
 from tensorflow.python.keras.callbacks import EarlyStopping
+from sklearn.metrics import accuracy_score
+import pandas as pd 
 import tensorflow as tf
-from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
-import pandas as pd
-import numpy as np
+from tensorflow.python.keras.models import Sequential, Model, load_model
+from tensorflow.python.keras.layers import Dense, Input, LSTM
 
-#1.데이터 
+#1.데이터
 datasets = fetch_covtype()
-x= datasets.data
-y= datasets.target
+x = datasets.data
+y = datasets['target']
+print(x.shape, y.shape) #(581012, 54) (581012,)
 
-print(x.shape, y.shape) #(581012, 54) (581012, )
-print(np.unique(y,return_counts=True)) #(array[1 2 3 4 5 6 7],array[211840, 283301,  35754,   2747,   9493,  17367,  20510] )
-
-#텐서플로우
-# from tensorflow.keras.utils import to_categorical
-# y = to_categorical(y) 
-
-# 판다스 겟더미
-# y= pd.get_dummies(y) #argmax 다르게 하니 돌아감. 이유는 모름
-
-#사이킷런
 # from sklearn.preprocessing import OneHotEncoder
-# one = OneHotEncoder(categories='auto',sparse= False)#False로 할 경우 넘파이 배열로 반환된다.
-# y = y.reshape(-1,1)
-# one.fit(y)
-# y = one.transform(y)
+print('y의 라벨값 :', np.unique(y,return_counts=True))
+# y의 라벨값 : (array([1, 2, 3, 4, 5, 6, 7]), array([211840, 283301,  35754,   2747,   9493,  17367,  20510],
+    #   dtype=int64))
 
+
+###########(pandas 버전 원핫인코딩)###############
 y_class = pd.get_dummies((y))
+print(y_class.shape) # (581012, 7)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y_class,
-                                                    test_size=0.2,
-                                                    shuffle=True,
-                                                    random_state=66
-                                                    )
+# 해당 기능을 통해 y값을 클래스 수에 맞는 열로 늘리는 원핫 인코딩 처리를 한다.
+#1개의 컬럼으로 [0,1,2] 였던 값을 ([1,0,0],[0,1,0],[0,0,1]과 같은 shape로 만들어줌)
 
-scaler = MinMaxScaler()
+###########(sklearn 버전 원핫인코딩)###############
+#from sklearn.preprocessing import OneHotEncoder
+# ohe = OneHotEncoder(sparse=False)
+# # fit_transform은 train에만 사용하고 test에는 학습된 인코더에 fit만 해야한다
+# train_cat = ohe.fit_transform(train[['cat1']])
+# train_cat
+
+
+# num = num.shape[0]
+# print(num)
+
+# y = np.eye(num)[data]
+# print(x)
+# print(y)
+
+
+
+# print(x.shape, y.shape) #(581012, 54) (581012,)
+
+x_train, x_test, y_train, y_test = train_test_split(x,y_class, test_size=0.15,shuffle=True ,random_state=100)
+from sklearn.preprocessing import MaxAbsScaler,RobustScaler 
+from sklearn.preprocessing import MinMaxScaler,StandardScaler
+# scaler = MinMaxScaler()
 # scaler = StandardScaler()
-scaler.fit(x_train)
-# scaler.transform(x_test)
-x_test =scaler.transform(x_test)
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+scaler.fit(x_train) #여기까지는 스케일링 작업을 했다.
+scaler.transform(x_train)
 x_train = scaler.transform(x_train)
-print(np.min(x_train))      # 0   알아서 컬럼별로 나눠준다. 
-print(np.max(x_train))      # 1
-print(np.min(x_test))      # 0   알아서 컬럼별로 나눠준다. 
-print(np.max(x_test))
+x_test = scaler.transform(x_test)
 
-print(x_train.shape,x_test.shape)  #(464809, 54) (116203, 54)
 
-x_train = x_train.reshape(464809, 54,1)
-x_test = x_test.reshape(116203, 54,1)
+print(x_train.shape,x_test.shape)  #(493860, 54) (87152, 54)
 
-print(x_train.shape,x_test.shape)
+x_train = x_train.reshape(493860, 27,2)
+x_test = x_test.reshape(87152, 27,2)
+#셔플을 False 할 경우 순차적으로 스플릿하다보니 훈련에서는 나오지 않는 값이 생겨 정확도가 떨어진다.
+#디폴트 값인  shuffle=True 를 통해 정확도를 올린다.
+
+print(y_train.shape,y_test.shape)
 
 #2.모델
 model = Sequential()
-model.add(Dense(128, activation='swish'))
-model.add(Dense(64, activation='relu'))
+# model.add(SimpleRNN(units= 10, input_shape=(3,1)))      # [batch, timesteps(몇개씩 자르는지), feature=1(input_dim)]
+# 10 = units, 3 = timesteps , 1 = feature 
+# units * (feature +bias +units)                    # units를 한번더 해준다. 
+# model.add(SimpleRNN(32))                          # RNN은 2차원으로 인식해서 바로 Dense적용가능.
+# model.add(SimpleRNN(units=10, input_length =3, input_dim=1))       
+# model.add(SimpleRNN(units=10, input_dim=1, input_length =3))    # 가독성 떨어짐                                                 # RNN은 2차원으로 인식해서 바로 Dense적용가능.  
+model.add(LSTM(10, input_shape=(27,2)))      # [batch, timesteps(몇개씩 자르는지), feature=1(input_dim)]
+model.add(Dense(50, activation='swish'))
+model.add(Dense(30, activation='relu'))
 model.add(Dense(32, activation='swish'))
 model.add(Dense(16, activation='relu'))
-model.add(Dense(8, activation='swish'))
-model.add(Dense(8, activation='swish'))
-model.add(Dense(7, activation='softmax'))
+model.add(Dense(7, activation='softmax')) 
 
 
 import time
 #3.컴파일,훈련
 model.compile(loss= 'categorical_crossentropy', optimizer ='adam', metrics='accuracy') #다중분류는 무조건 loss에 categorical_crossentropy
-x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.3,shuffle=True,
-                                                     random_state=58) #분류모델에서 셔플 중요! ,false로 하면 순차적으로 나와서 2가 아예 안나옴.
+#분류모델에서 셔플 중요! ,false로 하면 순차적으로 나와서 2가 아예 안나옴.
 
 
 # import datetime
@@ -97,12 +107,12 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.3,shuffle=T
 #                       ) 
 start_time = time.time()
 
-earlyStopping= EarlyStopping(monitor='val_loss',patience=10,mode='min',
-                             restore_best_weights=True,verbose=1)
+earlyStopping= EarlyStopping(monitor='val_loss',patience=80,mode='min',
+                             restore_best_weights=True,verbose=2)
 
 
-model.fit(x_train, y_train, epochs=100, batch_size=30,
-          validation_split=0.2,callbacks=[earlyStopping], verbose=1) #batch default :32
+model.fit(x_train, y_train, epochs=200, batch_size=2000,
+          validation_split=0.2,callbacks=[earlyStopping], verbose=2) #batch default :32
 
 end_time = time.time() - start_time
 
@@ -131,5 +141,10 @@ print('acc : ',acc)
 print(y_predict)
 print(y_test)
 print("걸린시간 :",end_time)
+print('keras39_08_fetch_covtype')
 
+# loss :  0.6954039931297302
+# acc :  0.7074421700018358
+# 걸린시간 : 11.360329389572144
 
+# LSTM

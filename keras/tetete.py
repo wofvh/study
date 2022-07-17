@@ -41,4 +41,18 @@ x =np.where(x >0.5,1,0)            # x를 np.where를 사용해서 x가 0.5 보�
 
 # # 종류 : StandardScaler, RobustScaler, MinMaxScaler, Normalizer
 
+df['Date Time'] = pd.to_datetime(df['Date Time'])
 
+df['year'] = df['Date Time'].dt.strftime('%Y')                  # 0000자리면 대문자, 00자리면 소문자  
+df['month'] = df['Date Time'].dt.strftime('%m')              
+df['day'] = df['Date Time'].dt.strftime('%d')      
+df['hour'] = df['Date Time'].dt.strftime('%h')      
+df['minute'] = df['Date Time'].dt.strftime('%M')      
+
+
+df = df.drop(['Date Time'], axis=1)  
+
+cols = ['year','month','day','hour','minute']
+for col in cols:
+    le = LabelEncoder()
+    df[col]=le.fit_transform(df[col])

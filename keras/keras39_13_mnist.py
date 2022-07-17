@@ -20,7 +20,7 @@ print(x_test.shape, y_test.shape)      # (10000, 28, 28) (10000,)
 x_train = x_train.reshape(60000, 28* 28*1)  # input 28,28,1 
 x_test = x_test.reshape(10000, 28* 28*1)    # 
 
-print(x_train.shape)
+print(x_train.shape)            # (60000, 784)
 print(np.unique(y_train, return_counts =True))
 #(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), 
 # array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949], dtype=int64))
@@ -44,9 +44,12 @@ y_test = pd.get_dummies((y_test))
 
 print(x_train.shape)
 print(y_train.shape)
+print(x_train)
+print(y_train)
+
 # 실습 acc 0.98이상 
 # 원핫인코딩 
-
+'''''
 #2. 모델구성 
 
 model = Sequential()
@@ -117,3 +120,5 @@ print('acc : ',acc)
 # LSTM
 # loss :  9.678908348083496
 # accuracy: 0.1032
+
+'''
