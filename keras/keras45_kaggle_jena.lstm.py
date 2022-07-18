@@ -85,8 +85,10 @@ def split_x(dataset, size): # def라는 예약어로 split_x라는 변수명을 
 bbb = split_x(a, size)
 
 
-x = bbb[:, :-1]
-y = bbb[:, -1]
+x = bbb[:,:-1]
+y = bbb[:,-1]
+
+
 
 print(x.shape) # (420547, 4, 14)
 print(y.shape) # (420547, 14)
@@ -100,7 +102,7 @@ print(y.shape) # (96,1,1)
 # df =df(['Date Time'], axis=1)
 
 
-x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.7,random_state=58525)
+x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.7,random_state=66,shuffle=False)
 
 print(x_train.shape) # (294382, 4, 14)
 print(x_test.shape) # (126165, 4, 14)
@@ -120,7 +122,7 @@ model.add(LSTM(units= 1000, input_shape=(4,14)))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(2, activation='relu'))
-model.add(Dense(14, activation='softmax'))
+model.add(Dense(1))
  
 
                                          # erorr = ndim=3 3차원으로 바꿔라. 
@@ -138,7 +140,7 @@ model.summary()      # 회귀모델은 output = linear 자연수치 그데로 �
 import time
 
 #3 컴파일, 훈련
-model.compile(loss ='categorical_crossentropy', optimizer='adam')
+model.compile(loss ='mae', optimizer='adam')
 from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint    # < fit-callbacks에 있다.
          
 
@@ -155,3 +157,4 @@ hist = model.fit(x_train, y_train, epochs =100, batch_size = 3200,
 loss = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 
+# loss :  195.19041442871094
