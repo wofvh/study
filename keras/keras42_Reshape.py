@@ -92,7 +92,7 @@ print('loss : ', results[0])
 
 y_predict = model.predict(x_test)
 print(y_predict)
-'''''
+'''
 y_predict = tf.argmax(y_predict,axis=1) 
 
 
