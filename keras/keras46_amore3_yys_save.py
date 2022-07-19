@@ -37,7 +37,6 @@ print(am,ss)      # (3040, 17) (3180, 17)
 am = am.sort_values(by='일자',ascending = False)
 ss = ss.sort_values(by='일자',ascending = False)
 
-
 print(am,ss)
 
 y = np.array(am['종가'])   
@@ -363,8 +362,8 @@ model.fit([x1_train,x2_train], y_train,
           ,batch_size=64
           ,callbacks=[earlystopping,mcp])    
         
-model.save_weights("./_test/keras46_1_save_weights종가13.h5")
-# model.load_weights("./_test/keras46_1_save_weights종가6.h5")
+model.save_weights("./_test/keras46_1_save_weights종가16.h5")
+# model.load_weights("./_test/keras46_1_save_weights종가13.h5")
 
 #4. 평가, 예측
 filepath = './_ModelCheckPoint/K24/'
