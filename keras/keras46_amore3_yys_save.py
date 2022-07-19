@@ -285,9 +285,9 @@ merge6 = Dropout(0.2)(merge5)
 merge7 = Dense(32, name ='mg4')(merge6)
 merge8 = Dropout(0.2)(merge7)
 merge9 = Dense(16, name ='mg5')(merge8)
-merge10 = Dropout(0.15)(merge9)
+merge10 = Dropout(0.2)(merge9)
 merge11 = Dense(8, name ='mg6')(merge10)
-merge12 = Dropout(0.15)(merge11)
+merge12 = Dropout(0.2)(merge11)
 last_output = Dense(1,activation='relu', name ='last')(merge12)
 
 model =Model(inputs =[input1, input2], outputs= last_output)
@@ -358,11 +358,11 @@ mcp = ModelCheckpoint(monitor='val_loss',mode='auto',verbose=1,
 model.compile(loss='mse', optimizer='Adam')
 model.fit([x1_train,x2_train], y_train, 
           validation_split=0.3, 
-          epochs=160,verbose=2
+          epochs=170,verbose=2
           ,batch_size=64
           ,callbacks=[earlystopping,mcp])    
         
-model.save_weights("./_test/keras46_1_save_weights종가16.h5")
+model.save_weights("./_test/keras46_1_save_weights종가22.h5")
 # model.load_weights("./_test/keras46_1_save_weights종가13.h5")
 
 #4. 평가, 예측
