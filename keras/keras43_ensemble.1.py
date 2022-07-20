@@ -1,3 +1,5 @@
+from tensorflow.python.keras.preprocessing.image 
+
 #1. 데이터
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
