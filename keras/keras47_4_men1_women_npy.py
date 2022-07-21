@@ -21,7 +21,7 @@ men1 = men.flow_from_directory(
     )
 print(men1[0][0])
 
-np.save('d:/study_data/_save/_npy/keras49_6_men1.npy', arr=men1[0][0])
+np.save('d:/study_data/_save/_npy/keras51_6_men1.npy', arr=men1[0][0])
 
 # #1. 데이터
 # x_train = np.load('d:/study_data/_save/_npy/keras47_4_train_x.npy')

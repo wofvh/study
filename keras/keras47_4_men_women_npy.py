@@ -56,7 +56,7 @@ from sklearn.model_selection import train_test_split
 
 # print(x_train.shape, x_train.shape) # (4, 100, 100, 3) (4, 100, 100, 3)
 # print(y_test.shape, y_test.shape)   # (1,) (1,)                                    
-men2 = np.load('d:/study_data/_save/_npy/keras49_6_men1.npy')
+men2 = np.load('d:/study_data/_save/_npy/keras51_6_men1.npy')
 x_train = np.load('d:/study_data/_save/_npy/keras47_4_train_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/keras47_4_train_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/keras47_4_test_x.npy')
@@ -86,7 +86,7 @@ model.add(Dense(1,activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics= ['accuracy'])
 # model.fit(xy_train[0][0],xy_train[0][1])          # 배치를 최대로 잡으면 가능
-hist = model.fit(x_train,y_train, epochs=100,validation_split=0.3,verbose=2) 
+hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2) 
                     # steps_per_epoch=32,  # steps_per_epoch=32 데이터를 batch size로 나눈것. 160/5 =32 
                     # validation_data=xy_test,
                     # validation_steps=4)
@@ -103,14 +103,15 @@ print('val_accuracy : ', val_accuracy[-1])
 print("=========================1.기본출력========================")
 loss = model.evaluate(x_test, y_test)
 y_predict = model.predict(men2)
-y_predict = np.around(y_predict)
-print('남자1 : ',y_predict[0])
+# y_predict = np.around(y_predict)
+print('남자 : ',y_predict[0])
 print('여자 : ' ,y_predict[1])
-print('남자2 : ',y_predict[2])
+# print('남자2 : ',y_predict[2])
 
-# loss :  3.9826912257012737e-07
-# val_loss :  4.451321601867676
+# loss :  1.416016743860382e-07
+# val_loss :  6.21212911605835
 # accuracy :  1.0
-# val_accuracy :  0.6415094137191772
-# predict :  [0.]
-# accuracy :  [0.]
+# val_accuracy :  0.6138364672660828
+# 남자1 :  [0.]
+# 여자 :  [1.]
+#
