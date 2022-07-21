@@ -49,7 +49,7 @@ model.add(Dense(1,activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics= ['accuracy'])
 # model.fit(xy_train[0][0],xy_train[0][1])          # 배치를 최대로 잡으면 가능
-hist = model.fit(x_train,y_train, epochs=100,validation_split=0.3,verbose=2) 
+hist = model.fit(x_train,y_train, epochs=5,validation_split=0.3,verbose=2) 
                     # steps_per_epoch=32,  # steps_per_epoch=32 데이터를 batch size로 나눈것. 160/5 =32 
                     # validation_data=xy_test,
                     # validation_steps=4)
