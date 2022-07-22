@@ -1,6 +1,3 @@
-# from click import argument
-# from sklearn.utils import shuffle
-from colorsys import yiq_to_rgb
 from tensorflow.keras.datasets import fashion_mnist
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
@@ -29,7 +26,7 @@ train_datagen = ImageDataGenerator(
 test_datagen = ImageDataGenerator(               
     rescale=1./255,  )
 
-augument_size = 40000                      # 반복횟수
+augument_size = 4000                      # 반복횟수
 randidx =np.random.randint(x_train.shape[0],size=augument_size)
 
 print(x_train.shape[0])         # 60000
@@ -67,25 +64,25 @@ xy_augumented = test_datagen.flow(x_train1, y_train2,
                                 batch_size = augument_size,
                                 shuffle=False)
 
+x_train = xy_train[0]
+
+# print(xy_augumented[0][0].shape)            # (100000, 28, 28, 1)
+# print(xy_augumented[0][1].shape)            # (100000, 28, 28, 1)
+# print(xy_augumented[0][0][0].shape)            # (100000, 28, 28, 1)
+# print(xy_augumented[0][0][1].shape)            # (100000, 28, 28, 1)
+# print(xy_augumented[0][0][0][0][0].shape)            # (100000, 28, 28, 1)
 
 
-print(xy_augumented[0][0].shape)            # (100000, 28, 28, 1)
-print(xy_augumented[0][1].shape)            # (100000, 28, 28, 1)
-print(xy_augumented[0][0][0].shape)            # (100000, 28, 28, 1)
-print(xy_augumented[0][0][1].shape)            # (100000, 28, 28, 1)
-print(xy_augumented[0][0][0][0][0].shape)            # (100000, 28, 28, 1)
+# print(x_train.shape,y_train.shape)
+# print(x_train[0].shape)                         # (28, 28)
+# print(x_train[0].reshape(28*28).shape)          # (784,)
+# print(np.tile(x_train[0].reshape(28*28), augument_size).reshape(-1,28,28,1).shape)          # (100, 28, 28, 1)
+# # reshape  # (100, 28, 28, 1) (열, reshape,reshape,reshape)
 
-
-print(x_train.shape,y_train.shape)
-print(x_train[0].shape)                         # (28, 28)
-print(x_train[0].reshape(28*28).shape)          # (784,)
-print(np.tile(x_train[0].reshape(28*28), augument_size).reshape(-1,28,28,1).shape)          # (100, 28, 28, 1)
-# reshape  # (100, 28, 28, 1) (열, reshape,reshape,reshape)
-
-print(np.zeros(augument_size))
-print(np.zeros(augument_size).shape)
-print(np.tile(x_train[0].reshape(28*28), augument_size).shape)                      # (31360000,)
-print(np.tile(x_train[0].reshape(28*28), augument_size).reshape(-1,28,28,1).shape)  # (40000, 28, 28, 1)
+# print(np.zeros(augument_size))
+# print(np.zeros(augument_size).shape)
+# print(np.tile(x_train[0].reshape(28*28), augument_size).shape)                      # (31360000,)
+# print(np.tile(x_train[0].reshape(28*28), augument_size).reshape(-1,28,28,1).shape)  # (40000, 28, 28, 1)
 
 # y_train = pd.get_dummies((y_train))
 # y_test = pd.get_dummies((y_test))
@@ -136,10 +133,11 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
         
-hist = model.fit_generator(xy_train, epochs=100, 
-                    steps_per_epoch=32,  # steps_per_epoch=32 데이터를 batch size로 나눈것. 160/5 =32 
-                    validation_data=xy_train,
-                    validation_steps=4)
+hist = model.fit_generator(xy_augumented, epochs=10, 
+                    steps_per_epoch=augument_size,  # steps_per_epoch=32 데이터를 batch size로 나눈것. 160/5 =32 
+                    validation_data=xy_augumented)
+                  
+                    # validation_steps=4)
 
 #4. 평가, 예측\
 results = model.evaluate(x_test,y_test)
@@ -157,3 +155,5 @@ y_test = tf.argmax(y_test,axis=1)         # argmax 형태가 맞지만, 값이 �
                                           # [3,8,1,2]    >> 1 반환. 
 acc = accuracy_score(y_test,y_predict)
 print('acc : ',acc)
+
+

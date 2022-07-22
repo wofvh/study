@@ -37,7 +37,10 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
                restore_best_weights = True)     
         
-hist = model.fit(x_train,y_train, epochs=100, validation_split=0.3,verbose=2)
+hist = model.fit_generator(x_train, epochs=100, 
+                    steps_per_epoch=32,  # steps_per_epoch=32 데이터를 batch size로 나눈것. 160/5 =32 
+                    validation_data=x_train,
+                    validation_steps=4)
                     
 
 #4. 평가, 예측\
