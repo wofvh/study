@@ -70,7 +70,7 @@ model.add(LSTM(32, input_shape=(6,1)))
 # model.add(Dense(32, input_shpae =(5,),activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 model.summary()
-'''''
+
 #3. 컴파일
 model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['acc'])
 model.fit(pad_x,labels,epochs=100,batch_size=16)
@@ -92,4 +92,3 @@ y = token.texts_to_sequences(y_predict)
 y1_predict = model.predict(y)
 print('predict : ',np.around(y1_predict[-1]))
 
-'''
