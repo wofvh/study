@@ -58,7 +58,7 @@ model = Sequential()                        # input(13,5)
 # model.add(Embedding(31,10,5))                    # input_length =5는  input_length 포함해야한다. 아니면 생략 (자동지정.)
 model.add(Embedding(31,11,input_length=6))      # input_length =5는  input_length 포함해야한다. 아니면 생략 (자동지정.)
 model.add(LSTM(32))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(2, activation='sigmoid'))
 model.summary()
 
 #3. 컴파일

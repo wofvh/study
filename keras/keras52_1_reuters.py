@@ -62,7 +62,7 @@ model.summary()
 
 #3. 컴파일
 model.compile(loss='categorical_crossentropy', optimizer='adam',metrics=['acc'])
-model.fit(x_train,y_train,epochs=10,batch_size=50)
+model.fit(x_train,y_train,epochs=20,batch_size=5000)
 
 
 
