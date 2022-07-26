@@ -13,45 +13,34 @@ x_train = np.load('d:/study_data/_save/_npy/project_train_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/project_train_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test_x.npy')
 y_test = np.load('d:/study_data/_save/_npy/project_test_y.npy')
-            # (550,)
 
-print(x_train.shape)            # (2600, 150, 150, 3)
-print(y_train.shape)            # (2600, 7)
-print(x_test.shape)             # (700, 150, 150, 3)
-print(y_test.shape)             # (700, 7)
+print(x_train.shape)            # (2000, 150, 150, 3)
+print(y_train.shape)            # (2000,)
+print(x_test.shape)             # (550, 150, 150, 3)
+print(y_test.shape)             # (550,)
 
-
-x_train = x_train.reshape(2600,150,450)
-x_test = x_test.reshape(700,150,450)
-print(season.shape)
-season = season.reshape(7,150,450)
-print(x_train.shape)            # 2600, 150, 450)
-print(y_train.shape)            # (2600, 7)
-print(x_test.shape)             # (700, 150, 450)
-print(y_test.shape)             # (700, 7)
-
+# x_train = x_train.reshape(2000,450,150)
+# x_test = x_test.reshape(550,450,150)
 
 
 from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxPooling2D,LSTM,Reshape
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxPooling2D,LSTM
 
 
 #2. 모델 
 model = Sequential()
-model.add(LSTM(64, input_shape = (150,450), activation='relu'))
-model.add(Reshape(target_shape=(4,4,4)))
-model.add(Conv2D(128,(3,3),activation='relu',padding='same'))
+model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
 model.add(MaxPooling2D(2,2))
-model.add(Conv2D(128,(3,3),activation='relu',padding='same'))
+model.add(Conv2D(128,(3,3),activation='relu'))
 model.add(MaxPooling2D(2,2))
-model.add(Conv2D(128,(3,3),activation='relu',padding='same'))
+model.add(Conv2D(128,(3,3),activation='relu'))
 model.add(Flatten())
 model.add(Dense(64,activation='relu'))
 # model.add(Dropout(0.3))
 model.add(Dense(32,activation='relu'))
 # model.add(Dropout(0.3))
 model.add(Dense(7,activation='softmax'))
-model.summary()    
+    
 
 #3. 컴파일.훈련
 
@@ -60,7 +49,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=30,validation_split=0.3,verbose=2,batch_size=128,
+hist = model.fit(x_train,y_train, epochs=20,validation_split=0.3,verbose=2,batch_size=16,
                  callbacks=[earlystopping]) 
 
 
@@ -75,7 +64,15 @@ print('accuracy : ', accuracy[-1])
 
 loss = model.evaluate(x_test, y_test)
 y_predict = model.predict(season)
+
+
+y_test = np.argmax(y_test, axis= 1)
+y_predict = np.argmax(y_predict, axis=1) 
 print('predict : ',y_predict)
+
+from sklearn.metrics import accuracy_score
+acc = accuracy_score(x_test,y_test)
+print('acc :',acc )
 
 
 # 1.hail   2.lighting   3.rain   4.rime   5.shine   6.smog   7.snow 
@@ -142,4 +139,3 @@ print('predict : ',y_predict)
 #  [0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 0. 0. 0. 1.]]
-
