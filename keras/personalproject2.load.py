@@ -8,11 +8,11 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest17.npy')
-x_train = np.load('d:/study_data/_save/_npy/personalproject_train10_x.npy')
-y_train = np.load('d:/study_data/_save/_npy/personalproject_train10_y.npy')
-x_test = np.load('d:/study_data/_save/_npy/personalproject_test10_x.npy')
-y_test = np.load('d:/study_data/_save/_npy/personalproject_test10_y.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest21.npy')
+x_train = np.load('d:/study_data/_save/_npy/project_train_x.npy')
+y_train = np.load('d:/study_data/_save/_npy/project_train_y.npy')
+x_test = np.load('d:/study_data/_save/_npy/project_test_x.npy')
+y_test = np.load('d:/study_data/_save/_npy/project_test_y.npy')
 
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
@@ -25,14 +25,14 @@ from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxP
 
 #2. 모델 
 model = Sequential()
-model.add(Conv2D(64,(2,2), input_shape = (150,150,3), padding='same',activation='relu'))
+model.add(Conv2D(64,(2,2), input_shape = (150,150,3), padding='same', activation='relu'))
 model.add(MaxPooling2D())
-model.add(Conv2D(48,(3,3),activation='relu'))
+model.add(Conv2D(32,(3,3),activation='relu'))
 model.add(Flatten())
 model.add(Dense(100,activation='relu'))
-# model.add(Dropout(0.3))
+model.add(Dropout(0.3))
 model.add(Dense(100,activation='relu'))
-# model.add(Dropout(0.3))
+model.add(Dropout(0.3))
 model.add(Dense(7,activation='softmax'))
     
 
@@ -43,7 +43,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 # earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
 #               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=16)
+hist = model.fit(x_train,y_train, epochs=100,validation_split=0.3,verbose=2,batch_size=16)
                 #  callbacks=[earlystopping]) 
 
 
@@ -66,3 +66,13 @@ print('predict : ',y_predict.round())
 # accuracy :  0.3424285650253296
 # val_accuracy :  0.3333333432674408
 # predict :  [0.24719454 0.05714595 0.6956595 ]
+
+
+# predict : 
+#  [[0. 0. 0. 0. 1. 0. 0.]
+#  [0. 0. 0. 1. 0. 0. 0.]
+#  [0. 0. 0. 0. 1. 0. 0.]
+#  [0. 0. 0. 0. 1. 0. 0.]
+#  [0. 0. 0. 0. 1. 0. 0.]
+#  [0. 0. 0. 0. 1. 0. 0.]
+#  [0. 0. 0. 0. 1. 0. 0.]]
