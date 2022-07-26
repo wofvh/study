@@ -67,7 +67,7 @@ model.add(Reshape(target_shape=(32,))) # N,32
 model.add(Dense(10, activation= 'softmax'))           # N,10
 
 model.summary()
-
+'''''
 #3. 컴파일 구성 
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -92,7 +92,7 @@ print('loss : ', results[0])
 
 y_predict = model.predict(x_test)
 print(y_predict)
-'''
+
 y_predict = tf.argmax(y_predict,axis=1) 
 
 
