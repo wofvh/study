@@ -10,13 +10,13 @@ season = ImageDataGenerator(
     rescale=1./255)
 
 season1 = season.flow_from_directory(
-    'D:\study_data\_data\season\smog',
+    'D:\study_data\_data\season\lightning',
     target_size=(150,150),# 크기들을 일정하게 맞춰준다.
-    batch_size=2000,
-    class_mode='binary', 
+    batch_size=4000,
+    class_mode='categorical', 
     # color_mode='grayscale', #디폴트값은 컬러
     shuffle=True,
     )
 print(season1[0][0])
 
-np.save('d:/study_data/_save/_npy/personaltest4.npy', arr=season1[0][0])
+np.save('d:/study_data/_save/_npy/personaltest17.npy', arr=season1[0][0])

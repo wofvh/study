@@ -8,11 +8,11 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest4.npy')
-x_train = np.load('d:/study_data/_save/_npy/personalproject_train_x.npy')
-y_train = np.load('d:/study_data/_save/_npy/personalproject_train_y.npy')
-x_test = np.load('d:/study_data/_save/_npy/personalproject_test_x.npy')
-y_test = np.load('d:/study_data/_save/_npy/personalproject_test_y.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest17.npy')
+x_train = np.load('d:/study_data/_save/_npy/personalproject_train10_x.npy')
+y_train = np.load('d:/study_data/_save/_npy/personalproject_train10_y.npy')
+x_test = np.load('d:/study_data/_save/_npy/personalproject_test10_x.npy')
+y_test = np.load('d:/study_data/_save/_npy/personalproject_test10_y.npy')
 
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
@@ -30,21 +30,21 @@ model.add(MaxPooling2D())
 model.add(Conv2D(48,(3,3),activation='relu'))
 model.add(Flatten())
 model.add(Dense(100,activation='relu'))
-model.add(Dropout(0.3))
+# model.add(Dropout(0.3))
 model.add(Dense(100,activation='relu'))
-model.add(Dropout(0.3))
-model.add(Dense(8,activation='softmax'))
+# model.add(Dropout(0.3))
+model.add(Dense(7,activation='softmax'))
     
 
 #3. 컴파일.훈련
 
-model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])
 
-earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
-              verbose=1, restore_best_weights = True)     
+# earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
+#               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=300,validation_split=0.2,verbose=2,batch_size=16,
-                 callbacks=[earlystopping]) 
+hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=16)
+                #  callbacks=[earlystopping]) 
 
 
 #4. 예측
@@ -53,12 +53,12 @@ val_accuracy = hist.history['val_accuracy']
 loss = hist.history['loss']
 val_loss = hist.history['val_loss']
 
-print('loss : ',loss[-1])
-print('accuracy : ', accuracy[-1])
+print('loss : ',loss)
+print('accuracy : ', accuracy)
 
 loss = model.evaluate(x_test, y_test)
 y_predict = model.predict(season)
-print('predict : ',y_predict)
+print('predict : ',y_predict.round())
 
 
 # loss :  1.0985032320022583
