@@ -50,7 +50,7 @@ print(x_train.shape, x_train.shape) #  (1450, 150, 150, 3) (1450, 150, 150, 3)
 print(y_test.shape, y_test.shape)   # (550,) (550,)                          
 
 
-augument_size = 5                    # 반복횟수
+augument_size = 2                   # 반복횟수
 randidx =np.random.randint(x_train.shape[0],size=augument_size)
 
 print(np.min(randidx),np.max(randidx))      # random 함수 적용가능. 
@@ -73,10 +73,10 @@ print(y_train.shape)
 print(x_test.shape) 
 print(y_test.shape) 
 
-np.save('d:/study_data/_save/_npy/project_train4_x.npy', arr =x_train)
-np.save('d:/study_data/_save/_npy/project_train4_y.npy', arr =y_train)
-np.save('d:/study_data/_save/_npy/project_test4_x.npy', arr =x_test)
-np.save('d:/study_data/_save/_npy/project_test4_y.npy', arr =y_test)
+np.save('d:/study_data/_save/_npy/project_train5_x.npy', arr =x_train)
+np.save('d:/study_data/_save/_npy/project_train5_y.npy', arr =y_train)
+np.save('d:/study_data/_save/_npy/project_test5_x.npy', arr =x_test)
+np.save('d:/study_data/_save/_npy/project_test5_y.npy', arr =y_test)
 
 
 

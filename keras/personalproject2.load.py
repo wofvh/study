@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest_rainbow.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest_hail.npy')
 x_train = np.load('d:/study_data/_save/_npy/project_train4_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/project_train4_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test4_x.npy')
@@ -49,7 +49,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=12, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=100,validation_split=0.3,verbose=2,batch_size=32,
+hist = model.fit(x_train,y_train, epochs=40,validation_split=0.3,verbose=2,batch_size=16,
                  callbacks=[earlystopping]) 
 
 
@@ -87,45 +87,18 @@ print('predict : ',y_predict)
 
 # 0.hail   1.lighting   2.rain   3.rime   4.shine   5.smog   6.snow 
 
-# 0.hail :       30%  [4 0 0 6 0 2 0 1 5 2 4]
+# 0.hail :       70%  [0 0 0 0 3 6 6 0 0 0]
 
 # 1.lighting :   90%  [1 1 1 1 4 1 1 1 1 1]
 
 # 2.rain :       40%  [0 0 2 0 0 2 6 6 2 2]
 
-# 3.rainbow :       2/7
-# [[0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 1. 0. 0. 0.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 1. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]
-#  [0. 0. 0. 0. 1. 0. 0.]
-#  [0. 0. 0. 1. 0. 0. 0.]]
+# 3.rainbow :    60%  [6 3 3 4 5 3 4 3 3 3]
 
-# 4.sunshine : 6/7
-#  [[0. 0. 0. 0. 1. 0. 0.]
-#  [0. 0. 0. 1. 0. 0. 0.]
-#  [0. 0. 0. 0. 1. 0. 0.]
-#  [0. 0. 0. 0. 1. 0. 0.]
-#  [0. 0. 0. 0. 1. 0. 0.]
-#  [0. 0. 0. 0. 1. 0. 0.]
-#  [0. 0. 0. 0. 1. 0. 0.]]
+# 4.sunshine :   90%  [4 4 4 4 4 3 4 4 4 4]
 
-#  5.smog : 3/7
-# [[1. 0. 0. 0. 0. 0. 0.]
-#  [0. 0. 0. 0. 0. 1. 0.]
-#  [0. 0. 0. 0. 0. 1. 0.]
-#  [0. 0. 0. 0. 0. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]
-#  [0. 0. 0. 0. 0. 1. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]]
+# 5.smog :       50%  [5 6 3 3 5 4 5 3 5 5]
 
-# 6.snow : 7/7
-# [[0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 0. 0. 0. 0. 1.]]
+# 6.snow :       70%  [6 6 0 5 6 6 6 6 0 6]
+
 
