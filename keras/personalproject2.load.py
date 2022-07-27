@@ -8,11 +8,11 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest33.npy')
-x_train = np.load('d:/study_data/_save/_npy/project_train_x.npy')
-y_train = np.load('d:/study_data/_save/_npy/project_train_y.npy')
-x_test = np.load('d:/study_data/_save/_npy/project_test_x.npy')
-y_test = np.load('d:/study_data/_save/_npy/project_test_y.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest_rainbow.npy')
+x_train = np.load('d:/study_data/_save/_npy/project_train4_x.npy')
+y_train = np.load('d:/study_data/_save/_npy/project_train4_y.npy')
+x_test = np.load('d:/study_data/_save/_npy/project_test4_x.npy')
+y_test = np.load('d:/study_data/_save/_npy/project_test4_y.npy')
 
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
@@ -31,7 +31,7 @@ from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxP
 model = Sequential()
 model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
 model.add(MaxPooling2D(2,2))
-model.add(Conv2D(128,(3,3),activation='relu'))
+model.add(Conv2D(256,(3,3),activation='relu'))
 model.add(MaxPooling2D(2,2))
 model.add(Conv2D(128,(3,3),activation='relu'))
 model.add(Flatten())
@@ -46,10 +46,10 @@ model.add(Dense(7,activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])
 
-earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
+earlystopping =EarlyStopping(monitor='loss', patience=12, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=16,
+hist = model.fit(x_train,y_train, epochs=100,validation_split=0.3,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
 
 
@@ -87,13 +87,13 @@ print('predict : ',y_predict)
 
 # 0.hail   1.lighting   2.rain   3.rime   4.shine   5.smog   6.snow 
 
-# 0.hail :       5/7   [0 3 0 0 0 0 0 2]
+# 0.hail :       30%  [4 0 0 6 0 2 0 1 5 2 4]
 
-# 1.lighting :   6/7  [1 1 1 0 1 1 1]
+# 1.lighting :   90%  [1 1 1 1 4 1 1 1 1 1]
 
-# 2.rain :       4/7   [2 2 0 2 6 2 6]
+# 2.rain :       40%  [0 0 2 0 0 2 6 6 2 2]
 
-# 3.rime :       2/7
+# 3.rainbow :       2/7
 # [[0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 1. 0. 0. 0.]
 #  [0. 0. 0. 0. 0. 0. 1.]
@@ -128,3 +128,4 @@ print('predict : ',y_predict)
 #  [0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 0. 0. 0. 1.]]
+

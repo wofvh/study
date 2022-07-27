@@ -20,8 +20,8 @@ train_datagen = ImageDataGenerator(              # 이미지를 수치화. 증�
     width_shift_range=0.1,                      # width_shift그림을 수직 또는 수평으로 무작위로 변환하는 범위(총 너비 또는 높이의 일부)입니다.
     height_shift_range=-0.1,                    # height_shift 수직 또는 수평으로 무작위로 변환하는 범위(총 너비 또는 높이의 일부)입니다.
     rotation_range=5,                           # 사진을 무작위로 회전할 범위인 도(0-180) 값입니다.
-    zoom_range=1.1,                             # 내부 사진을 무작위로 확대하기 위한 것입니다
-    shear_range=0.3,                            # 무작위로 전단 변환 을 적용하기 위한 것입니다. # 찌그러,기울려 
+    zoom_range=1.2,                             # 내부 사진을 무작위로 확대하기 위한 것입니다
+    shear_range=0.7,                            # 무작위로 전단 변환 을 적용하기 위한 것입니다. # 찌그러,기울려 
     fill_mode='nearest'                         # 회전 또는 너비/높이 이동 후에 나타날 수 있는 새로 생성된 픽셀을 채우는 데 사용되는 전략입니다.
 )
 
@@ -50,7 +50,7 @@ print(x_train.shape, x_train.shape) #  (1450, 150, 150, 3) (1450, 150, 150, 3)
 print(y_test.shape, y_test.shape)   # (550,) (550,)                          
 
 
-augument_size = 500                     # 반복횟수
+augument_size = 5                    # 반복횟수
 randidx =np.random.randint(x_train.shape[0],size=augument_size)
 
 print(np.min(randidx),np.max(randidx))      # random 함수 적용가능. 
@@ -73,10 +73,10 @@ print(y_train.shape)
 print(x_test.shape) 
 print(y_test.shape) 
 
-np.save('d:/study_data/_save/_npy/project_train_x.npy', arr =x_train)
-np.save('d:/study_data/_save/_npy/project_train_y.npy', arr =y_train)
-np.save('d:/study_data/_save/_npy/project_test_x.npy', arr =x_test)
-np.save('d:/study_data/_save/_npy/project_test_y.npy', arr =y_test)
+np.save('d:/study_data/_save/_npy/project_train4_x.npy', arr =x_train)
+np.save('d:/study_data/_save/_npy/project_train4_y.npy', arr =y_train)
+np.save('d:/study_data/_save/_npy/project_test4_x.npy', arr =x_test)
+np.save('d:/study_data/_save/_npy/project_test4_y.npy', arr =y_test)
 
 
 
