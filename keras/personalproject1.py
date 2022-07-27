@@ -20,8 +20,8 @@ train_datagen = ImageDataGenerator(              # 이미지를 수치화. 증�
     width_shift_range=0.1,                      # width_shift그림을 수직 또는 수평으로 무작위로 변환하는 범위(총 너비 또는 높이의 일부)입니다.
     height_shift_range=-0.1,                    # height_shift 수직 또는 수평으로 무작위로 변환하는 범위(총 너비 또는 높이의 일부)입니다.
     rotation_range=5,                           # 사진을 무작위로 회전할 범위인 도(0-180) 값입니다.
-    zoom_range=1.2,                             # 내부 사진을 무작위로 확대하기 위한 것입니다
-    shear_range=0.7,                            # 무작위로 전단 변환 을 적용하기 위한 것입니다. # 찌그러,기울려 
+    zoom_range=1.1,                             # 내부 사진을 무작위로 확대하기 위한 것입니다
+    shear_range=0.3,                            # 무작위로 전단 변환 을 적용하기 위한 것입니다. # 찌그러,기울려 
     fill_mode='nearest'                         # 회전 또는 너비/높이 이동 후에 나타날 수 있는 새로 생성된 픽셀을 채우는 데 사용되는 전략입니다.
 )
 
@@ -78,27 +78,5 @@ np.save('d:/study_data/_save/_npy/project_train_y.npy', arr =y_train)
 np.save('d:/study_data/_save/_npy/project_test_x.npy', arr =x_test)
 np.save('d:/study_data/_save/_npy/project_test_y.npy', arr =y_test)
 
-# x_train = x_train.reshape(50000,32,32,3)
-# x_test = x_test.reshape(x_test.shape[0],x_test.shape[1],x_test.shape[2],1)
 
-# x_augumented = x_augumented.reshape(x_augumented.shape[0],
-#                                     x_augumented.shape[1],
-#                                     x_augumented.shape[2],
-#                                     3)
-
-# xy_train = train_datagen.flow(x_train,y_train,
-#                                 batch_size = augument_size,
-#                                 shuffle=False)
-
-# x_train1 =np.concatenate((xy_train[0][0],x_augumented))
-# y_train2 =np.concatenate((xy_train[0][1],y_augumented))
-
-# xy_augumented = test_datagen.flow(x_train1, y_train2,
-#                                 batch_size = augument_size,
-#                                 shuffle=False)
-
-# np.save('d:/study_data/_save/_npy/personalproject_train14_x.npy', arr=xy_augumented[0][0])
-# np.save('d:/study_data/_save/_npy/personalproject_train14_y.npy', arr=xy_augumented[0][1])
-# np.save('d:/study_data/_save/_npy/personalproject_test14_x.npy', arr=x_test)
-# np.save('d:/study_data/_save/_npy/personalproject_test14_y.npy', arr=y_test)
 

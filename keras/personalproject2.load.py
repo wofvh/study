@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest28.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest33.npy')
 x_train = np.load('d:/study_data/_save/_npy/project_train_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/project_train_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test_x.npy')
@@ -49,7 +49,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=20,validation_split=0.3,verbose=2,batch_size=16,
+hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=16,
                  callbacks=[earlystopping]) 
 
 
@@ -61,50 +61,39 @@ val_loss = hist.history['val_loss']
 
 print('loss : ',loss[-1])
 print('accuracy : ', accuracy[-1])
+# loss = model.evaluate(x_test, y_test)
+# x_predict = model.predict(x_test)
 
+# y_predict = model.predict(x_test)
+# # y_predict = np.argmax(y_predict, axis= 1)
+# # y_test = np.argmax(y_test, axis= 1)
+
+
+
+# season_predict = model.predict(season)
+# y_test = np.argmax(y_test, axis= 1)
+# y_predict = np.argmax(season_predict, axis=1) 
+# print('predict : ',season_predict)
+############################################
 loss = model.evaluate(x_test, y_test)
 y_predict = model.predict(season)
-
 
 y_test = np.argmax(y_test, axis= 1)
 y_predict = np.argmax(y_predict, axis=1) 
 print('predict : ',y_predict)
 
-from sklearn.metrics import accuracy_score
-acc = accuracy_score(x_test,y_test)
-print('acc :',acc )
+# acc = accuracy_score(y_test,y_predict) 
+# print('acc : ', acc) 
 
+# 0.hail   1.lighting   2.rain   3.rime   4.shine   5.smog   6.snow 
 
-# 1.hail   2.lighting   3.rain   4.rime   5.shine   6.smog   7.snow 
+# 0.hail :       5/7   [0 3 0 0 0 0 0 2]
 
-# 1.hail : 3/7
-# [[0. 0. 0. 0. 1. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]
-#  [0. 0. 1. 0. 0. 0. 0.]
-#  [0. 0. 0. 1. 0. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]]
+# 1.lighting :   6/7  [1 1 1 0 1 1 1]
 
-# 2.lighting : 7/7
-# [[0. 1. 0. 0. 0. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]
-#  [0. 1. 0. 0. 0. 0. 0.]]
+# 2.rain :       4/7   [2 2 0 2 6 2 6]
 
-# 3.rain : 4/7
-# [[0. 0. 1. 0. 0. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]
-#  [0. 0. 1. 0. 0. 0. 0.]
-#  [1. 0. 0. 0. 0. 0. 0.]
-#  [0. 0. 1. 0. 0. 0. 0.]
-#  [0. 0. 0. 0. 0. 0. 1.]
-#  [0. 0. 1. 0. 0. 0. 0.]]
-
-# 4.rime : 2/7
+# 3.rime :       2/7
 # [[0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 1. 0. 0. 0.]
 #  [0. 0. 0. 0. 0. 0. 1.]
@@ -113,7 +102,7 @@ print('acc :',acc )
 #  [0. 0. 0. 0. 1. 0. 0.]
 #  [0. 0. 0. 1. 0. 0. 0.]]
 
-# 5.sunshine : 6/7
+# 4.sunshine : 6/7
 #  [[0. 0. 0. 0. 1. 0. 0.]
 #  [0. 0. 0. 1. 0. 0. 0.]
 #  [0. 0. 0. 0. 1. 0. 0.]
@@ -122,7 +111,7 @@ print('acc :',acc )
 #  [0. 0. 0. 0. 1. 0. 0.]
 #  [0. 0. 0. 0. 1. 0. 0.]]
 
-#  6.smog : 3/7
+#  5.smog : 3/7
 # [[1. 0. 0. 0. 0. 0. 0.]
 #  [0. 0. 0. 0. 0. 1. 0.]
 #  [0. 0. 0. 0. 0. 1. 0.]
@@ -131,7 +120,7 @@ print('acc :',acc )
 #  [0. 0. 0. 0. 0. 1. 0.]
 #  [1. 0. 0. 0. 0. 0. 0.]]
 
-# 7.snow : 7/7
+# 6.snow : 7/7
 # [[0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 0. 0. 0. 1.]
 #  [0. 0. 0. 0. 0. 0. 1.]

@@ -14,7 +14,7 @@ def createFolder(directory):
         print ('Error: Creating directory. ' +  directory)
 
 
-keyword='nice weather'
+keyword='맑은하늘'
 #keyword2='고화질'
 createFolder('d:/project/'+keyword)
 
@@ -73,7 +73,7 @@ time.sleep(2)
 for k,i in enumerate(links):
     url = i
     start = time.time()
-    urllib.request.urlretrieve(url, "d:/project/"+keyword+"/"+"img"+str(k)+".jpg")
+    urllib.request.urlretrieve(url, "d:/project/"+keyword+"/"+"img1"+str(k)+".jpg")
     print(str(k+1)+'/'+str(len(links))+' '+keyword+' 다운로드 중....... Download time : '+str(time.time() - start)[:5]+' 초')
 print(keyword+' ---다운로드 완료---')
 
