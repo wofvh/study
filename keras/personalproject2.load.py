@@ -65,7 +65,22 @@ y_predict = model.predict(season)
 
 y_test = np.argmax(y_test, axis= 1)
 y_predict = np.argmax(y_predict, axis=1) 
-print('predict : ',y_predict)
+print('predict : ',y_predict[0])
+
+if y_predict[0] == 0:
+    print('hail ')
+elif  y_predict[0] ==1 :
+    print('lighting')
+elif  y_predict[0] ==2 :
+    print('rain')
+elif  y_predict[0] ==3 :
+    print('rainbow')
+elif  y_predict[0] ==4 :
+    print('sunshine')        
+elif  y_predict[0] ==5 :
+    print('smog')        
+else :
+    print('snow')   
 ############################################
 # y_predict = model.predict(x_test)
 # y_predict = tf.argmax(y_predict,axis=1) 
