@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest_hail.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest_rain.npy')
 x_train = np.load('d:/study_data/_save/_npy/project_train4_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/project_train4_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test4_x.npy')
@@ -49,9 +49,8 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=12, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=40,validation_split=0.3,verbose=2,batch_size=16,
+hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=16,
                  callbacks=[earlystopping]) 
-
 
 #4. 예측
 accuracy = hist.history['accuracy']
