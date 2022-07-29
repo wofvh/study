@@ -12,7 +12,7 @@ from sklearn.metrics import accuracy_score
 # tf.random.set_seed(9) # 하이퍼 파라미터 튜닝 용이하게 하기 위해
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'D:\study_data\_data/test/'
+app.config['UPLOAD_FOLDER'] = 'D:\study_data\_data/test/test'
 
 #업로드 HTML 렌더링
 @app.route('/')
