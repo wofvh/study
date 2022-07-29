@@ -23,10 +23,10 @@ print(y_test.shape)             # (550,)
 # x_test = x_test.reshape(550,450,150)
 
 
-from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.models import Sequential, load_model
 from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxPooling2D,LSTM
 
-
+'''
 #2. 모델 
 model = Sequential()
 model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
@@ -40,6 +40,8 @@ model.add(Dense(100,activation='relu'))
 model.add(Dense(100,activation='relu'))
 model.add(Dense(7,activation='softmax'))
     
+model.save("./_save/project1_save_model.h1")
+
 
 #3. 컴파일.훈련
 
@@ -50,22 +52,26 @@ earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto',
 
 hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
+'''
+
+model = load_model('C:\study\_save/project.h5')
+
 
 #4. 예측
-accuracy = hist.history['accuracy']
-val_accuracy = hist.history['val_accuracy']
-loss = hist.history['loss']
-val_loss = hist.history['val_loss']
+# accuracy = hist.history['accuracy']
+# val_accuracy = hist.history['val_accuracy']
+# loss = hist.history['loss']
+# val_loss = hist.history['val_loss']
 
-print('loss : ',loss[-1])
-print('accuracy : ', accuracy[-1])
+# print('loss : ',loss[-1])
+# print('accuracy : ', accuracy[-1])
 
 ############################################
 loss = model.evaluate(x_test, y_test)
 y_predict = model.predict(season)
 
 y_test = np.argmax(y_test, axis= 1)
-y_predict = np.argmax(y_predict, axis=1) 
+y_predict = np.argmax(y_predict, axis=1)
 print('predict : ',y_predict)
 
 if y_predict[0] == 0:

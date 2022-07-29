@@ -124,9 +124,11 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=30,validation_split=0.3,verbose=2,batch_size=16,
+hist = model.fit(x_train,y_train, epochs=3,validation_split=0.3,verbose=2,batch_size=16,
                  callbacks=[earlystopping]) 
+model.save('C:\study\_save/project.h5')
 
+# model = load_model('C:\study\_save/project.h5')
 
 #4. 예측
 accuracy = hist.history['accuracy']

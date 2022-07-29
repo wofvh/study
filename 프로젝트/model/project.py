@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import os
 from keras.preprocessing.image import ImageDataGenerator
-from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.models import Sequential, load_model
 from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxPooling2D,LSTM
 from tensorflow.keras.utils import to_categorical
 import numpy as np
@@ -64,65 +64,67 @@ def upload_file():
 
 
         #2. 모델 
-        model = Sequential()
-        model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
-        model.add(MaxPooling2D(2,2))
-        model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
-        model.add(MaxPooling2D(2,2))
-        model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
-        model.add(Flatten())
-        model.add(Dropout(0.5))
-        model.add(Dense(100,activation='relu'))
-        model.add(Dense(100,activation='relu'))
-        model.add(Dense(7,activation='softmax'))
+        # model = Sequential()
+        # model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
+        # model.add(MaxPooling2D(2,2))
+        # model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
+        # model.add(MaxPooling2D(2,2))
+        # model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
+        # model.add(Flatten())
+        # model.add(Dropout(0.5))
+        # model.add(Dense(100,activation='relu'))
+        # model.add(Dense(100,activation='relu'))
+        # model.add(Dense(7,activation='softmax'))
             
-
+        # model.save("./_save/project_save_model.h1")
+        
         #3. 컴파일.훈련
 
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])
+        # model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])
 
-        earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
-                    verbose=1, restore_best_weights = True)     
+        # earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
+        #             verbose=1, restore_best_weights = True)     
 
-        hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
-                        callbacks=[earlystopping]) 
-
+        # hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
+        #                 callbacks=[earlystopping]) 
+        model = load_model('C:\study\_save/project.h5')
+        
         #4. 예측
-        accuracy = hist.history['accuracy']
-        val_accuracy = hist.history['val_accuracy']
-        loss = hist.history['loss']
-        val_loss = hist.history['val_loss']
+        # accuracy = model.history['accuracy']
+        # val_accuracy = model.history['val_accuracy']
+        # loss = model.history['loss']
+        # val_loss = model.history['val_loss']
 
-        print('loss : ',loss[-1])
-        print('accuracy : ', accuracy[-1])
+        # print('loss : ',loss[-1])
+        # print('accuracy : ', accuracy[-1])
 
-        ############################################
-        loss = model.evaluate(x_test, y_test)
+        # ############################################
+        # loss = model.evaluate(x_test, y_test)
         y_predict = model.predict(season)
 
         y_test = np.argmax(y_test, axis= 1)
         y_predict = np.argmax(y_predict, axis=1) 
         print('predict : ',y_predict)
-
+        
         
         if y_predict[0] == 0:
-            print('hail ')
+            wh_result='hail '
         elif  y_predict[0] ==1 :
-            print('lighting')
+            wh_result='lighting'
         elif  y_predict[0] ==2 :
-            print('rain')
+            wh_result='rain'
         elif  y_predict[0] ==3 :
-            print('rainbow')
+            wh_result='rainbow'
         elif  y_predict[0] ==4 :
-            print('sunshine')        
+            wh_result='sunshine'        
         elif  y_predict[0] ==5 :
-            print('smog')        
+            wh_result='smog'        
         else :
-            print('snow')   
+             wh_result='snow'   
 
         wh1 = y_predict[0]
 
-        return render_template('end.html', wh=wh1)
+        return render_template('end.html', wh=wh_result)
 
     
 if __name__ == '__main__':
