@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest_sunshine.npy')
+season = np.load('d:/study_data/_save/_npy/personaltest_rainbow.npy')
 x_train = np.load('d:/study_data/_save/_npy/project_train7_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/project_train7_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test7_x.npy')
@@ -24,23 +24,41 @@ print(y_test.shape)             # (550,)
 
 
 from tensorflow.python.keras.models import Sequential, load_model
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxPooling2D,LSTM
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten , Dropout,MaxPooling2D,LSTM,MaxPool2D
 
-'''
+
 #2. 모델 
+# model = Sequential()
+# model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
+# model.add(MaxPooling2D(2,2))
+# model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
+# model.add(MaxPooling2D(2,2))
+# model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
+# model.add(Flatten())
+# model.add(Dropout(0.5))
+# model.add(Dense(100,activation='relu'))
+# model.add(Dense(100,activation='relu'))
+# model.add(Dense(7,activation='softmax'))
+
 model = Sequential()
-model.add(Conv2D(64,(3,3), input_shape = (150,150,3), padding='same', activation='relu'))
-model.add(MaxPooling2D(2,2))
-model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
-model.add(MaxPooling2D(2,2))
-model.add(Conv2D(128,(3,3), padding='same',activation='relu'))
+model.add(Conv2D(128,(2,2),input_shape=(150,150,3),padding='same',activation='relu'))
+# model.add(conv_base)
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+# model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+# model.add(MaxPool2D((2,2)))
 model.add(Flatten())
-model.add(Dropout(0.5))
-model.add(Dense(100,activation='relu'))
-model.add(Dense(100,activation='relu'))
+model.add(Dense(256,activation='relu'))
+model.add(Dropout(0.6))
 model.add(Dense(7,activation='softmax'))
+model.summary()
     
-model.save("./_save/project1_save_model.h1")
+# model.save("./_save/project1_save_model.h2")
 
 
 #3. 컴파일.훈련
@@ -52,9 +70,9 @@ earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto',
 
 hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
-'''
 
-model = load_model('C:\study\_save/project.h5')
+model.save('C:\study\_save/project1.h5')
+# model = load_model('C:\study\_save/project.h5')
 
 
 #4. 예측
