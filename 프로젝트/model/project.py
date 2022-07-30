@@ -87,7 +87,7 @@ def upload_file():
 
         # hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
         #                 callbacks=[earlystopping]) 
-        model = load_model('C:\study\_save/project.h5')
+        model = load_model('C:\study\_save/project1.h5')
         
         #4. 예측
         # accuracy = model.history['accuracy']
@@ -108,19 +108,19 @@ def upload_file():
         
         
         if y_predict[0] == 0:
-            wh_result='hail '
+            wh_result='<우박>  내륙에는 우박이 떨어지는 곳이 있겠습니다. 각별히 유의하기 바랍니다.  '
         elif  y_predict[0] ==1 :
-            wh_result='lighting'
+            wh_result='<번개>  풍과 천둥번개가 동반될 수 있습니다. 틈나는 대로 날씨 변화를 점검해주시기 바랍니다.'
         elif  y_predict[0] ==2 :
-            wh_result='rain'
+            wh_result='<비> 비구름대가 발달하면서 내륙에는 비가 오는 곳이 있겠습니다.반드시 우산을 챙기시기 바랍니다. '
         elif  y_predict[0] ==3 :
-            wh_result='rainbow'
+            wh_result='<무지개>  소나기가 지나간 하늘에 무지개가 떴습니다.'
         elif  y_predict[0] ==4 :
-            wh_result='sunshine'        
+            wh_result='<맑은날> 고기압의 영향으로 대체로 날은 맑겠습니다.미세먼지 농도는 좋음 단계로 야외 활동하기 좋습니다. '        
         elif  y_predict[0] ==5 :
-            wh_result='smog'        
+            wh_result='<황사> 이번 베이징의 황사는 중국의 황사경보 4단계 중 낮은 청색경보 수준이라, 한국에는 약한 수준의 황사정도가 예상됩니다.'        
         else :
-             wh_result='snow'   
+             wh_result='<눈>  찬 대륙고기압이 우리나라에 확장되면서 기온이 급격히 낮아지고 대설이 예상됩니다.'   
 
         wh1 = y_predict[0]
 
