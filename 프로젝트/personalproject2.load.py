@@ -9,10 +9,10 @@ from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 
 #1. 데이터
 season = np.load('d:/study_data/_save/_npy/personaltest_rainbow.npy')
-x_train = np.load('d:/study_data/_save/_npy/project_train7_x.npy')
-y_train = np.load('d:/study_data/_save/_npy/project_train7_y.npy')
-x_test = np.load('d:/study_data/_save/_npy/project_test7_x.npy')
-y_test = np.load('d:/study_data/_save/_npy/project_test7_y.npy')
+x_train = np.load('d:/study_data/_save/_npy/project_train9_x.npy')
+y_train = np.load('d:/study_data/_save/_npy/project_train9_y.npy')
+x_test = np.load('d:/study_data/_save/_npy/project_test9_x.npy')
+y_test = np.load('d:/study_data/_save/_npy/project_test9_y.npy')
 
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
@@ -54,7 +54,7 @@ model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
 model.add(MaxPool2D((2,2)))
 model.add(Flatten())
 model.add(Dense(256,activation='relu'))
-model.add(Dropout(0.6))
+model.add(Dropout(0.6))                 #과적합방지
 model.add(Dense(7,activation='softmax'))
 model.summary()
     
@@ -71,7 +71,7 @@ earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto',
 hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
 
-model.save('C:\study\_save/project2.h5')
+model.save('C:\study\_save/project4.h5')
 # model = load_model('C:\study\_save/project.h5')
 
 
