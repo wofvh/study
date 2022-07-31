@@ -50,8 +50,8 @@ model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
 model.add(MaxPool2D((2,2)))
 model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
 model.add(MaxPool2D((2,2)))
-# model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
-# model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
 model.add(Flatten())
 model.add(Dense(256,activation='relu'))
 model.add(Dropout(0.6))
@@ -71,7 +71,7 @@ earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto',
 hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
 
-model.save('C:\study\_save/project1.h5')
+model.save('C:\study\_save/project2.h5')
 # model = load_model('C:\study\_save/project.h5')
 
 
