@@ -9,7 +9,7 @@ from tensorflow.python.keras.callbacks import EarlyStopping
 import tensorflow as tf
 from sklearn.metrics import accuracy_score
 
-# tf.random.set_seed(9) # 하이퍼 파라미터 튜닝 용이하게 하기 위해
+tf.random.set_seed(9) # 하이퍼 파라미터 튜닝 용이하게 하기 위해
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'D:\study_data\_data/test/test'
@@ -17,14 +17,14 @@ app.config['UPLOAD_FOLDER'] = 'D:\study_data\_data/test/test'
 #업로드 HTML 렌더링
 @app.route('/')
 def render_file():
-   return render_template('start.html')
+   return render_template('start1.html')
 
 #파일 업로드 처리
 @app.route('/fileUpload', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
         f = request.files['file']
-      #저장할 경로 + 파일명
+        #저장할 경로 + 파일명
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
         
         season = ImageDataGenerator(
@@ -78,7 +78,7 @@ def upload_file():
             
         # model.save("./_save/project_save_model.h1")
         
-        #3. 컴파일.훈련
+        # #3. 컴파일.훈련
 
         # model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])
 
@@ -87,7 +87,7 @@ def upload_file():
 
         # hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
         #                 callbacks=[earlystopping]) 
-        model = load_model('C:\study\_save/project1.h5')
+        model = load_model('C:\study\_save/project4.h5')
         
         #4. 예측
         # accuracy = model.history['accuracy']
@@ -124,7 +124,7 @@ def upload_file():
 
         wh1 = y_predict[0]
 
-        return render_template('end.html', wh=wh_result)
+        return render_template('end1.html', wh=wh_result)
 
     
 if __name__ == '__main__':

@@ -8,11 +8,11 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personaltest_rainbow.npy')
-x_train = np.load('d:/study_data/_save/_npy/project_train9_x.npy')
-y_train = np.load('d:/study_data/_save/_npy/project_train9_y.npy')
-x_test = np.load('d:/study_data/_save/_npy/project_test9_x.npy')
-y_test = np.load('d:/study_data/_save/_npy/project_test9_y.npy')
+season = np.load('d:/study_data/_save/_npy/personalpj_project24.npy')
+x_train = np.load('d:/study_data/_save/_npy/project_train11_x.npy')
+y_train = np.load('d:/study_data/_save/_npy/project_train11_y.npy')
+x_test = np.load('d:/study_data/_save/_npy/project_test11_x.npy')
+y_test = np.load('d:/study_data/_save/_npy/project_test11_y.npy')
 
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
@@ -50,11 +50,11 @@ model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
 model.add(MaxPool2D((2,2)))
 model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
 model.add(MaxPool2D((2,2)))
-model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
-model.add(MaxPool2D((2,2)))
+# model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+# model.add(MaxPool2D((2,2)))
 model.add(Flatten())
 model.add(Dense(256,activation='relu'))
-model.add(Dropout(0.6))                 #과적합방지
+# model.add(Dropout(0.6))                 #과적합방지
 model.add(Dense(7,activation='softmax'))
 model.summary()
     
@@ -68,7 +68,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
+hist = model.fit(x_train,y_train, epochs=200,validation_split=0.15,verbose=2,batch_size=50,
                  callbacks=[earlystopping]) 
 
 model.save('C:\study\_save/project4.h5')
@@ -86,11 +86,20 @@ model.save('C:\study\_save/project4.h5')
 
 ############################################
 loss = model.evaluate(x_test, y_test)
-y_predict = model.predict(season)
+# y_predict = model.predict(season)
 
+# y_predict = model.predict(x_test)
+# y_predict = tf.argmax(y_predict,axis=1) 
+
+# y_test = tf.argmax(y_test,axis=1) 
+
+y_test2 = [0,1,2,3,4,5,6]
+y_predict = model.predict(season)
 y_test = np.argmax(y_test, axis= 1)
 y_predict = np.argmax(y_predict, axis=1)
 print('predict : ',y_predict)
+acc = accuracy_score(y_test2,y_predict)
+print('acc : ',acc)
 
 if y_predict[0] == 0:
     print('hail ')
@@ -108,12 +117,12 @@ else :
     print('snow')   
 ############################################
 # y_predict = model.predict(x_test)
-# y_predict = tf.argmax(y_predict,axis=1) 
-
-# y_test = tf.argmax(y_test,axis=1) 
+# # y_predict = tf.argmax(y_predict,axis=1) 
+# # y_test = tf.argmax(y_test,axis=1) 
 # acc = accuracy_score(y_test,y_predict)
 # print('acc : ',acc)
 ############################################
+
 # 0.hail   1.lighting   2.rain   3.rime   4.shine   5.smog   6.snow 
 
 # 0.hail :       70%  [0 0 0 0 3 6 6 0 0 0]

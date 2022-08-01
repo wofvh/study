@@ -12,11 +12,11 @@ from sklearn.metrics import r2_score, accuracy_score
 from sklearn.model_selection import train_test_split
 from keras.datasets import mnist, cifar100 , fashion_mnist
 
-train_datagen = ImageDataGenerator(              # 이미지를 수치화. 증폭도 가능. 
-    rescale=1./255,                             # 다른 처리 전에 데이터를 곱할 값입니다. 원본 이미지는 0-255의 RGB 계수로 구성되지만 이러한 값은 모델이 처리하기에는 너무 높기 때문에(주어진 일반적인 학습률) 
-                                                # 1/255로 스케일링하여 대신 0과 1 사이의 값을 목표로 합니다.
-    horizontal_flip=True,                       # 이미지의 절반을 가로로 무작위로 뒤집기 위한 것입니다. 수평 비대칭에 대한 가정이 없을 때 관련이 있습니다
-    vertical_flip=True,                         # 이미지의 절반을 가로로 무작위로 뒤집기 위한 것입니다. 수직 비대칭에 대한 가정이 없을 때 관련이 있습니다
+train_datagen = ImageDataGenerator(             # 이미지를 수치화. 증폭도 가능. 
+    rescale=1./255,                             # 다른 처리 전에 데이터를 곱할 값/ 원본 이미지는 0-255의 RGB 계수로 구성되지만 이러한 값은 모델이 처리하기에는 너무 높기 때문에(주어진 일반적인 학습률) 
+                                              
+    horizontal_flip=True,                       # 이미지의 절반을 수평으로 무작위로 뒤집기 위한 것.
+    vertical_flip=True,                         # 이미지의 절반을 수직으로 무작위로 뒤집기 위한 것.
     width_shift_range=0.1,                      # width_shift그림을 수직 또는 수평으로 무작위로 변환하는 범위(총 너비 또는 높이의 일부)입니다.
     height_shift_range=-0.1,                    # height_shift 수직 또는 수평으로 무작위로 변환하는 범위(총 너비 또는 높이의 일부)입니다.
     rotation_range=5,                           # 사진을 무작위로 회전할 범위인 도(0-180) 값입니다.
@@ -43,14 +43,14 @@ y = xy[0][1]
 
 print(x.shape,y.shape)  # (5, 100, 100, 3) (5,)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.25 )
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.15,random_state=58525 )
                           
 
 print(x_train.shape, x_train.shape) #  (1450, 150, 150, 3) (1450, 150, 150, 3)
 print(y_test.shape, y_test.shape)   # (550,) (550,)                          
 
 
-augument_size = 1000                  # 반복횟수
+augument_size = 2                  # 반복횟수
 randidx =np.random.randint(x_train.shape[0],size=augument_size)
 
 print(np.min(randidx),np.max(randidx))      # random 함수 적용가능. 
@@ -59,8 +59,8 @@ print(type(randidx))            # <class 'numpy.ndarray'>
 x_augumented = x_train[randidx].copy()
 y_augumented = y_train[randidx].copy()
 
-print(x_augumented.shape)       # (40000, 150, 150, 1)
-print(y_augumented.shape)       # (40000,)
+print(x_augumented.shape)       # (2, 150, 150, 3)
+print(y_augumented.shape)       # (2, 7)
 
 x_augumented = train_datagen.flow(x_augumented, y_augumented, batch_size=augument_size, shuffle=False).next()[0]
 
@@ -68,15 +68,15 @@ x_augumented = train_datagen.flow(x_augumented, y_augumented, batch_size=augumen
 x_train = np.concatenate((x_train, x_augumented))
 y_train = np.concatenate((y_train, y_augumented))
 
-print(x_train.shape) 
-print(y_train.shape) 
-print(x_test.shape) 
-print(y_test.shape) 
+print(x_train.shape) # (2739, 150, 150, 3)
+print(y_train.shape) # (2739, 7)
+print(x_test.shape)  # (483, 150, 150, 3)
+print(y_test.shape)  # (483, 7)
 
-np.save('d:/study_data/_save/_npy/project_train9_x.npy', arr =x_train)
-np.save('d:/study_data/_save/_npy/project_train9_y.npy', arr =y_train)
-np.save('d:/study_data/_save/_npy/project_test9_x.npy', arr =x_test)
-np.save('d:/study_data/_save/_npy/project_test9_y.npy', arr =y_test)
+# np.save('d:/study_data/_save/_npy/project_train11_x.npy', arr =x_train)
+# np.save('d:/study_data/_save/_npy/project_train11_y.npy', arr =y_train)
+# np.save('d:/study_data/_save/_npy/project_test11_x.npy', arr =x_test)
+# np.save('d:/study_data/_save/_npy/project_test11_y.npy', arr =y_test)
 
 
 
