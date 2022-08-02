@@ -18,5 +18,4 @@ season1 = season.flow_from_directory(
     shuffle=True,
     )
 
-np.save('d:/study_data/_save/_npy/personalpj_project28.npy', 
-        arr=season1[0][0])
+np.save('d:/study_data/_save/_npy/personalpj_project31.npy',  arr=season1[0][0])

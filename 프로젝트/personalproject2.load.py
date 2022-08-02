@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
 
 #1. 데이터
-season = np.load('d:/study_data/_save/_npy/personalpj_project28.npy')
+season = np.load('d:/study_data/_save/_npy/personalpj_project31.npy')
 x_train = np.load('d:/study_data/_save/_npy/project_train11_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/project_train11_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test11_x.npy')
@@ -68,7 +68,7 @@ additional_model.compile(loss='categorical_crossentropy',optimizer='adam',metric
 earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
               verbose=2, restore_best_weights = True)     
 
-hist = additional_model.fit(x_train,y_train, epochs=100    ,validation_split=0.15,verbose=2,batch_size=32,
+hist = additional_model.fit(x_train,y_train, epochs=20  ,validation_split=0.5,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
 
 # model.save('C:\study\_save/project4.h5')  # 웹에서 사용하기위해 
@@ -93,12 +93,12 @@ hist = additional_model.fit(x_train,y_train, epochs=100    ,validation_split=0.1
 
 # y_test = tf.argmax(y_test,axis=1) 
 
-# y_test2 = [0,1,2,3,4,5,6]
+y_test2 = [0,1,2,3,4,5,6]
 y_predict = additional_model.predict(season)
 y_test = np.argmax(y_test, axis= 1)
 y_predict = np.argmax(y_predict, axis=1)
 print('predict : ',y_predict)
-acc = accuracy_score(y_test,y_predict)
+acc = accuracy_score(y_test2,y_predict)
 print('acc : ',acc)
 
 
@@ -120,7 +120,7 @@ elif  y_predict[0] ==6 :
 
 ###########################################
 # y_predict = model.predict(x_test)
-# # y_predict = tf.argmax(y_predict,axis=1) 
+# # y_predict = tf.argmax(y_predict,axis=1) S
 # # y_test = tf.argmax(y_test,axis=1) 
 # acc = accuracy_score(y_test,y_predict)
 # print('acc : ',acc)
@@ -143,3 +143,4 @@ elif  y_predict[0] ==6 :
 # 6.snow :       70%  [6 6 0 5 6 6 6 6 0 6]
 
 
+# predict :  [5 0 6 3 2 0 1]

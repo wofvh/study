@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+
 <html>
    <body style="background:#dfe6f7;">
-    
+      <p>
+         <img src="{{ url_for('static', filename=image_file) }}">
+     </p>
       <form action = "http://127.0.0.1:5000/fileUpload" method = "POST" enctype = "multipart/form-data">
          <div style="text-align:center;">
             <h2 style="font-family:verdana; font-size:30px; width:600px; background:#c9d4f2; padding:26px 40px; color:#333; border:1px solid #fff;
@@ -19,6 +21,6 @@
             
          </div>
       </form>
-      <img src="images/1.jpg" alt="하하">
+       <img src="images/1.jpg" alt="하하">
    </body>
 </html>
