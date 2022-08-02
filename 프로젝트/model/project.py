@@ -8,8 +8,7 @@ import numpy as np
 from tensorflow.python.keras.callbacks import EarlyStopping
 import tensorflow as tf
 from sklearn.metrics import accuracy_score
-
-tf.random.set_seed(9) # 하이퍼 파라미터 튜닝 용이하게 하기 위해
+from flask import Flask, url_for
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'D:\study_data\_data/test/test'
@@ -119,12 +118,12 @@ def upload_file():
             wh_result='<맑은날> 고기압의 영향으로 대체로 날은 맑겠습니다.미세먼지 농도는 좋음 단계로 야외 활동하기 좋습니다. '        
         elif  y_predict[0] ==5 :
             wh_result='<황사> 이번 베이징의 황사는 중국의 황사경보 4단계 중 낮은 청색경보 수준이라, 한국에는 약한 수준의 황사정도가 예상됩니다.'        
-        else :
+        elif  y_predict[0] ==6 :
              wh_result='<눈>  찬 대륙고기압이 우리나라에 확장되면서 기온이 급격히 낮아지고 대설이 예상됩니다.'   
 
-        wh1 = y_predict[0]
+        # wh1 = y_predict[0]
 
-        return render_template('end1.html', wh=wh_result)
+        return render_template('end1.html', wh=wh_result,sa=app.config['UPLOAD_FOLDER'])
 
     
 if __name__ == '__main__':

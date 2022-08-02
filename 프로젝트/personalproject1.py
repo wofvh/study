@@ -26,7 +26,7 @@ train_datagen = ImageDataGenerator(             # 이미지를 수치화. 증폭
 )
 
 test_datagen =ImageDataGenerator(               # 평가데이터는 증폭하지 않는다. (수정x)
-    rescale=1./255
+    rescale=1./255                              # 가장 작은값을 0~255 가장큰값으로 가장 작은값을 빼고 나눈다. 0~1 사이
 )
 
 xy = train_datagen.flow_from_directory(
@@ -35,48 +35,28 @@ xy = train_datagen.flow_from_directory(
     batch_size=4000,
     class_mode='categorical',                        
     shuffle=True,
-  
     )                                            
 
 x = xy[0][0]
 y = xy[0][1]
 
-print(x.shape,y.shape)  # (5, 100, 100, 3) (5,)
-
 x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.15,random_state=58525 )
-                          
-
-print(x_train.shape, x_train.shape) #  (1450, 150, 150, 3) (1450, 150, 150, 3)
-print(y_test.shape, y_test.shape)   # (550,) (550,)                          
-
-
-augument_size = 2                  # 반복횟수
+                                                  
+augument_size = 500                  
 randidx =np.random.randint(x_train.shape[0],size=augument_size)
-
-print(np.min(randidx),np.max(randidx))      # random 함수 적용가능. 
-print(type(randidx))            # <class 'numpy.ndarray'>  
 
 x_augumented = x_train[randidx].copy()
 y_augumented = y_train[randidx].copy()
 
-print(x_augumented.shape)       # (2, 150, 150, 3)
-print(y_augumented.shape)       # (2, 7)
-
 x_augumented = train_datagen.flow(x_augumented, y_augumented, batch_size=augument_size, shuffle=False).next()[0]
 
-# 원본train과 증폭train 합치기
+# 원본train + 증폭train 
 x_train = np.concatenate((x_train, x_augumented))
 y_train = np.concatenate((y_train, y_augumented))
 
-print(x_train.shape) # (2739, 150, 150, 3)
-print(y_train.shape) # (2739, 7)
-print(x_test.shape)  # (483, 150, 150, 3)
-print(y_test.shape)  # (483, 7)
-
-# np.save('d:/study_data/_save/_npy/project_train11_x.npy', arr =x_train)
-# np.save('d:/study_data/_save/_npy/project_train11_y.npy', arr =y_train)
-# np.save('d:/study_data/_save/_npy/project_test11_x.npy', arr =x_test)
-# np.save('d:/study_data/_save/_npy/project_test11_y.npy', arr =y_test)
-
+np.save('d:/study_data/_save/_npy/project_train11_x.npy', arr =x_train)
+np.save('d:/study_data/_save/_npy/project_train11_y.npy', arr =y_train)
+np.save('d:/study_data/_save/_npy/project_test11_x.npy', arr =x_test)
+np.save('d:/study_data/_save/_npy/project_test11_y.npy', arr =y_test)
 
 
