@@ -64,7 +64,7 @@ model.fit(x_train,y_train)
 
 #4 평가 예측
 
-results = model.score(x_test,y_test)   # = evaluate 
+results = model.score(x_test,y_test)    # = evaluate 
 print("결과 :",results)                 # 회귀는 = r2스코어 분류는 acc 값과 동일. 
 
 y_predict = model.predict(x_test)
