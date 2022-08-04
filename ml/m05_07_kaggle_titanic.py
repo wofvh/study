@@ -38,29 +38,23 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     )
 
 #2. 모델
-from sklearn.utils import all_estimators
-import warnings
-warnings.filterwarnings('ignore') 
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+from sklearn.metrics import accuracy_score 
+from sklearn.model_selection import cross_val_predict, train_test_split, KFold, cross_val_score
+from sklearn.model_selection import cross_val_score
 
-# allAlgorithms = all_estimators(type_filter='classifier')
-allAlgorithms = all_estimators(type_filter='regressor')
+n_splits=5
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+#2. 모델
+model =  RandomForestClassifier()
 
-print('allAlgorithms:',allAlgorithms)
-print('모델개수:',len(allAlgorithms))
+#3.4 컴파일,훈련, 예측
+scores = cross_val_score(model,x_train, y_train,cv=kfold)
+print('acc :' ,scores,'\n cross_val_score',round(np.mean(scores),4))
 
-for (name,algorithm) in  allAlgorithms :
-    try :
-        model = algorithm()
-        model.fit(x_train,y_train)
-        
-        y_predict = model.predict(x_test)
-        acc = accuracy_score(y_test,y_predict)
-        print(name,'의 정답률 :',acc )
-    except:
-        # continue
-        print(name,"은 안나온 놈")
+y_predict = cross_val_predict(model,x_test, y_test,cv=kfold)
+acc =accuracy_score(y_test,y_predict)
+print('cross_val_predict acc :', acc )
+
+# acc : [0.7972028  0.81818182 0.81690141 0.78873239 0.78169014] 
+# cross_val_predict acc : 0.8100558659217877
+

@@ -51,34 +51,28 @@ y = datasets.target                     #(569,)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2,                                
     shuffle=True, random_state =58525)
-from sklearn.metrics import accuracy_score
+
 
 #2. 모델구성
 
-from sklearn.utils import all_estimators
-import warnings
-warnings.filterwarnings('ignore') 
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
-
-# allAlgorithms = all_estimators(type_filter='classifier')
-allAlgorithms = all_estimators(type_filter='regressor')
-
-print('allAlgorithms:',allAlgorithms)
-print('모델개수:',len(allAlgorithms))
+from sklearn.metrics import accuracy_score 
+from sklearn.model_selection import cross_val_predict, train_test_split, KFold, cross_val_score
+from sklearn.model_selection import cross_val_score
 from sklearn.metrics import r2_score
-for (name,algorithm) in  allAlgorithms :
-    try :
-        model = algorithm()
-        model.fit(x_train,y_train)
-        
-        y_predict = model.predict(x_test)
-        
-        r2 = r2_score(y_test,y_predict)
-        print('r2 스코어 :', r2)
-    except:
-        # continue
-        print(name,"은 안나온 놈")
+
+n_splits=5
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+#2. 모델
+model =  RandomForestRegressor ()
+
+#3.4 컴파일,훈련, 예측
+scores = cross_val_score(model,x_train, y_train,cv=kfold)
+print('r2 :' ,scores,'\n cross_val_score',round(np.mean(scores),4))
+
+y_predict = cross_val_predict(model,x_test, y_test,cv=kfold)
+r2 =r2_score(y_test,y_predict)
+print('cross_val_predict r2 :', r2 )
+
+# r2 : [0.8086264  0.80672291 0.80556312 0.81067309 0.7927834 ] 
+#  cross_val_score 0.8049
+# cross_val_predict r2 : 0.7560136947840981
