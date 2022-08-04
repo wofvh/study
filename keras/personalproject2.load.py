@@ -15,7 +15,7 @@ x_test = np.load('d:/study_data/_save/_npy/project_test7_x.npy')
 y_test = np.load('d:/study_data/_save/_npy/project_test7_y.npy')
 
 print(season.shape)
-'''''
+
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
 print(x_test.shape)             # (550, 150, 150, 3)
@@ -114,4 +114,3 @@ else :
 # 6.snow :       70%  [6 6 0 5 6 6 6 6 0 6]
 
 
-'''
