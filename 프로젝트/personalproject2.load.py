@@ -30,50 +30,50 @@ from keras import models, layers
 #2. 모델 
 
 
-pre_trained_vgg = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
-pre_trained_vgg.trainable = False
-pre_trained_vgg.summary()
-additional_model = models.Sequential()
-additional_model.add(pre_trained_vgg)
-additional_model.add(layers.Flatten())
-additional_model.add(layers.Dense(50, activation='relu'))
-additional_model.add(layers.Dense(50, activation='relu'))
-additional_model.add(layers.Dense(50, activation='relu'))
-additional_model.add(layers.Dense(7, activation='softmax'))
-additional_model.summary()
+# pre_trained_vgg = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+# pre_trained_vgg.trainable = False
+# pre_trained_vgg.summary()
+# additional_model = models.Sequential()
+# additional_model.add(pre_trained_vgg)
+# additional_model.add(layers.Flatten())
+# additional_model.add(layers.Dense(50, activation='relu'))
+# additional_model.add(layers.Dense(50, activation='relu'))
+# additional_model.add(layers.Dense(50, activation='relu'))
+# additional_model.add(layers.Dense(7, activation='softmax'))
+# additional_model.summary()
 
 
-# model = Sequential()
-# model.add(Conv2D(128,(2,2),input_shape=(150,150,3),padding='same',activation='relu'))
-# model.add(MaxPool2D((2,2)))
-# model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
-# model.add(MaxPool2D((2,2)))
-# model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
-# model.add(MaxPool2D((2,2)))
-# model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
-# model.add(MaxPool2D((2,2)))
-# model.add(Flatten())
-# model.add(Dense(256,activation='relu'))
-# model.add(Dropout(0.6))                
-# model.add(Dense(7,activation='softmax'))
-# model.summary()
+model = Sequential()
+model.add(Conv2D(128,(2,2),input_shape=(150,150,3),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(128,(2,2),padding='same',activation='relu'))
+model.add(MaxPool2D((2,2)))
+model.add(Flatten())
+model.add(Dense(256,activation='relu'))
+model.add(Dropout(0.6))                
+model.add(Dense(7,activation='softmax'))
+model.summary()
     
 # model.save("./_save/project1_save_model.h2")
 
 
 #3. 컴파일.훈련
 
-additional_model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 
 earlystopping =EarlyStopping(monitor='loss', patience=50, mode='auto', 
               verbose=2, restore_best_weights = True)     
 
-hist = additional_model.fit(x_train,y_train, epochs=20  ,validation_split=0.5,verbose=2,batch_size=32,
+hist = model.fit(x_train,y_train, epochs=3  ,validation_split=0.5,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
 
-# model.save('C:\study\_save/project4.h5')  # 웹에서 사용하기위해 
+model.save('C:\study\_save/project999.h5')  # 웹에서 사용하기위해 
 # model = load_model('C:\study\_save/project.h5')
-
+'''
 
 #4. 예측
 # accuracy = hist.history['accuracy']
@@ -94,7 +94,7 @@ hist = additional_model.fit(x_train,y_train, epochs=20  ,validation_split=0.5,ve
 # y_test = tf.argmax(y_test,axis=1) 
 
 y_test2 = [0,1,2,3,4,5,6]
-y_predict = additional_model.predict(season)
+y_predict = model.predict(season)
 y_test = np.argmax(y_test, axis= 1)
 y_predict = np.argmax(y_predict, axis=1)
 print('predict : ',y_predict)
@@ -144,3 +144,5 @@ elif  y_predict[0] ==6 :
 
 
 # predict :  [5 0 6 3 2 0 1]
+
+'''

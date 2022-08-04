@@ -86,8 +86,8 @@ def upload_file():
 
         # hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
         #                 callbacks=[earlystopping]) 
-        model = load_model('C:\study\_save/project4.h5')
-        model.save("./_save/project1_save_model.h2")
+        model = load_model('C:\study\_save/project999.h5')
+        
         #4. 예측
         # accuracy = model.history['accuracy']
         # val_accuracy = model.history['val_accuracy']
