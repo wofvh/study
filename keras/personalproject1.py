@@ -1,10 +1,7 @@
 
-from colorsys import yiq_to_rgb
 
 from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Conv2D, MaxPooling2D ,Flatten, Dense, Dropout
 import pandas as pd
 from tensorflow.python.keras.callbacks import EarlyStopping,ModelCheckpoint
 import tensorflow as tf
@@ -50,28 +47,8 @@ print(x_train.shape, x_train.shape) #  (1450, 150, 150, 3) (1450, 150, 150, 3)
 print(y_test.shape, y_test.shape)   # (550,) (550,)                          
 
 
-augument_size = 100                   # 반복횟수
-randidx =np.random.randint(x_train.shape[0],size=augument_size)
+# 
 
-print(np.min(randidx),np.max(randidx))      # random 함수 적용가능. 
-print(type(randidx))            # <class 'numpy.ndarray'>  
-
-x_augumented = x_train[randidx].copy()
-y_augumented = y_train[randidx].copy()
-
-print(x_augumented.shape)       # (40000, 150, 150, 1)
-print(y_augumented.shape)       # (40000,)
-
-x_augumented = train_datagen.flow(x_augumented, y_augumented, batch_size=augument_size, shuffle=False).next()[0]
-
-# 원본train과 증폭train 합치기
-x_train = np.concatenate((x_train, x_augumented))
-y_train = np.concatenate((y_train, y_augumented))
-
-print(x_train.shape) 
-print(y_train.shape) 
-print(x_test.shape) 
-print(y_test.shape) 
 
 np.save('d:/study_data/_save/_npy/project_train7_x.npy', arr =x_train)
 np.save('d:/study_data/_save/_npy/project_train7_y.npy', arr =y_train)

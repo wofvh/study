@@ -14,6 +14,8 @@ y_train = np.load('d:/study_data/_save/_npy/project_train7_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/project_test7_x.npy')
 y_test = np.load('d:/study_data/_save/_npy/project_test7_y.npy')
 
+print(season.shape)
+'''''
 print(x_train.shape)            # (2000, 150, 150, 3)
 print(y_train.shape)            # (2000,)
 print(x_test.shape)             # (550, 150, 150, 3)
@@ -48,7 +50,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accu
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
 
-hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=32,
+hist = model.fit(x_train,y_train, epochs=10,validation_split=0.3,verbose=2,batch_size=32,
                  callbacks=[earlystopping]) 
 
 #4. 예측
@@ -61,12 +63,17 @@ print('loss : ',loss[-1])
 print('accuracy : ', accuracy[-1])
 
 ############################################
+y_test2 = [0,1,2,3,4,5,6]
 loss = model.evaluate(x_test, y_test)
 y_predict = model.predict(season)
 
 y_test = np.argmax(y_test, axis= 1)
 y_predict = np.argmax(y_predict, axis=1) 
 print('predict : ',y_predict)
+
+acc = accuracy_score(y_test2,y_predict)
+print('acc : ',acc)
+
 
 if y_predict[0] == 0:
     print('hail ')
@@ -107,3 +114,4 @@ else :
 # 6.snow :       70%  [6 6 0 5 6 6 6 6 0 6]
 
 
+'''
