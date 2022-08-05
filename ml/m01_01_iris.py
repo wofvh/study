@@ -42,3 +42,6 @@ print('acc스코어 : ', acc)
 
 # loss :  0.0530550517141819
 # accuracy :  1.0
+
+import sklearn as sk 
+print(sk.__version__)
