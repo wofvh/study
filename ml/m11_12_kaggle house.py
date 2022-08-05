@@ -85,10 +85,10 @@ parameters = [
     {'n_jobs':[-1,2,4],'min_samples_leaf':[3,5,7]}
 ]                                                   
     
-
+from sklearn.model_selection import RandomizedSearchCV
 #2. 모델
 # model= SVC(C=1, kernel='linear', degree=3)
-model =GridSearchCV(RandomForestRegressor(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
+model =RandomizedSearchCV(RandomForestRegressor(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
                     refit=True,n_jobs=-1)
 
 
@@ -117,3 +117,13 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # r2_score: 0.8663733499108444
 # 최적의 튠 acc: 0.8663733499108444
 # 걸린시간 : 66.9446 초
+
+
+# RandomizedSearchCV
+# 최적의 매개변수 : RandomForestRegressor(min_samples_leaf=5, n_jobs=4)
+# 최적의 파라미터: {'n_jobs': 4, 'min_samples_leaf': 5}
+# 최적의 점수: 0.8271616266650966
+# model.score : 0.8669125175973493
+# r2_score: 0.8669125175973492
+# 최적의 튠 acc: 0.8669125175973492
+# 걸린시간 : 8.513 초

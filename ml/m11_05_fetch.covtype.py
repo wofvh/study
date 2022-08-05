@@ -33,11 +33,11 @@ parameters = [
     {'min_samples_split':[2,3,5,20]},
     {'n_jobs':[-1,2,4],'min_samples_leaf':[3,5,7]}
 ]                                                   
-    
+from sklearn.model_selection import RandomizedSearchCV   
 
 #2. 모델
 # model= SVC(C=1, kernel='linear', degree=3)
-model =GridSearchCV(RandomForestClassifier(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
+model =RandomizedSearchCV(RandomForestClassifier(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
                     refit=True,n_jobs=-1)
 
 

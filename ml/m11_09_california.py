@@ -57,33 +57,56 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_predict, train_test_split, KFold, cross_val_score
 from sklearn.model_selection import cross_val_score, StratifiedKFold
 
-n_splits=5
+from sklearn.model_selection import KFold, cross_val_score, GridSearchCV
+n_splits =5 
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+
+
+from sklearn.svm import LinearSVC,SVC
+from sklearn.linear_model import Perceptron 
+from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+
+parameters = [
+    {'n_estimators':[100,200],'max_depth':[6,8,10,12],'min_samples_leaf':[3,5,7]},
+    {'max_depth':[6,8,10,12],'min_samples_leaf':[3,5,7]},
+    {'min_samples_leaf':[3,5,7],'min_samples_split':[2,3,5,20]},
+    {'min_samples_split':[2,3,5,20]},
+    {'n_jobs':[-1,2,4],'min_samples_leaf':[3,5,7]}
+]                                                   
+    
+from sklearn.model_selection import RandomizedSearchCV
 #2. 모델
-model =  RandomForestClassifier()
-
-from sklearn.utils import all_estimators
-import warnings
-warnings.filterwarnings('ignore') 
-from sklearn.preprocessing import MinMaxScaler
+# model= SVC(C=1, kernel='linear', degree=3)
+model =RandomizedSearchCV(RandomForestRegressor(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
+                    refit=True,n_jobs=-1)
 
 
-#2. 모델
-# allAlgorithms = all_estimators(type_filter='classifier')
-allAlgorithms = all_estimators(type_filter='regressor')
+#3. 컴파일,훈련
+import time
+start_time = time.time()
 
-print('allAlgorithms:',allAlgorithms)
-print('모델개수:',len(allAlgorithms))
+model.fit(x_train,y_train)
+end_time = time.time()
+print('최적의 매개변수 :',model.best_estimator_)
+print("최적의 파라미터:",model.best_params_)
+print("최적의 점수:",model.best_score_)
+print('model.score :',model.score(x_test,y_test))
 
-for (name,algorithm) in  allAlgorithms :
-    try :
-        model = algorithm()
+y_predict= model.predict(x_test)
+print('r2_score:',r2_score(y_test,y_predict))
 
-        scores = cross_val_score(model,x, y,cv=kfold)
-        print('r2 :' ,scores)
-        y_predict = cross_val_predict(model,x, y,cv=kfold)
-        r2 =r2_score(y,y_predict)
-        print('cross_val_predict r2 :', r2 )
-    except:
-        # continue
-        print(name,"은 안나온 놈")
+y_pred_best = model.best_estimator_.predict(x_test)
+print('최적의 튠 acc:',r2_score(y_test,y_pred_best))
+print("걸린시간 :",round(end_time-start_time,4),"초")
+
+# RandomizedSearchCV
+# 최적의 매개변수 : RandomForestRegressor(min_samples_leaf=5, min_samples_split=5)
+# 최적의 파라미터: {'min_samples_split': 5, 'min_samples_leaf': 5}
+# 최적의 점수: 0.7995187294935869
+# model.score : 0.800858810087763
+# r2_score: 0.800858810087763
+# 최적의 튠 acc: 0.800858810087763
+# 걸린시간 : 42.9752 초

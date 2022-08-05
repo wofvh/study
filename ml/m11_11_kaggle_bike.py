@@ -60,6 +60,10 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2,
     shuffle=True, random_state =58525)
 
 
+from sklearn.metrics import accuracy_score 
+from sklearn.model_selection import cross_val_predict, train_test_split, KFold, cross_val_score
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+
 from sklearn.model_selection import KFold, cross_val_score, GridSearchCV
 n_splits =5 
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
@@ -80,10 +84,10 @@ parameters = [
     {'n_jobs':[-1,2,4],'min_samples_leaf':[3,5,7]}
 ]                                                   
     
-
+from sklearn.model_selection import RandomizedSearchCV
 #2. 모델
 # model= SVC(C=1, kernel='linear', degree=3)
-model =GridSearchCV(RandomForestRegressor(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
+model =RandomizedSearchCV(RandomForestRegressor(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
                     refit=True,n_jobs=-1)
 
 
@@ -105,6 +109,7 @@ y_pred_best = model.best_estimator_.predict(x_test)
 print('최적의 튠 acc:',r2_score(y_test,y_pred_best))
 print("걸린시간 :",round(end_time-start_time,4),"초")
 
+
 # 최적의 매개변수 : RandomForestRegressor()
 # 최적의 파라미터: {'min_samples_split': 2}
 # 최적의 점수: 0.9470312481475084
@@ -112,3 +117,12 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # r2_score: 0.9469746161144094
 # 최적의 튠 acc: 0.9469746161144094
 # 걸린시간 : 113.5078 초
+
+# RandomizedSearchCV
+# 최적의 매개변수 : RandomForestRegressor(min_samples_split=3)
+# 최적의 파라미터: {'min_samples_split': 3}
+# 최적의 점수: 0.9468168448466117
+# model.score : 0.9470869643097212
+# r2_score: 0.9470869643097212
+# 최적의 튠 acc: 0.9470869643097212
+# 걸린시간 : 13.2219 초

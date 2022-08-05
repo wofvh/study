@@ -87,3 +87,12 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # r2_score: 0.9342979049991655
 # 최적의 튠 acc: 0.9342979049991655
 # 걸린시간 : 19.1774 초
+
+# RandomizedSearchCV
+# 최적의 매개변수 : RandomForestRegressor(min_samples_split=5)
+# 최적의 파라미터: {'min_samples_split': 5}
+# 최적의 점수: 0.8390032209315368
+# model.score : 0.9227030971363911
+# r2_score: 0.9227030971363911
+# 최적의 튠 acc: 0.9227030971363911
+# 걸린시간 : 3.5692 초
