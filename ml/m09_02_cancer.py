@@ -1,16 +1,10 @@
-import numpy as np
-import pandas as pd
-from sklearn.datasets import load_breast_cancer
-# from tensorflow.python.keras.models import Sequential
-# from tensorflow.python.keras.layers import Dense
-from sklearn.model_selection import train_test_split
-from tensorflow.python.keras.callbacks import EarlyStopping
-from sklearn.metrics import r2_score, accuracy_score
-import matplotlib.pyplot as plt
-from tensorflow.keras.utils import to_categorical # https://wikidocs.net/22647 케라스 원핫인코딩
-from sklearn.preprocessing import OneHotEncoder  # https://psystat.tistory.com/136 싸이킷런 원핫인코딩
-import tensorflow as tf
 
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, accuracy_score, r2_score
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+from sklearn.svm import LinearSVC,SVC
+from sklearn.model_selection import KFold, cross_val_score, GridSearchCV
 
 from sklearn.svm import LinearSVC,SVC
 from sklearn.linear_model import Perceptron 
