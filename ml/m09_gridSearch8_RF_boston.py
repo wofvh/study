@@ -19,11 +19,12 @@ n_splits =5
 kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=66)
 
 parameters = [
-    {"C":[1,10,100,1000],"kernel":["linear"],"degree":[3,4,5]},     #12
-    {"C":[1,10,100],"kernel":["rbf"],"gamma":[0.001,0.0001]},       #6
-    {"C":[1,10,100,1000],"kernel":["sigmoid"],                      #24
-     "gamma":[0.01,0.001,0.0001],"degree":[3,4]}
-]                                                                   #총42 번
+    {'n_estiators':[100,200]},
+    {'max_depth':[6,8,10,12]},
+    {'min_samples_leaf':[3,5,7,10]},
+    {'min_samples_split':[2,3,5,20]},
+    {'n_jobs':[-1,2,4]}
+]                                                                
     
 
 #2. 모델
@@ -56,18 +57,5 @@ print('최적의 튠 acc:',accuracy_score(y_test,y_pred_best))
 # 최적의 튠 acc: 0.9666666666666667
 
 print("걸린시간 :",round(start_time-end_time,4),"초")
-#4. 평가, 예측
-
-# results1 = model.score(x_test,y_test)   # = evaluate 
-# print("acc :",results1)     
 
 
-
-# loss :  0.0530550517141819
-# accuracy :  1.0
-
-# Perceptron : 0.9333333333333333
-# LogisticRegression : 1.0
-# KNeighborsClassifier : 0.9666666666666667
-# DecisionTreeClassifier : 0.9666666666666667        
-# RandomForestClassifier : 0.9333333333333333

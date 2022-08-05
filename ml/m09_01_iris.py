@@ -18,17 +18,26 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
 n_splits =5 
 kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=66)
 
+
+from sklearn.svm import LinearSVC,SVC
+from sklearn.linear_model import Perceptron 
+from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+
 parameters = [
-    {"C":[1,10,100,1000],"kernel":["linear"],"degree":[3,4,5]},     #12
-    {"C":[1,10,100],"kernel":["rbf"],"gamma":[0.001,0.0001]},       #6
-    {"C":[1,10,100,1000],"kernel":["sigmoid"],                      #24
-     "gamma":[0.01,0.001,0.0001],"degree":[3,4]}
-]                                                                   #총42 번
+    {'n_estimators':[100,200],'max_depth':[6,8,10,12],'min_samples_leaf':[3,5,7]},
+    {'max_depth':[6,8,10,12],'min_samples_leaf':[3,5,7]},
+    {'min_samples_leaf':[3,5,7],'min_samples_split':[2,3,5,20]},
+    {'min_samples_split':[2,3,5,20]},
+    {'n_jobs':[-1,2,4],'min_samples_leaf':[3,5,7]}
+]                                                   
     
 
 #2. 모델
 # model= SVC(C=1, kernel='linear', degree=3)
-model =GridSearchCV(SVC(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
+model =GridSearchCV(RandomForestClassifier(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
                     refit=True,n_jobs=-1)
 
 
@@ -39,35 +48,20 @@ start_time = time.time()
 model.fit(x_train,y_train)
 end_time = time.time()
 print('최적의 매개변수 :',model.best_estimator_)
-# 최적의 매개변수 : SVC(C=1, kernel='linear')
 print("최적의 파라미터:",model.best_params_)
-# 최적의 파라미터: {'C': 1, 'degree': 3, 'kernel': 'linear'}
 print("최적의 점수:",model.best_score_)
-# 최적의 파라미터: 0.9916666666666668
 print('model.score :',model.score(x_test,y_test))
-# model.score : 0.9666666666666667
 
 y_predict= model.predict(x_test)
 print('acc_score:',accuracy_score(y_test,y_predict))
-# acc_score: 0.9666666666666667
 
 y_pred_best = model.best_estimator_.predict(x_test)
 print('최적의 튠 acc:',accuracy_score(y_test,y_pred_best))
-# 최적의 튠 acc: 0.9666666666666667
+print("걸린시간 :",round(end_time-start_time,4),"초")
 
-print("걸린시간 :",round(start_time-end_time,4),"초")
-#4. 평가, 예측
+# 최적의 점수: 0.9583333333333334
+# model.score : 0.9333333333333333
+# acc_score: 0.9333333333333333
+# 최적의 튠 acc: 0.9333333333333333
+# 걸린시간 : 14.5051 초
 
-# results1 = model.score(x_test,y_test)   # = evaluate 
-# print("acc :",results1)     
-
-
-
-# loss :  0.0530550517141819
-# accuracy :  1.0
-
-# Perceptron : 0.9333333333333333
-# LogisticRegression : 1.0
-# KNeighborsClassifier : 0.9666666666666667
-# DecisionTreeClassifier : 0.9666666666666667        
-# RandomForestClassifier : 0.9333333333333333
