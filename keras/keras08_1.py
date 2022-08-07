@@ -11,7 +11,9 @@ datasets = load_boston()
 x = datasets.data
 y = datasets.target
 
-     
+print(x.shape,y.shape)    
+
+'''
 x_train, x_test, y_train, y_test = train_test_split(
     x,y, train_size =0.7,                                
     shuffle=True, 
@@ -93,3 +95,5 @@ print('r2 스코어 :', r2)
 # print(datasets.feature_names)
 # # ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
 # print(datasets.DESCR)
+
+'''
