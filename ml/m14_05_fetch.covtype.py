@@ -67,3 +67,20 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # acc_score: 0.9557670628124919
 # 최적의 튠 acc: 0.9557670628124919
 # 걸린시간 : 7088.3054 초
+
+# HalvingGridSearchCV
+# 최적의 매개변수 : RandomForestClassifier()
+# 최적의 파라미터: {'min_samples_split': 2}
+# 최적의 점수: 0.9504457786148768
+# model.score : 0.9551646687262807
+# acc_score: 0.9551646687262807
+# 최적의 튠 acc: 0.9551646687262807
+# 걸린시간 : 762.3908 초
+
+# HalvingRandomSearchCV
+# 최적의 파라미터: {'n_jobs': -1, 'min_samples_leaf': 3}
+# 최적의 점수: 0.7321474183543148
+# model.score : 0.9436847585690559
+# acc_score: 0.9436847585690559
+# 최적의 튠 acc: 0.9436847585690559
+# 걸린시간 : 34.5 초
