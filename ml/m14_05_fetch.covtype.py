@@ -9,7 +9,7 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 from sklearn.experimental import enable_halving_search_cv   # 실험버전사용할때 사용.
-from sklearn.model_selection import KFold, cross_val_score, GridSearchCV, HalvingGridSearchCV
+from sklearn.model_selection import KFold, cross_val_score, GridSearchCV, HalvingGridSearchCV, HalvingRandomSearchCV
 #1. 데이터
 datasets = fetch_covtype()
 x = datasets['data']
@@ -38,7 +38,7 @@ from sklearn.model_selection import RandomizedSearchCV
 
 #2. 모델
 # model= SVC(C=1, kernel='linear', degree=3)
-model =HalvingGridSearchCV(RandomForestClassifier(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
+model =HalvingRandomSearchCV(RandomForestClassifier(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
                     refit=True,n_jobs=-1)
 
 

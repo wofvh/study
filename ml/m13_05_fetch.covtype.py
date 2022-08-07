@@ -18,6 +18,7 @@ y = datasets['target']
 x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.8,
                                                     random_state=66
+                                                
                                                     )
 
 from sklearn.metrics import accuracy_score 
@@ -67,3 +68,12 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # acc_score: 0.9557670628124919
 # 최적의 튠 acc: 0.9557670628124919
 # 걸린시간 : 7088.3054 초
+
+# HalvingGridSearchCV
+# 최적의 매개변수 : RandomForestClassifier()
+# 최적의 파라미터: {'min_samples_split': 2}
+# 최적의 점수: 0.9504457786148768
+# model.score : 0.9551646687262807
+# acc_score: 0.9551646687262807
+# 최적의 튠 acc: 0.9551646687262807
+# 걸린시간 : 762.3908 초
