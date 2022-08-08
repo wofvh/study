@@ -11,11 +11,11 @@ y = datasets.target
 x_train,x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,shuffle=True, random_state=1234)
 
 parameters = [
-    {'RandomForestClassifier__n_estimators':[100,200],'RandomForestClassifier__max_depth':[6,8,10,12],'RandomForestClassifier__min_samples_leaf':[3,5,7]},
-    {'RandomForestClassifier__max_depth':[6,8,10,12],'RandomForestClassifier__min_samples_leaf':[3,5,7]},
-    {'RandomForestClassifier__min_samples_leaf':[3,5,7],'RandomForestClassifier__min_samples_split':[2,3,5,20]},
-    {'RandomForestClassifier__min_samples_split':[2,3,5,20]},
-    {'RandomForestClassifier__n_jobs':[-1,2,4],'RandomForestClassifier__min_samples_leaf':[3,5,7]}
+    {'randomforestclassifier__n_estimators':[100,200],'randomforestclassifier__max_depth':[6,8,10,12],'randomforestclassifier__min_samples_leaf':[3,5,7]},
+    {'randomforestclassifier__max_depth':[6,8,10,12],'randomforestclassifier__min_samples_leaf':[3,5,7]},
+    {'randomforestclassifier__min_samples_leaf':[3,5,7],'randomforestclassifier__min_samples_split':[2,3,5,20]},
+    {'randomforestclassifier__min_samples_split':[2,3,5,20]},
+    {'randomforestclassifier__n_jobs':[-1,2,4],'randomforestclassifier__min_samples_leaf':[3,5,7]}
 ]                
 
 from sklearn.model_selection import KFold, StratifiedKFold

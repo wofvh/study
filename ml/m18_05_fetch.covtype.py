@@ -65,6 +65,9 @@ print('acc_score:',accuracy_score(y_test,y_predict))
 print("걸린시간 :",round(end_time-start_time,4),"초")
 
 # GridSearchCV + KFold + pipe
+# model.score : 0.9550011617600234
+# acc_score: 0.9550011617600234
+# 걸린시간 : 3088.8847 초
 
 # nopipeline 
 # model.score : 0.9552421193945079
