@@ -30,27 +30,62 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
 from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
 
-# model = DecisionTreeRegressor()
-# model = RandomForestRegressor()
-# model = GradientBoostingRegressor()
-model = XGBRFRegressor()
+model1 = DecisionTreeRegressor()
+model2 = RandomForestRegressor()
+model3 = GradientBoostingRegressor()
+model4 = XGBRFRegressor()
 
 #3. 훈련
-model.fit(x_train,y_train)
+model1.fit(x_train,y_train)
+model2.fit(x_train,y_train)
+model3.fit(x_train,y_train)
+model4.fit(x_train,y_train)
 
 #4. 예측
-result = model.score(x_test,y_test)
-print("model.score:",result)
+result1 = model1.score(x_test,y_test)
+print("model.score:",result1)
 
 from sklearn.metrics import accuracy_score, r2_score
 
-y_predict = model.predict(x_test)
+y_predict = model1.predict(x_test)
 r2 = r2_score(y_test,y_predict)
 
-print( 'r2_score :',r2)
+print( 'r2_score1 :',r2)
+print(model1,':',model1.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 print("===================================")
-print(model,':',model.feature_importances_)           # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 
+result2 = model2.score(x_test,y_test)
+print("model1.score:",result2)
+
+
+y_predict2 = model2.predict(x_test)
+r2 = r2_score(y_test,y_predict2)
+
+print( 'r2_score2 :',r2)
+print(model2,':',model2.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print("===================================")
+
+result3 = model3.score(x_test,y_test)
+print("model2.score3:",result3)
+
+
+y_predict3 = model3.predict(x_test)
+r2 = r2_score(y_test,y_predict3)
+
+print( 'r2_score3 :',r2)
+print(model3,':',model3.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print("===================================")
+
+result4 = model4.score(x_test,y_test)
+print("model4.score:",result4)
+
+
+y_predict4 = model4.predict(x_test)
+r2 = r2_score(y_test,y_predict4)
+
+print( 'r2_score4 :',r2)
+print(model4,':',model4.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print("===================================")
 
 # DecisionTreeClassifier() : [0.03338202 0.         0.56740948 0.39920851]
 # RandomForestClassifier() : [0.10385929 0.03867157 0.39319982 0.46426933]
