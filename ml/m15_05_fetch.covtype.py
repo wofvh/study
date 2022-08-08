@@ -34,7 +34,7 @@ from sklearn.pipeline import make_pipeline
 
 model = RandomForestClassifier()
 
-model = make_pipeline(MinMaxScaler(),RandomForestClassifier())             #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
+# model = make_pipeline(MinMaxScaler(),RandomForestClassifier())             #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
 
 
 #3. 컴파일,훈련
@@ -58,9 +58,9 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # acc_score: 0.9722222222222222
 # 걸린시간 : 0.0821 초
 # pipeline
-# model.score : 0.9722222222222222
-# acc_score: 0.9722222222222222
-# 걸린시간 : 0.0816 초
+# model.score : 0.9566878652014148
+# acc_score: 0.9566878652014148
+# 걸린시간 : 116.1415 초
 
 # 최적의 매개변수 : RandomForestClassifier()
 # 최적의 파라미터: {'min_samples_split': 2}
