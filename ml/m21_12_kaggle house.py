@@ -72,34 +72,66 @@ from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
 # x_test = scaler.transform(x_test)
 
 
-#2. 모델구성 
-from sklearn.svm import LinearSVC, SVC
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+#2. 모델 
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
+from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
 
-from sklearn.pipeline import make_pipeline
+model1 = DecisionTreeRegressor()
+model2 = RandomForestRegressor()
+model3 = GradientBoostingRegressor()
+model4 = XGBRFRegressor()
 
-# model = RandomForestRegressor()
+#3. 훈련
+model1.fit(x_train,y_train)
+model2.fit(x_train,y_train)
+model3.fit(x_train,y_train)
+model4.fit(x_train,y_train)
 
-model = make_pipeline(MinMaxScaler(),RandomForestRegressor())             #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
+#4. 예측
+# result = model.score(x_test,y_test)
+# print("model.score:",result)
+
+from sklearn.metrics import accuracy_score, r2_score
+
+# y_predict = model.predict(x_test)
+# r2 = r2_score(y_test,y_predict)
+
+# print( 'r2_score :',r2)
+# print("===================================")
+print(model1,':',model1.feature_importances_)           # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 
 
-#3. 컴파일,훈련
-model.fit(x_train,y_train)
+import matplotlib.pyplot as plt 
+def plot_feature_importances(model):
+    n_features = datasets.data.shape[1]
+    plt.barh(np.arange(n_features),model.feature_importances_, align ='center')
+    plt.yticks(np.arange(n_features),datasets.feature_names)
+    plt.xlabel('Feature Important')
+    plt.ylabel('Features')
+    plt.ylim(-1,n_features)
+    # if model == XGBRFRegressor():
+    #     plt.title(model4)
+    # plt.title(model)
+   
+model5 = 'XGBRFRegressor()'
 
-#3. 컴파일,훈련
-import time
-start_time = time.time()
+plt.subplot(2,2,1)
+plt.title(model1)
+plot_feature_importances(model1)
+plt.subplot(2,2,2)
+plt.title(model2)
+plot_feature_importances(model2)
+plt.subplot(2,2,3)
+plt.title(model3)
+plot_feature_importances(model3)
+plt.subplot(2,2,4)
+plt.title(model5)
+plot_feature_importances(model4)
 
-model.fit(x_train,y_train)
-end_time = time.time()
-
-print('model.score :',model.score(x_test,y_test))
-
-y_predict= model.predict(x_test)
-print('r2_score:',r2_score(y_test,y_predict))
-
-print("걸린시간 :",round(end_time-start_time,4),"초")
-
+    
+plt.show()     
 # nopipeline 
 # model.score : 0.8866082850187218
 # r2_score: 0.8866082850187218

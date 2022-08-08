@@ -19,7 +19,7 @@ y = datasets.target
 # x = np.array(x)
 # y = np.array(y) 
 
-x = np.delete(x,[1],axis=1) 
+x = np.delete(x,1, axis=1) 
 # x = np.delete(x,4, axis=1) 
 
 # y = np.delete(y,1, axis=1) 
