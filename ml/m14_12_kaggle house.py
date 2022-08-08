@@ -57,7 +57,7 @@ print(x.shape) #(1460, 75)
 
 y = train_set['SalePrice']
 x_train, x_test, y_train, y_test = train_test_split(
-    x, y, train_size = 0.95, shuffle = True, random_state = 68
+    x, y, train_size = 0.98, shuffle = True, random_state = 68
  )
 from sklearn.model_selection import KFold, cross_val_score, GridSearchCV
 n_splits =5 
@@ -111,7 +111,6 @@ print("걸린시간 :",round(end_time-start_time,4),"초")
 # r2_score: 0.8663733499108444
 # 최적의 튠 acc: 0.8663733499108444
 # 걸린시간 : 66.9446 초
-
 
 # RandomizedSearchCV
 # 최적의 매개변수 : RandomForestRegressor(min_samples_leaf=5, n_jobs=4)

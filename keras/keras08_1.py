@@ -12,8 +12,8 @@ x = datasets.data
 y = datasets.target
 
 print(x.shape,y.shape)    
+# (506, 13) (506,)
 
-'''
 x_train, x_test, y_train, y_test = train_test_split(
     x,y, train_size =0.7,                                
     shuffle=True, 
@@ -71,17 +71,6 @@ print('r2 스코어 :', r2)
 # model.compile(loss ='mae', optimizer='adam')
 # model.fit(x_train, y_train, epochs =300, batch_size = 2)
 
-
-
-
-# #3 컴파일, 훈련
-# model.compile(loss ='mae', optimizer='adam')
-# model.fit(x_train, y_train, epochs =200, batch_size = 2)
-
-
-
-
-
 # print(x)
 # print(y)
 # print(x.shape) # (506,13)
@@ -91,9 +80,7 @@ print('r2 스코어 :', r2)
 
 # 예측 > y_test
 
-
 # print(datasets.feature_names)
 # # ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
 # print(datasets.DESCR)
 
-'''
