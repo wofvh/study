@@ -121,37 +121,36 @@ print(model4,':')   # 중요한 피쳐를 구분하는 것 중요성이 떨어�
 print("===================================")
 
 # 삭제후 
-# model.score: 0.9649122807017544
-# accuracy_score : 0.9649122807017544
-# DecisionTreeClassifier() 
-# ===================================
-# model2.score: 0.9736842105263158
-# accuracy2_score : 0.9736842105263158
-# RandomForestClassifier() 
-# ===================================
-# model3.score: 0.9736842105263158
-# accuracy3_score : 0.9736842105263158
-# GradientBoostingClassifier() 
-# ===================================
-# model4.score: 0.9736842105263158
-# accuracy4_score : 0.9736842105263158
-# XGBClassifier 
-
-# 삭제전 
-# model.score: 0.956140350877193
-# accuracy_score : 0.956140350877193
+# accuracy_score : 0.8194444444444444
 # DecisionTreeClassifier() :
 # ===================================
-# model2.score: 0.9912280701754386
-# accuracy2_score : 0.9912280701754386
+# model2.score: 0.9777777777777777
+# accuracy2_score : 0.9777777777777777
 # RandomForestClassifier() :
 # ===================================
-# model3.score: 0.9736842105263158
-# accuracy3_score : 0.9736842105263158
+# model3.score: 0.9583333333333334
+# accuracy3_score : 0.9583333333333334
 # GradientBoostingClassifier() :
 # ===================================
-# model4.score: 0.9649122807017544
-# accuracy4_score : 0.9649122807017544
+# model4.score: 0.9611111111111111
+# accuracy4_score : 0.9611111111111111
+# XGBClassifier
+
+# 삭제전 
+# model.score: 0.8305555555555556
+# accuracy_score : 0.8305555555555556
+# DecisionTreeClassifier() :
+# ===================================
+# model2.score: 0.975
+# accuracy2_score : 0.975
+# RandomForestClassifier() :
+# ===================================
+# model3.score: 0.9583333333333334
+# accuracy3_score : 0.9583333333333334
+# GradientBoostingClassifier() :
+# ===================================
+# model4.score: 0.9638888888888889
+# accuracy4_score : 0.9638888888888889
 # XGBClassifier
 
 

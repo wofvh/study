@@ -50,10 +50,10 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
 from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
 
-model1 = DecisionTreeRegressor()
-model2 = RandomForestRegressor()
-model3 = GradientBoostingRegressor()
-model4 = XGBRFRegressor()
+model1 = DecisionTreeClassifier()
+model2 = RandomForestClassifier()
+model3 = GradientBoostingClassifier()
+model4 = XGBClassifier()
 
 #3. 훈련
 model1.fit(x_train,y_train)

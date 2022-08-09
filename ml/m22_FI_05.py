@@ -5,34 +5,26 @@
 # 4개 모델 비교 
 
 
-import numpy as np
-from sklearn import datasets
-from sklearn.datasets import load_iris
-from sqlalchemy import column
-
-#1. 데이터
-
-datasets = load_iris()
-x = datasets.data
-y = datasets.target
-
-# x = np.array(x)
-# y = np.array(y) 
-
-x = np.delete(x,1, axis=1) 
-# x = np.delete(x,4, axis=1) 
-
-# y = np.delete(y,1, axis=1) 
-
-
-print(x.shape,y.shape)
-print(datasets.feature_names)
-
-
+from sklearn.datasets import fetch_covtype
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, accuracy_score
+from sklearn.svm import LinearSVC,SVC
+from sklearn.linear_model import Perceptron 
+from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+import numpy as np
+#1. 데이터
+datasets = fetch_covtype()
+x = datasets['data']
+y = datasets['target']
+# x = np.delete(x,[6,7,8,14,15,16], axis=1) 
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,
-                                                    random_state=123,shuffle=True)
+x_train, x_test, y_train, y_test = train_test_split(x,y,
+                                                    train_size=0.8,
+                                                    random_state=66
+                                                    )
 
 
 #2. 모델 
@@ -52,50 +44,88 @@ model3.fit(x_train,y_train)
 model4.fit(x_train,y_train)
 
 #4. 예측
-result1 = model1.score(x_test,y_test)
-print("model.score:",result1)
 
 from sklearn.metrics import accuracy_score, r2_score
 
-y_predict = model1.predict(x_test)
-r2 = r2_score(y_test,y_predict)
+result = model1.score(x_test,y_test)
+print("model.score:",result)
 
-print( 'r2_score1 :',r2)
-print(model1,':',model1.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+y_predict = model1.predict(x_test)
+acc = accuracy_score(y_test,y_predict)
+
+print( 'accuracy_score :',acc)
+print(model1,':')   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 print("===================================")
+
+
+
 
 result2 = model2.score(x_test,y_test)
-print("model1.score:",result2)
-
+print("model2.score:",result2)
 
 y_predict2 = model2.predict(x_test)
-r2 = r2_score(y_test,y_predict2)
+acc2 = accuracy_score(y_test,y_predict2)
 
-print( 'r2_score2 :',r2)
-print(model2,':',model2.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'accuracy2_score :',acc2)
+print(model2,':')   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 print("===================================")
+
+
+
 
 result3 = model3.score(x_test,y_test)
-print("model2.score3:",result3)
-
+print("model3.score:",result3)
 
 y_predict3 = model3.predict(x_test)
-r2 = r2_score(y_test,y_predict3)
+acc3 = accuracy_score(y_test,y_predict3)
 
-print( 'r2_score3 :',r2)
-print(model3,':',model3.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'accuracy3_score :',acc3)
+print(model3,':')   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 print("===================================")
+
+
 
 result4 = model4.score(x_test,y_test)
 print("model4.score:",result4)
 
-
 y_predict4 = model4.predict(x_test)
-r2 = r2_score(y_test,y_predict4)
+acc4 = accuracy_score(y_test,y_predict4)
 
-print( 'r2_score4 :',r2)
-print(model4,':',model4.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'accuracy4_score :',acc4)
+print(model4,':')   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 print("===================================")
+
+# 삭제후 
+# accuracy_score : 0.8194444444444444
+# DecisionTreeClassifier() :
+# ===================================
+# model2.score: 0.9777777777777777
+# accuracy2_score : 0.9777777777777777
+# RandomForestClassifier() :
+# ===================================
+# model3.score: 0.9583333333333334
+# accuracy3_score : 0.9583333333333334
+# GradientBoostingClassifier() :
+# ===================================
+# model4.score: 0.9611111111111111
+# accuracy4_score : 0.9611111111111111
+# XGBClassifier
+
+# 삭제전 
+# model.score: 0.8305555555555556
+# accuracy_score : 0.8305555555555556
+# DecisionTreeClassifier() :
+# ===================================
+# model2.score: 0.975
+# accuracy2_score : 0.975
+# RandomForestClassifier() :
+# ===================================
+# model3.score: 0.9583333333333334
+# accuracy3_score : 0.9583333333333334
+# GradientBoostingClassifier() :
+# ===================================
+# model4.score: 0.9638888888888889
+# accuracy4_score 
 
 # 삭제후 
 

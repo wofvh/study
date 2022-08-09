@@ -5,28 +5,42 @@
 # 4개 모델 비교 
 
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
-from sklearn import datasets
-from sklearn.datasets import load_iris
-from sqlalchemy import column
+import pandas as pd
+from sqlalchemy import true                                 # pandas : 엑셀땡겨올때 씀 python 지원하는 엑셀을 불러오는 기능.
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 
 #1. 데이터
+path = './_data/ddarung/'
+train_set = pd.read_csv(path + 'train.csv',                 # + 명령어는 문자를 앞문자와 더해줌
+                        index_col=0)                        # index_col=n n번째 컬럼을 인덱스로 인식
 
-datasets = load_iris()
-x = datasets.data
-y = datasets.target
+test_set = pd.read_csv(path + 'test.csv',                    # 예측에서 쓸거임                
+                       index_col=0)
 
-# x = np.array(x)
-# y = np.array(y) 
+train_set = train_set.fillna(train_set.mean())       # dropna() : train_set 에서 na, null 값 들어간 행 삭제
+test_set = test_set.fillna(test_set.mean()) # test_set 에서 이빨빠진데 바로  ffill : 위에서 가져오기 test_set.mean : 평균값
 
-x = np.delete(x,1, axis=1) 
+x = train_set.drop(['count'], axis=1)                    # drop 데이터에서 ''사이 값 빼기
+
+y = train_set['count'] 
+x = np.array(x)
+x = np.delete(x,[2,3,4], axis=1)  
+
+# x = np.delete(x,1, axis=1) 
 # x = np.delete(x,4, axis=1) 
 
 # y = np.delete(y,1, axis=1) 
 
 
-print(x.shape,y.shape)
-print(datasets.feature_names)
+# print(x.shape,y.shape)
+# print(datasets.feature_names)
 
 
 from sklearn.model_selection import train_test_split
@@ -40,10 +54,10 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
 from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
 
-model1 = DecisionTreeClassifier()
-model2 = RandomForestClassifier()
-model3 = GradientBoostingClassifier()
-model4 = XGBClassifier()
+model1 = DecisionTreeRegressor()
+model2 = RandomForestRegressor()
+model3 = RandomForestRegressor()
+model4 = XGBRFRegressor ()
 
 #3. 훈련
 model1.fit(x_train,y_train)
@@ -99,29 +113,42 @@ print("===================================")
 
 # 삭제후 
 
-# model.score: 0.9666666666666667
-# r2_score1 : 0.958100558659218
-# DecisionTreeClassifier() : [0.02506789 0.06761888 0.90731323]
+# model.score: 0.6300146059727504
+# r2_score1 : 0.6300146059727504
+# DecisionTreeRegressor() : [0.58889837 0.19193815 0.07812078 0.0589318  0.04272128 0.03938963]
 # ===================================
-# model1.score: 0.9333333333333333
-# r2_score2 : 0.9162011173184358
-# RandomForestClassifier() : [0.21475798 0.37988318 0.40535883]
+# model1.score: 0.7821477073674483
+# r2_score2 : 0.7821477073674483
+# RandomForestRegressor() : [0.59613307 0.19878038 0.06884772 0.05845012 0.04331326 0.03447545]
 # ===================================
-# model2.score3: 0.9666666666666667
-# r2_score3 : 0.958100558659218
-# GradientBoostingClassifier() : [0.01294319 0.64726702 0.33978979]
+# model2.score3: 0.7953047052028843
+# r2_score3 : 0.7953047052028843   
+# RandomForestRegressor() : [0.59692309 0.19396559 0.06771564 0.05766864 0.04795155 0.03577549]
 # ===================================
-# model4.score: 0.9666666666666667
-# r2_score4 : 0.958100558659218
-# XGBClassifier : [0.01042643 0.8341722  0.15540144]
-# ===================================
+# model4.score: 0.7438176570900675
+# r2_score4 : 0.7438176570900675
+# XGBRFRegressor
 
 
 # 삭제전 
-# DecisionTreeClassifier() : [0.03338202 0.         0.56740948 0.39920851]
-# RandomForestClassifier() : [0.10385929 0.03867157 0.39319982 0.46426933]
-# GradientBoostingClassifier() : [0.00482361 0.01545806 0.3617882  0.61793013]
-# XGBClassifier : [0.00912187 0.0219429  0.678874   0.29006115]
+# model.score: 0.6203555250587188
+# r2_score1 : 0.6203555250587188
+# DecisionTreeRegressor() : [0.58266757 0.17451747 0.02718274 0.01550531 0.02803954 0.04941452  
+#  0.04749699 0.04161734 0.03355851]
+# ===================================
+# model1.score: 0.7961345753061605
+# r2_score2 : 0.7961345753061605
+# RandomForestRegressor() : [0.58372849 0.18168007 0.02193944 0.03235003 0.03393578 0.04210459  
+#  0.04164655 0.03494641 0.02766864]
+# ===================================
+# model2.score3: 0.7954735396341172
+# r2_score3 : 0.7954735396341172
+# RandomForestRegressor() : [0.57913503 0.19415576 0.0211313  0.03100085 0.03570498 0.04025897  
+#  0.03780124 0.0357234  0.02508846]
+# ===================================
+# model4.score: 0.7576400722892229
+# r2_score4 : 0.7576400722892229
+# XGBRFRegressor
 
 
 
