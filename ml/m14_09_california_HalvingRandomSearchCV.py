@@ -55,7 +55,7 @@ from sklearn.linear_model import Perceptron
 from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+ 
 
 parameters = [
     {'n_estimators':[100,200],'max_depth':[6,8,10,12],'min_samples_leaf':[3,5,7]},
@@ -68,6 +68,7 @@ parameters = [
 from sklearn.model_selection import RandomizedSearchCV
 #2. 모델
 # model= SVC(C=1, kernel='linear', degree=3)
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 model =HalvingRandomSearchCV(RandomForestRegressor(),parameters, cv=kfold,verbose=1,       #(모델,파라미터,크로스발리데이션)
                     refit=True,n_jobs=-1)
 

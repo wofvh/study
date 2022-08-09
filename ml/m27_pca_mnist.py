@@ -43,10 +43,10 @@ print(cumsum)
 # plt.grid()
 # plt.show()
 
-print(np.argmax(cumsum >=0.95) + 1)         # 154
-print(np.argmax(cumsum >=0.99) + 1)         # 331
-print(np.argmax(cumsum >=0.999) + 1)        # 486
-print(np.argmax(cumsum >=1.0) + 1)          # 713
+print(np.argmax(cumsum >=0.95) + 1)         # 154   0.95 이상 값의 열
+print(np.argmax(cumsum >=0.99) + 1)         # 331   0.99 이상 값의 열
+print(np.argmax(cumsum >=0.999) + 1)        # 486   0.999 이상 값의 열
+print(np.argmax(cumsum >=1.0) + 1)          # 713   1.0 이상 값의 열
 
 
 # print(np.argwhere(cumsum>=0.95)[0])   # [153] 

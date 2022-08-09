@@ -19,14 +19,14 @@ y = datasets.target
 
 print(x.shape,y.shape )
 
-pca = PCA(n_components=20)               # 주성분 / 열축소 13 > 2개로 압축. 
+pca = PCA(n_components=20)               
 x = pca.fit_transform(x)
 print(x.shape,y.shape )
 
 pca_EVR = pca.explained_variance_ratio_
-print(pca_EVR)                              # 새로 생긴 피쳐에 값에 중요도를 보여줌. 
-print(sum(pca_EVR))                         # 0.999998352533973 모든값을 합친 값.
-
+print(pca_EVR)                               
+print(sum(pca_EVR))                         
+'''
 cumsum = np.cumsum(pca_EVR)             
 print(cumsum)
 # cumsum 누적합 값이 쌓이면서 1이 된다. 
@@ -38,7 +38,7 @@ plt.plot(cumsum)
 plt.grid()
 plt.show()
 # 그래프화 
-
+'''
 
 # x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,shuffle=True,random_state=123)
 

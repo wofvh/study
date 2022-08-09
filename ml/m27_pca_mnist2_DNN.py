@@ -5,6 +5,9 @@ from keras.datasets import mnist
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
+from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
 
 (x_train,y_train),(x_test,y_test) =mnist.load_data()       # _를 사용하면 사용하지않겠다. 
 print(x_train.shape,x_test.shape)   # (60000, 28, 28) (10000, 28, 28)
@@ -14,7 +17,7 @@ y = np.append(y_train, y_test, axis=0)
 
 x = x.reshape(70000,784)
 
-pca = PCA(n_components=154)   
+pca = PCA(n_components=331)   
 x= pca.fit_transform(x) 
 
 pca_EVR = pca.explained_variance_ratio_ 
@@ -39,19 +42,15 @@ print(np.argmax(cumsum >=0.99) + 1)         # 331
 print(np.argmax(cumsum >=0.999) + 1)        # 486
 print(np.argmax(cumsum >=1.0) + 1)          # 713
 
-scaler = MinMaxScaler()
-x_train = scaler.fit_transform(x_train)
-x_test = scaler.transform(x_test)
+# scaler = MinMaxScaler()
+# x_train = scaler.fit_transform(x_train)
+# x_test = scaler.transform(x_test)
 
 #2. 모델 
-from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
-from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
-
 # mode = DecisionTreeClassifier()
-model = RandomForestClassifier()
+# model = RandomForestClassifier()
 # model = GradientBoostingClassifier()
-# model = XGBClassifier()
+model = XGBClassifier()
 
 #3. 훈련
 import time
@@ -63,11 +62,10 @@ end = time.time()
 from sklearn.metrics import accuracy_score, r2_score
 
 result = model.score(x_test,y_test)
-print("model.score:",result)
+print(model,) 
+print("결과:",result)
 print("걸린시간",end-start)
-print(model,)   
-print("===================================")
-
+  
 
 
 #[실습]
@@ -76,39 +74,40 @@ print("===================================")
 
 # time 체크 / fit에서 하고 
 
-# 1. 나의 최고 DNN
+################# 1. 나의 최고 DNN ##################
 # loss :  0.3970048725605011
 # acc :  0.9568
 # 걸린시간 :  146.47142386436462
 
-# 2. 나의 최고 CNN
+################# 2. 나의 최고 CNN ##################
 # acc :  0.986
 # 걸린시간: 77.1074709892273
 
-# 3. PCA 0.95
-# model.score: 0.9707
-# accuracy_score : 0.9707
-# RandomForestClassifier() :
-# ===================================
-# 걸린시간 35.764737606048584
+################# 3. PCA 0.95 ######################
+# RandomForestClassifier()
+# 결과: 0.9454285714285714
+# 걸린시간 64.21542644500732
 
-# 4. PCA 0.99
-# model.score: 0.9694
-# accuracy_score : 0.9694
-# RandomForestClassifier() :
-# ===================================
-# 걸린시간 36.09515190124512
+# XGBClassifier
+# 결과: 0.9625 
+# 걸린시간 244.99761271476746
 
-# 5. PCA 0.999
-# model.score: 0.9696
-# accuracy_score : 0.9696
-# RandomForestClassifier() :
-# ===================================
-# 걸린시간 36.197712421417236
+################# 4. PCA 0.99 #####################
+# RandomForestClassifier()
+# 결과: 0.9372857142857143
+# 걸린시간 98.65063333511353
 
-# 6. PCA 1.0
-# model.score: 0.9704
-# accuracy_score : 0.9704
-# RandomForestClassifier() :
-# ===================================
-# 걸린시간 35.87223172187805
+# XGBClassifier
+# 결과: 0.9607142857142857
+# 걸린시간 523.4567730426788
+
+################# 5. PCA 0.999 ####################
+# RandomForestClassifier()
+# 결과: 0.9212142857142858
+# 걸린시간 127.08801937103271
+
+
+################# 6. PCA 1.0 ######################
+# RandomForestClassifier()
+# 결과: 0.9037142857142857
+# 걸린시간 171.50856471061707

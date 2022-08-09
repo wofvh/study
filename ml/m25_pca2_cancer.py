@@ -21,10 +21,10 @@ y = datasets.target
 
 model = RandomForestClassifier()
 
-for i in range(1, 31) :
-    x = datasets.data
-    pca = PCA(n_components=i)
-    x = pca.fit_transform(x)
+for i in range(1, 31) :                     # i = 1~30
+    x = datasets.data                       
+    pca = PCA(n_components=i)               # pca = n_components =30 번  반복
+    x = pca.fit_transform(x)                # 
     print(x.shape)
     #print()
     x_train, x_test, y_train, y_test = train_test_split(
