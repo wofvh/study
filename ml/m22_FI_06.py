@@ -36,10 +36,10 @@ scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-x = np.delete(x,[6,7,8,14,15,16], axis=1) 
-# x = np.delete(x,4, axis=1) 
+# x = np.delete(x,[6,7,8,14,15,16], axis=1) 
+# # x = np.delete(x,4, axis=1) 
 
-# y = np.delete(y,1, axis=1) 
+# # y = np.delete(y,1, axis=1) 
 
 
 print(x.shape,y.shape)

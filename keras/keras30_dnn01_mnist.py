@@ -63,20 +63,26 @@ model.add(Dense(units=10, input_shape=(28 * 28,)))   # 출력(4,4,10)          #
 #                  padding = 'valid',         # 디폴트값(안준것과 같다.) 
 #                  activation= 'relu'))       # 출력(3,3,7)                                                     
 model.add(Flatten())                        # (N, 63) 위치와 순서가 변경되면 안된다. transpose는 조작으로 Flatten과 헷갈리기 쉬우니 조심. 
-model.add(Dense(16, activation= 'relu'))
-model.add(Dense(8, activation= 'relu'))
+model.add(Dense(100, activation= 'relu'))
+model.add(Dense(80, activation= 'relu'))
+model.add(Dense(80, activation= 'relu'))
+model.add(Dense(80, activation= 'relu'))
 model.add(Dense(10, activation= 'softmax'))
 model.summary()
 
 #3. 컴파일 구성 
-
+import time
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
+earlystopping =EarlyStopping(monitor='loss', patience=30, mode='auto', 
               verbose=1, restore_best_weights = True)     
+
+start = time.time()
         
-hist = model.fit(x_train, y_train, epochs=50, batch_size=32,verbose=1,
+hist = model.fit(x_train, y_train, epochs=300, batch_size=320,verbose=1,
                  validation_split=0.2, callbacks=[earlystopping])
+
+end = time.time() - start
 
 
 # model.save("./_save/keras23_9_load_diabet.h5")
@@ -95,7 +101,7 @@ y_predict = tf.argmax(y_predict,axis=1)
 y_test = tf.argmax(y_test,axis=1) 
 acc = accuracy_score(y_test,y_predict)
 print('acc : ',acc)
-
+print("걸린시간 : ", end)
 
 # (kernel_size * channls + bias) * filters(output) = summary Param 개수
 

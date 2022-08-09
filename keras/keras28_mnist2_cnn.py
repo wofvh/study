@@ -71,11 +71,14 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
+
+import time
+start = time.time()
         
-hist = model.fit(x_train, y_train, epochs=1, batch_size=3002,verbose=1,
+hist = model.fit(x_train, y_train, epochs=150, batch_size=300,verbose=1,
                  validation_split=0.2, callbacks=[earlystopping])
 
-
+end = start - time.time()
 # model.save("./_save/keras23_9_load_diabet.h5")
 # model = load_model("./_save/keras23_9_load_diabet.h5")
 
@@ -97,7 +100,7 @@ y_test = tf.argmax(y_test,axis=1)         # argmax 형태가 맞지만, 값이 �
                                           # [3,8,1,2]    >> 1 반환. 
 acc = accuracy_score(y_test,y_predict)
 print('acc : ',acc)
-
+print('걸린시간:', end)
 
 # (kernel_size * channls + bias) * filters(output) = summary Param 개수
 

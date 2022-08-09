@@ -49,7 +49,7 @@ print(y_train)
 
 # 실습 acc 0.98이상 
 # 원핫인코딩 
-'''''
+
 #2. 모델구성 
 
 model = Sequential()
@@ -66,15 +66,16 @@ model.summary()
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-earlystopping =EarlyStopping(monitor='loss', patience=2, mode='auto', 
+earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True)     
+
+import time 
+start = time.time()
         
-hist = model.fit(x_train, y_train, epochs=1, batch_size=150,verbose=1,
+hist = model.fit(x_train, y_train, epochs=200, batch_size=300,verbose=1,
                  validation_split=0.2, callbacks=[earlystopping])
+end =  time.time()- start
 
-
-# model.save("./_save/keras23_9_load_diabet.h5")
-# model = load_model("./_save/keras23_9_load_diabet.h5")
 
 #4. 평가, 예측\
 results = model.evaluate(x_test,y_test)
@@ -82,7 +83,6 @@ print('loss : ', results[0])
 # print('accuracy : ', results[1])
 ############################################
 
-# print(y_test)
 y_predict = model.predict(x_test)
 y_predict = tf.argmax(y_predict,axis=1) 
 
@@ -90,7 +90,7 @@ y_test = tf.argmax(y_test,axis=1)
 acc = accuracy_score(y_test,y_predict)
 print('acc : ',acc)
 
-
+print("걸린시간:",end )
 # (kernel_size * channls + bias) * filters(output) = summary Param 개수
 
 # tf.keras.layers.Dense(
@@ -116,9 +116,7 @@ print('acc : ',acc)
 # loss :  0.12605245411396027
 # acc :  0.9853
 
-
 # LSTM
 # loss :  9.678908348083496
 # accuracy: 0.1032
 
-'''
