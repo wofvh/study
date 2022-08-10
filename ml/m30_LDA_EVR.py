@@ -19,8 +19,11 @@ print('xgboostversion: ',xg.__version__)        # xgboostversion:  1.6.1
 '''
 #1. 데이터 
 
-datasets = load_iris()
-# datasets = load_breast_cancer()
+datasets = load_iris()              # 150,4 > 150,2
+datasets = load_breast_cancer()     # 569,30 > 569 ,1
+datasets = load_wine()              # 178,13 > 178,2
+datasets = fetch_covtype()          # 581012,54 >581012,6
+datasets = load_digits()            # 1797,64 > 1797,9
 
 x = datasets.data
 y = datasets.target
@@ -33,14 +36,14 @@ print(x.shape)              # (581012, 54)
 # x = pca.fit_transform(x)
 
 # lda = LinearDiscriminantAnalysis(n_components=2)
-lda = LinearDiscriminantAnalysis()
+lda = LinearDiscriminantAnalysis(n_components=7)
 lda.fit(x,y)
 x = lda.transform(x)
-print(x)
+print(x.shape)
 
-# pca_EVR = pca.explained_variance_ratio_
-# cumsum = np.cumsum(pca_EVR)             
-# print(cumsum)
+pca_EVR = lda.explained_variance_ratio_
+cumsum = np.cumsum(pca_EVR)             
+print(cumsum)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,shuffle=True,random_state=123,
                                                     stratify=y)

@@ -10,12 +10,12 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-import numpy as np
-import pandas as pd
+
 import tensorflow as tf
 from tensorflow.python.keras.callbacks import EarlyStopping
 import math
-
+import numpy as np
+import pandas as pd
 #1. 데이터
 path = './_data/kaggle_titanic/'
 train_set = pd.read_csv(path + 'train.csv')             # index_col=n n번째 컬럼을 인덱스로 인식

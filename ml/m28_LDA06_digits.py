@@ -19,7 +19,7 @@ print('xgboostversion: ',xg.__version__)        # xgboostversion:  1.6.1
 '''
 #1. 데이터 
 
-datasets = load_iris()
+datasets = load_digits()
 # datasets = load_breast_cancer()
 
 x = datasets.data
@@ -29,10 +29,10 @@ print(x.shape)              # (581012, 54)
 # le = LabelEncoder()
 # y = le.fit_transform(y)
 
-# pca = PCA(n_components=20)       #   54 >10
+# pca = PCA(n_components=4)       #   54 >10
 # x = pca.fit_transform(x)
 
-# lda = LinearDiscriminantAnalysis(n_components=2)
+# lda = LinearDiscriminantAnalysis(n_components=40)
 lda = LinearDiscriminantAnalysis()
 lda.fit(x,y)
 x = lda.transform(x)
@@ -45,7 +45,7 @@ print(x)
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,shuffle=True,random_state=123,
                                                     stratify=y)
 
-# lda = LinearDiscriminantAnalysis()
+# lda = LinearDiscriminantAnalysis(n_components=9)
 # lda.fit(x_train,y_train)
 # x_train = lda.transform(x_train)
 # x_test = lda.transform(x_test)
@@ -70,21 +70,11 @@ results= model.score(x_test,y_test)
 print("결과 :",results)
 print("시간 :", end-start )
 
-
-# XGBClassifier
-# 결과: 0.8695988915948814
-# 시간 : 6.970503330230713
-
-# XGBClassifier
-# pca = PCA(n_components=10)
-# 결과: 0.8406065247885166
-# 시간 : 4.496622323989868
-
-# XGBClassifier
-# pca = PCA(n_components=20)   
-# 결과: 0.8855279123602661
-# 시간 : 5.378031492233276
-
 # LinearDiscriminantAnalysis()
-# 결과 : 0.9508939352634385
-# 시간 : 0.4368555545806885
+# 결과 : 0.8123313876989622
+# 시간 : 0.6725680828094482
+
+# pca = PCA(n_components=10)       
+# 결과 : 0.6646130750024042
+# 시간 : 0.8190426826477051
+

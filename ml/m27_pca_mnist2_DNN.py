@@ -23,19 +23,7 @@ x= pca.fit_transform(x)
 pca_EVR = pca.explained_variance_ratio_ 
 cumsum = np.cumsum(pca_EVR)
 
-x_train,x_test,y_train,y_test = train_test_split(x,y , train_size=0.8, random_state=123, shuffle=True) 
-# # x = np.append(x_train,x_test,axis=0)
-# # print(x.shape)                      # (70000, 28, 28)
-
-# x_train= x_train.reshape(60000, 28*28)   
-# x_test= x_test.reshape(10000, 28*28)   
-
-# pca = PCA(n_components=154)               # 주성분 / 열축소 13 > 2개로 압축. 
-# x = pca.fit_transform(x_train)
-# # y = pca.transform(y_train)
-
-# pca_EVR = pca.explained_variance_ratio_                      
-# cumsum = np.cumsum(pca_EVR)             
+x_train,x_test,y_train,y_test = train_test_split(x,y , train_size=0.8, random_state=123, shuffle=True)           
 
 print(np.argmax(cumsum >=0.95) + 1)         # 154
 print(np.argmax(cumsum >=0.99) + 1)         # 331
@@ -58,15 +46,11 @@ start = time.time()
 model.fit(x_train,y_train)
 end = time.time()
 #4. 예측
-
-from sklearn.metrics import accuracy_score, r2_score
-
 result = model.score(x_test,y_test)
 print(model,) 
 print("결과:",result)
 print("걸린시간",end-start)
   
-
 
 #[실습]
 # 아까 4가지로 모델을 만들기 
