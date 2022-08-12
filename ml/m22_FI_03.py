@@ -5,7 +5,7 @@
 # 4개 모델 비교 
 
 
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, accuracy_score, r2_score
 from sklearn.model_selection import cross_val_score, StratifiedKFold
@@ -14,7 +14,7 @@ from sklearn.model_selection import KFold, cross_val_score, GridSearchCV
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 #1. 데이터
-datasets = load_breast_cancer()
+datasets = load_diabetes()
 x = datasets['data']
 y = datasets['target']
 
