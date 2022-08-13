@@ -1,3 +1,4 @@
+# m36_dacon_travel.py
 import numpy as np
 import pandas as pd                               
 from sklearn.model_selection import train_test_split
@@ -83,7 +84,8 @@ print(test)
 
 # 모델 선언
 from xgboost import XGBClassifier, XGBRegressor
-model = XGBClassifier()
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
 train = train_enc.drop(columns=['TypeofContact','Occupation'])
