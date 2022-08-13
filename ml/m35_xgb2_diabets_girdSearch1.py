@@ -125,6 +125,7 @@ submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!
 
 print(train_set.describe()) 
 print(train_set.columns.values)
+
 # ['Age' 'TypeofContact' 'CityTier' 'DurationOfPitch' 'Occupation' 'Gender'
 #  'NumberOfPersonVisiting' 'NumberOfFollowups' 'ProductPitched'
 #  'PreferredPropertyStar' 'MaritalStatus' 'NumberOfTrips' 'Passport'

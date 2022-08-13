@@ -59,6 +59,7 @@ def plot_feature_importances(model):
    
 model5 = 'XGBRFRegressor()'
 
+import matplotlib.pyplot as plt 
 plt.subplot(2,2,1)
 plt.title(model1)
 plot_feature_importances(model1)

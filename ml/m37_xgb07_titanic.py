@@ -30,6 +30,8 @@ x = np.array(x)
 x = np.delete(x,[4,6], axis=1)
 y = np.array(y).reshape(-1, 1)
 
+
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=123, stratify = y )
 
 scaler = MinMaxScaler()
