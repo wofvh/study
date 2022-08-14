@@ -3,7 +3,7 @@ import random
 import os
 import numpy as np
 from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
+from sklearn.impute import IterativeImputer,KNNImputer
 from sklearn.linear_model import LinearRegression
 from sklearn.multioutput import MultiOutputRegressor
 from xgboost import XGBClassifier,XGBRegressor  
@@ -51,6 +51,7 @@ imp = IterativeImputer(estimator = LinearRegression(),
                        max_iter=30, 
                        verbose=2, 
                        imputation_order='roman')
+
 
 train_x = pd.DataFrame(imp.fit_transform(train_x))
 

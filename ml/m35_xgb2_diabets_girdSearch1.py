@@ -18,6 +18,9 @@ test = pd.read_csv(path + 'test.csv',
 
 sample_submission = pd.read_csv(path + 'sample_submission.csv')
 
+
+print(train.describe())  # DurationOfPitch, MonthlyIncome
+
 # 결측치를 처리하는 함수를 작성.
 def handle_na(data):
     temp = data.copy()
@@ -85,11 +88,11 @@ print(test)
 # 모델 선언
 from xgboost import XGBClassifier, XGBRegressor
 from sklearn.linear_model import LogisticRegression
-model = LogisticRegression()
+model = XGBClassifier()
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
-train = train_enc.drop(columns=['TypeofContact','Occupation'])
-test = test.drop(columns=['TypeofContact','Occupation'])
+train = train_enc.drop(columns=['TypeofContact'])  
+test = test.drop(columns=['TypeofContact'])
 
 
 # 학습에 사용할 정보와 예측하고자 하는 정보를 분리합니다.
@@ -104,6 +107,7 @@ model.fit(x_train,y_train)
 
 prediction = model.predict(test)
 print('----------------------예측된 데이터의 상위 10개의 값 확인--------------------\n')
+
 print(prediction[:10])
 
 # 예측된 값을 정답파일과 병합
