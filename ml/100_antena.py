@@ -20,13 +20,13 @@ train_df = pd.read_csv(path + 'train.csv')
 test_x = pd.read_csv(path + 'test.csv').drop(columns=['ID'])
 train = np.array(train_df)
 
-print("=============================상관계수 히트 맵==============")
-print(train_df.corr())                    # 상관관계를 확인.  
-import matplotlib.pyplot as plt 
-import seaborn as sns
-sns.set(font_scale=0.3)
-sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
-plt.show()
+# print("=============================상관계수 히트 맵==============")
+# print(train_df.corr())                    # 상관관계를 확인.  
+# import matplotlib.pyplot as plt 
+# import seaborn as sns
+# sns.set(font_scale=0.3)
+# sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
+# plt.show()
 
 precent = [0.20,0.40,0.60,0.80]
 
@@ -54,18 +54,32 @@ imp = IterativeImputer(estimator = LinearRegression(),
 
 
 train_x = pd.DataFrame(imp.fit_transform(train_x))
-
 print(train_x)
+######################모델######################################
+from sklearn.linear_model import LogisticRegression
+# model = MultiOutputRegressor(LinearRegression()).fit(train_x, train_y)
+# 0.03932714821910016
 
-model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
-# model = XGBRFRegressor().fit(train_x, train_y)
+# model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
+# 0.28798862985210744 best 
+
+# model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=0.75, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+# 0.098387698230517
+
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=0.75, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+# 0.098387698230517
+
+# model = XGBRegressor().fit(train_x, train_y)
+# 0.4177584378415335
+
 print('Done.')
-
+######################모델######################################
 
 preds = model.predict(test_x)
-print(preds.shape)
+print(preds)
 print(model.score(train_x, train_y))
 print('Done.')
+
 
 submit = pd.read_csv(path + 'sample_submission.csv')
 

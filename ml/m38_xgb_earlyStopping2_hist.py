@@ -16,6 +16,7 @@ print(x.shape,y.shape)          # (569, 30) (569,)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=123, stratify=y)
 
+
 scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)

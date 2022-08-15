@@ -20,6 +20,15 @@ sample_submission = pd.read_csv(path + 'sample_submission.csv')
 
 
 print(train.describe())  # DurationOfPitch, MonthlyIncome
+print("=============================상관계수 히트 맵==============")
+print(train.corr())                    # 상관관계를 확인.  
+import matplotlib.pyplot as plt 
+import seaborn as sns
+sns.set(font_scale=0.3)
+sns.heatmap(data=train.corr(),square=True, annot=True, cbar=True) 
+plt.show()
+
+
 
 # 결측치를 처리하는 함수를 작성.
 def handle_na(data):
@@ -45,6 +54,10 @@ print('object 칼럼 : ', list(object_columns))
 
 # 해당 칼럼만 보아서 봅시다
 train_nona[object_columns]
+
+print(train_nona.shape)
+print(test.shape)
+
 
 # LabelEncoder를 준비해줍니다.
 from sklearn.preprocessing import LabelEncoder
@@ -91,8 +104,9 @@ from sklearn.linear_model import LogisticRegression
 model = XGBClassifier()
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
-train = train_enc.drop(columns=['TypeofContact'])  
-test = test.drop(columns=['TypeofContact'])
+# 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
+train = train_enc.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'])  
+test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'])
 
 
 # 학습에 사용할 정보와 예측하고자 하는 정보를 분리합니다.
@@ -109,7 +123,7 @@ prediction = model.predict(test)
 print('----------------------예측된 데이터의 상위 10개의 값 확인--------------------\n')
 
 print(prediction[:10])
-
+# print(model.score(x_train, y_train))
 # 예측된 값을 정답파일과 병합
 sample_submission['ProdTaken'] = prediction
 
