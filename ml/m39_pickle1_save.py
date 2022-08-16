@@ -67,7 +67,7 @@ import pickle
 
 # 모델저장
 path = 'D:\study_data\_save/_xg/'
-pickle.dump(model, open(path+'m39_pickle1_save.dat','wb'))
+pickle.dump(model, open(path+'m39_pickle1_save.dat','wb'))  # rb 불러오기 wb 가져오기
 
 
 
