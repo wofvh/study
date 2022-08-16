@@ -1,20 +1,21 @@
 #[실습] girdSearchfrom sklearn.datasets import load_breast_cancer
 
-from sklearn.datasets import load_breast_cancer, load_diabetes,load_boston
+from sklearn.datasets import load_breast_cancer, load_diabetes
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold,StratifiedKFold,train_test_split
 from sklearn.preprocessing import StandardScaler,MinMaxScaler
 from xgboost import XGBClassifier, XGBRegressor
 import time 
 from sklearn.feature_selection import SelectFromModel   # 모델을 선택.
+from sklearn.linear_model import LinearRegression
+
 #1. 데이터 
-datasets = load_boston()
+datasets = load_diabetes()
 x = datasets.data
 y = datasets.target
 
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=123)
-from sklearn.preprocessing import StandardScaler,MinMaxScaler
+x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=72)
 
 scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
@@ -27,14 +28,14 @@ kfold = StratifiedKFold(n_splits=n_splits ,shuffle=True, random_state=123)
 
 #2. 모델 
 
-model = XGBRegressor(random_state=123,                 #위에있는 파라미터를 모델안에 넣을때 하는 방법
-                    n_estimators=100,
-                    learning_rate=0.1,
-                    max_depth=3,
-                    gamma=1
+# model = XGBRegressor(random_state=123,                 #위에있는 파라미터를 모델안에 넣을때 하는 방법
+#                     n_estimators=100,
+#                     learning_rate=0.1,
+#                     max_depth=3,
+#                     gamma=1
 
-)
-
+# )
+model = LinearRegression()
 # model = GridSearchCV(xgb, parameters, cv =kfold, n_jobs=8)
 
 import time
@@ -42,14 +43,7 @@ start = time.time()
 
 
 
-model.fit(x_train,y_train, early_stopping_rounds =200,
-          eval_set = [(x_train,y_train),(x_test,y_test)],   # 훈련 + 학습 # 뒤에걸 인지한다
-          eval_metric='error',          
-          # rmse,mae,mrmsle...  회귀             
-          # errror, auc...      이진  
-          # merror,mlogloss..   다중
-          )
-
+model.fit(x_train,y_train)
 end = time.time()
 
 #4. 평가 예측
@@ -60,10 +54,10 @@ print("시간 :", end-start )
 
 from sklearn.metrics import accuracy_score,r2_score
 y_predict = model.predict(x_test)
-acc = r2_score(y_test,y_predict)
-print("최종 r2_score :", acc)
+r2 = r2_score(y_test,y_predict)
+print("최종 r2_score :", r2)
 
-
+exit()
 print(model.feature_importances_)
 
 # 결과 : -2.8392073911166262
@@ -107,5 +101,6 @@ for thresh in thresholds:
     print('Thresh=%.3f, n=%d, R2: %.2f%%'
           %(thresh, select_x_train.shape[1],score*100))
 
-# (404, 6) (102, 6)
-# Thresh=0.025, n=6, R2: 81.56%
+
+# (353, 9) (89, 9)
+# Thresh=0.045, n=9, R2: 57.36%
