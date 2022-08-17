@@ -99,6 +99,8 @@ print(test)
 
 
 # 모델 선언
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
@@ -114,25 +116,30 @@ test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPe
 
 
 # 학습에 사용할 정보와 예측하고자 하는 정보를 분리합니다.
-x_train = train.drop(columns=['ProdTaken'])
-y_train = train[['ProdTaken']]
-print(x_train.info())
-print(y_train.info())
+x = train.drop(columns=['ProdTaken'])
+y = train[['ProdTaken']]
+
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.8,shuffle=True,stratify=y)
 
 
 # 모델 학습
 model.fit(x_train,y_train)
 
-prediction = model.predict(test)
+prediction = model.predict(x_test)
 print('----------------------예측된 데이터의 상위 10개의 값 확인--------------------\n')
+
+print('acc : ', accuracy_score(prediction,y_test))
 
 print(prediction[:10])
 # print(model.score(x_train, y_train))
 # 예측된 값을 정답파일과 병합
+print(prediction.shape)
+
 sample_submission['ProdTaken'] = prediction
 
 # 정답파일 데이터프레임 확인
 print(sample_submission)
+exit()
 
 sample_submission.to_csv(path+'sample_submission.csv',index = False)
 
