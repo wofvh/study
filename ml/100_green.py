@@ -87,23 +87,75 @@ def aaa(input_paths, target_paths): #, infer_mode):
     return np.array(data_list), np.array(label_list)
     print('끗.')
 
-train_data, label_data = aaa(train_input_list, train_target_list) #, False)
+x_train,y_train = aaa(train_input_list, train_target_list) #, False)
+x_test,y_test = aaa(val_input_list, val_target_list) #, False)
 
-print(train_data[0])
-print(len(train_data), len(label_data)) # 1607 1607
-print(len(train_data[0]))   # 1440
-print(label_data)   # 1440
-print(train_data.shape, label_data.shape)   # (1607, 1440, 37) (1607,)
+# print(train_data[0])
+# print(len(train_data), len(label_data)) # 1607 1607
+# print(len(train_data[0]))   # 1440
+# print(label_data)   # 1440
+# print(train_data.shape, label_data.shape)   # (1607, 1440, 37) (1607,)
 
-x_train, x_test, y_train, y_test = train_test_split(train_data.shape,label_data.shape,
-                                                    train_size=0.8,
-                                                    random_state=66
-                                                    )
-print(x_train.shape)
-print(x_test.shape)
-print(y_train.shape)
-print(y_test.shape)
+print(x_train.shape)        # (1607, 1440, 37)
+print(y_train.shape)        # (1607,)
+print(x_test.shape)         # (206, 1440, 37)
+print(y_test.shape)         # (206,)
 
+from sklearn.metrics import r2_score, accuracy_score
+# x_train.reshape(1607*1440)
+
+
+# x_train, x_test, y_train, y_test = train_test_split(train_data.shape,label_data.shape,
+#                                                     train_size=0.8,
+#                                                     random_state=66
+#                                                     )
+# print(x_train.shape)
+# print(x_test.shape)
+# print(y_train.shape)
+# print(y_test.shape)
+
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense, Conv1D, Flatten, Dropout
+from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+from xgboost import XGBClassifier, XGBRegressor
+
+###################################################
+# model = Sequential()
+# model.add(Conv1D(64,2 ,input_shape=(1440,37)))
+# model.add(Flatten())
+# model.add(Dropout(0.5))
+# model.add(Dense(100,activation='relu'))
+# model.add(Dense(100,activation='relu'))
+# model.add(Dense(100,activation='relu'))
+# model.add(Dense(1))
+####################################################
+model=XGBClassifier()
+
+model.fit(x_train, y_train)
+
+#4. 평가,예측
+# loss = model.evaluate(x_test, y_test)
+# print('loss :', loss)
+# y_predict = model.predict(x_test)
+# from sklearn.metrics import r2_score, accuracy_score
+# r2 = r2_score(y_test, y_predict)
+# print('acc :', r2)
+#####################################################
+
+from sklearn.metrics import accuracy_score, r2_score
+
+result = model.score(x_test,y_test)
+print("model.score:",result)
+
+y_predict = model.predict(x_test)
+acc = accuracy_score(y_test,y_predict)
+
+print( 'accuracy_score :',acc)
+print(model,':')   
+print("===================================")
 
 
 
