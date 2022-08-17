@@ -54,20 +54,22 @@ imp = IterativeImputer(estimator = LinearRegression(),
 
 
 train_x = pd.DataFrame(imp.fit_transform(train_x))
-print(train_x)
+print(train_x.shape,train_y.shape)
+
+
 ######################모델######################################
 from sklearn.linear_model import LogisticRegression
 # model = MultiOutputRegressor(LinearRegression()).fit(train_x, train_y)
 # 0.03932714821910016
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
-# 0.28798862985210744 best 
+# 0.28798862985210744 
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=0.75, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
-# 0.098387698230517
+# 0.098387698230517  best
 
-model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=0.75, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
-# 0.098387698230517
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+# 0.0942562122814897
 
 # model = XGBRegressor().fit(train_x, train_y)
 # 0.4177584378415335
@@ -80,6 +82,23 @@ print(preds)
 print(model.score(train_x, train_y))
 print('Done.')
 
+# {'n_estimators':[1000],
+#               'learning_rate':[0.1],
+#               'max_depth':[3],
+#               'gamma': [1],
+#               'min_child_weight':[1],
+#               'subsample':[1],
+#               'colsample_bytree':[1],
+#               'colsample_bylevel':[1],
+#             #   'colsample_byload':[1],
+#               'reg_alpha':[0],
+#               'reg_lambda':[1]
+#               }  
+
+
+
+exit()
+####################제출############################
 
 submit = pd.read_csv(path + 'sample_submission.csv')
 

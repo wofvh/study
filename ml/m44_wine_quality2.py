@@ -11,7 +11,7 @@ from sklearn.feature_selection import SelectFromModel   # 모델을 선택.
 data = pd.read_csv('C:\study\_data\wine/winequality-white.csv',header=0,sep=';')
 
 print(data.shape)
-print(data.describe()  )            # pandas에서 좋은점 자료정보가 다나옴 
+print(data.describe())            # pandas에서 좋은점 자료정보가 다나옴 
 
 #     fixed acidity  volatile acidity  citric acid  residual sugar    chlorides  free sulfur dioxide  total sulfur dioxide      density           pH    sulphates      alcohol      quality
 # count    4898.000000       4898.000000  4898.000000     4898.000000  4898.000000          4898.000000           4898.000000  4898.000000  4898.000000  4898.000000  4898.000000  4898.000000
