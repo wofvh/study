@@ -23,7 +23,7 @@ model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse',optimizer='adam')
-model.fit(x, y, epochs=3, batch_size=1)             #batch 사용법. batch_size가 2명 2개씩 3이면 3개씩 실행함.
+model.fit(x, y, epochs=3, batch_size=1)             #batch 사용법. batch_size가 2면 2개씩 3이면 3개씩 실행함.
 
 #4. 평가, 예측
 loss = model.evaluate(x, y)                         # 반드시는 필요없지만, 결과값을 보는 것 

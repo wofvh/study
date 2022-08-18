@@ -9,7 +9,8 @@ from tensorflow.keras.layers import Dense
 
 #1. 데이터
 x = np.array([range(10), range(21, 31),range(201, 211)])
-
+print(x)
+exit()
 print(x.shape)  #(3,10)
 
 y = np.array([[1,2,3,4,5,6,7,8,9,10],

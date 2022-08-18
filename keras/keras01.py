@@ -21,7 +21,7 @@ model.add(Dense(3))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
-model.compile(loss='mse',optimizer='adam')  # compile 엮다. #loss='mse'  optimizer='adam'(최적화)
+model.compile(loss='mae',optimizer='adam')  # compile 엮다. #loss='mse'  optimizer='adam'(최적화)
 model.fit(x, y, epochs=100)                 # model.fit > 훈련시키다.     epochs > 훈련횟수
 
 #4. 평가, 예측

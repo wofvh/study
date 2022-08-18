@@ -8,14 +8,14 @@ x = np.array([[1,2,3,4,5,6,7,8,9,10],
              ,[9,8,7,6,5,4,3,2,1,0]])   # -> y= w1x1 + w2x2 +b
 y = np.array([11,12,13,14,15,16,17,18,19,20])    # (10,)
 
-print (x.shape)  #(3,10)    # x = 행3, 열,10 
+print (x)  #(3,10)    # x = 행3, 열,10 
 print (y.shape)  #(10,)
 
 # x = x.transpose()                     # transpose 행과열의 위치변경 방법1 
 x = x.T                                 # transpose 행과열의 위치변경 방법2
 print(x)
 print(x.shape)   #(10,3)
-
+exit()
 
 # [실습] 모델을 완성하시오.
 # 예측값 [10,1.4,0]

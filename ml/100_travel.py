@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(font_scale=0.3)
 sns.heatmap(data=train.corr(),square=True, annot=True, cbar=True) 
-plt.show()
+# plt.show()
 
 
 
@@ -119,13 +119,15 @@ test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPe
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.8,shuffle=True,stratify=y)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.91,shuffle=True,stratify=y)
 
 
 # 모델 학습
 model.fit(x_train,y_train)
 
 prediction = model.predict(x_test)
+prediction1 = model.predict(test)
+
 print('----------------------예측된 데이터의 상위 10개의 값 확인--------------------\n')
 
 print('acc : ', accuracy_score(prediction,y_test))
@@ -135,11 +137,10 @@ print(prediction[:10])
 # 예측된 값을 정답파일과 병합
 print(prediction.shape)
 
-sample_submission['ProdTaken'] = prediction
+sample_submission['ProdTaken'] = prediction1
 
 # 정답파일 데이터프레임 확인
 print(sample_submission)
-exit()
 
 sample_submission.to_csv(path+'sample_submission.csv',index = False)
 

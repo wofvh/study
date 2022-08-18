@@ -18,10 +18,10 @@ warnings.filterwarnings(action='ignore')
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
 CFG = {
-    'EPOCHS':50,
+    'EPOCHS':5,
     'LEARNING_RATE':1e-3,
     'BATCH_SIZE':16,
-    'SEED':42
+    'SEED':41
 }
 
 def seed_everything(seed):
