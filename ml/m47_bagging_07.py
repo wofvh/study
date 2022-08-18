@@ -39,21 +39,57 @@ x = np.array(x)
 x = np.delete(x,[4,6], axis=1)
 y = np.array(y).reshape(-1, 1)
 
+
+
 x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.8,
                                                     random_state=66
                                                     )
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
+scaler = MinMaxScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
 
 #2. 모델 
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
 from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
+from sklearn.ensemble import BaggingClassifier,BaggingRegressor  # 한가지 모델을 여러번 돌리는 것(파라미터 조절).
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
 
-model1 = DecisionTreeClassifier()
-model2 = RandomForestClassifier()
-model3 = GradientBoostingClassifier()
-model4 = XGBClassifier()
+model1 = BaggingClassifier(DecisionTreeClassifier(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+model2 = BaggingClassifier(RandomForestClassifier(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+model3 = BaggingClassifier(LogisticRegression(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+model4 = BaggingClassifier(XGBClassifier(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+
+# model1 = DecisionTreeClassifier()
+# model2 = RandomForestClassifier()
+# model3 = GradientBoostingClassifier()
+# model4 = XGBClassifier()
 
 #3. 훈련
 model1.fit(x_train,y_train)
@@ -62,56 +98,91 @@ model3.fit(x_train,y_train)
 model4.fit(x_train,y_train)
 
 #4. 예측
+result1 = model1.score(x_test,y_test)
+# print("model1.score:",result1)
 
 from sklearn.metrics import accuracy_score, r2_score
 
-result = model1.score(x_test,y_test)
-print("model.score:",result)
-
 y_predict = model1.predict(x_test)
-acc = accuracy_score(y_test,y_predict)
+acc1 = accuracy_score(y_test,y_predict)
 
-print( 'accuracy_score :',acc)
-print(model1,':',model1.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'score1 :',acc1)
+print(model1) 
 print("===================================")
 
-
-
-
 result2 = model2.score(x_test,y_test)
-print("model2.score:",result2)
+# print("model2.score:",result2)
+
 
 y_predict2 = model2.predict(x_test)
 acc2 = accuracy_score(y_test,y_predict2)
 
-print( 'accuracy2_score :',acc2)
-print(model2,':',model2.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'score2 :',acc2)
+print(model2) 
 print("===================================")
 
-
-
-
 result3 = model3.score(x_test,y_test)
-print("model3.score:",result3)
+# print("model3.score3:",result3)
+
 
 y_predict3 = model3.predict(x_test)
 acc3 = accuracy_score(y_test,y_predict3)
 
-print( 'accuracy3_score :',acc3)
-print(model3,':',model3.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'score3 :',acc3)
+print(model3)
 print("===================================")
 
-
-
 result4 = model4.score(x_test,y_test)
-print("model4.score:",result4)
+# print("model4.score:",result4)
+
 
 y_predict4 = model4.predict(x_test)
 acc4 = accuracy_score(y_test,y_predict4)
 
-print( 'accuracy4_score :',acc4)
-print(model4,':',model4.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'acc :',acc4)
+print(model4) 
 print("===================================")
+
+# BaggingClassifier
+
+# model1.score: 0.8491620111731844
+# score1 : 0.8491620111731844
+# BaggingClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model2.score: 0.8603351955307262
+# score2 : 0.8603351955307262
+# BaggingClassifier(base_estimator=RandomForestClassifier(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model3.score3: 0.7653631284916201
+# score3 : 0.7653631284916201
+# BaggingClassifier(base_estimator=LogisticRegression(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model4.score: 0.8715083798882681
+# acc : 0.8715083798882681
+# BaggingClassifier(base_estimator=XGBClassifier
+
+
+# model1.score: 0.9444444444444444
+# score1 : 0.9444444444444444
+# BaggingClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model2.score: 0.9777777777777777
+# score2 : 0.9777777777777777
+# BaggingClassifier(base_estimator=RandomForestClassifier(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model3.score3: 0.9694444444444444
+# score3 : 0.9694444444444444
+# BaggingClassifier(base_estimator=LogisticRegression(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model4.score: 0.9694444444444444
+# acc : 0.9694444444444444
+# BaggingClassifier(base_estimator=XGBClassifier
 # 삭제후 
 # model.score: 0.8268156424581006
 # accuracy_score : 0.8268156424581006

@@ -137,6 +137,7 @@ print('loss : ', results[0])
 
 # print(y_test)
 y_predict = model.predict(x_test)
+
 y_predict = tf.argmax(y_predict,axis=1) 
 
 # print(y_test)

@@ -32,7 +32,7 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size =0.2,
     shuffle=True, random_state =58525)
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
-scaler = MinMaxScaler()
+scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
@@ -138,7 +138,29 @@ print(model4)
 print("===================================")
 
 
+
+
+
 # BaggingClassifier
+# model1.score: 0.9444444444444444
+# score1 : 0.9444444444444444
+# BaggingClassifier(base_estimator=DecisionTreeClassifier(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model2.score: 0.9777777777777777
+# score2 : 0.9777777777777777
+# BaggingClassifier(base_estimator=RandomForestClassifier(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model3.score3: 0.9694444444444444
+# score3 : 0.9694444444444444
+# BaggingClassifier(base_estimator=LogisticRegression(), n_estimators=100,
+#                   n_jobs=1, random_state=123)
+# ===================================
+# model4.score: 0.9694444444444444
+# acc : 0.9694444444444444
+# BaggingClassifier(base_estimator=XGBClassifier
+
 
 # 삭제후 
 # accuracy_score : 0.8194444444444444
@@ -172,7 +194,4 @@ print("===================================")
 # model4.score: 0.9638888888888889
 # accuracy4_score : 0.9638888888888889
 # XGBClassifier
-
-
-
 

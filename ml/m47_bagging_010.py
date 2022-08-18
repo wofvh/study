@@ -1,63 +1,79 @@
-# 결과비교 
-# DecisionTree
-# 기존 acc : 
-# 컬럼삭제후 acc : 
-# 4개 모델 비교 
-
-
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
 import pandas as pd
-from sqlalchemy import true                                 # pandas : 엑셀땡겨올때 씀 python 지원하는 엑셀을 불러오는 기능.
+from sqlalchemy import true                                 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
-from sklearn.linear_model import LogisticRegression, LinearRegression     # LogisticRegression 분류모델 LinearRegression 회귀
+from sklearn.linear_model import LogisticRegression, LinearRegression     
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 #1. 데이터
 path = './_data/ddarung/'
-train_set = pd.read_csv(path + 'train.csv',                 # + 명령어는 문자를 앞문자와 더해줌
-                        index_col=0)                        # index_col=n n번째 컬럼을 인덱스로 인식
+train_set = pd.read_csv(path + 'train.csv',                 
+                        index_col=0)                       
 
-test_set = pd.read_csv(path + 'test.csv',                    # 예측에서 쓸거임                
+test_set = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-train_set = train_set.fillna(train_set.mean())       # dropna() : train_set 에서 na, null 값 들어간 행 삭제
-test_set = test_set.fillna(test_set.mean()) # test_set 에서 이빨빠진데 바로  ffill : 위에서 가져오기 test_set.mean : 평균값
-
-x = train_set.drop(['count'], axis=1)                    # drop 데이터에서 ''사이 값 빼기
-
+train_set = train_set.fillna(train_set.mean())       
+test_set = test_set.fillna(test_set.mean())
+x = train_set.drop(['count'], axis=1)                    
 y = train_set['count'] 
 x = np.array(x)
 x = np.delete(x,[2,3,4], axis=1)  
 
-# x = np.delete(x,1, axis=1) 
-# x = np.delete(x,4, axis=1) 
+from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
 
-# y = np.delete(y,1, axis=1) 
-
-
-# print(x.shape,y.shape)
-# print(datasets.feature_names)
-
-
-from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.8,
                                                     random_state=123,shuffle=True)
+
+
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
 
 #2. 모델 
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, RandomForestRegressor,GradientBoostingRegressor
 from xgboost import XGBClassifier,XGBRFRegressor        # activate tf282gpu > pip install xgboost 
+from sklearn.ensemble import BaggingClassifier ,BaggingRegressor # 한가지 모델을 여러번 돌리는 것(파라미터 조절).,
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
 
-model1 = DecisionTreeRegressor()
-model2 = RandomForestRegressor()
-model3 = RandomForestRegressor()
-model4 = XGBRFRegressor ()
+model1 = BaggingRegressor(DecisionTreeRegressor(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+model2 = BaggingRegressor(RandomForestRegressor(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+model3 = BaggingRegressor(KNeighborsRegressor(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+model4 = BaggingRegressor(XGBRFRegressor(),
+                          n_estimators=100, 
+                          n_jobs=1,
+                          random_state=123
+                          )
+
+
+# model1 = DecisionTreeClassifier()
+# model2 = RandomForestClassifier()
+# model3 = GradientBoostingClassifier()
+# model4 = XGBClassifier()
 
 #3. 훈련
 model1.fit(x_train,y_train)
@@ -67,50 +83,67 @@ model4.fit(x_train,y_train)
 
 #4. 예측
 result1 = model1.score(x_test,y_test)
-print("model.score:",result1)
+# print("model1.score:",result1)
 
 from sklearn.metrics import accuracy_score, r2_score
 
 y_predict = model1.predict(x_test)
-r2 = r2_score(y_test,y_predict)
+score1 = r2_score(y_test,y_predict)
 
-print( 'r2_score1 :',r2)
-print(model1,':',model1.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'score1 :',score1)
+print(model1) 
 print("===================================")
 
 result2 = model2.score(x_test,y_test)
-print("model1.score:",result2)
+# print("model2.score:",result2)
 
 
 y_predict2 = model2.predict(x_test)
-r2 = r2_score(y_test,y_predict2)
+score2 = r2_score(y_test,y_predict2)
 
-print( 'r2_score2 :',r2)
-print(model2,':',model2.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'score2 :',score2)
+print(model2) 
 print("===================================")
 
 result3 = model3.score(x_test,y_test)
-print("model2.score3:",result3)
+# print("model3.score3:",result3)
 
 
 y_predict3 = model3.predict(x_test)
-r2 = r2_score(y_test,y_predict3)
+score3 = r2_score(y_test,y_predict3)
 
-print( 'r2_score3 :',r2)
-print(model3,':',model3.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'score3 :',score3)
+print(model3)
 print("===================================")
 
 result4 = model4.score(x_test,y_test)
-print("model4.score:",result4)
+# print("model4.score:",result4)
 
 
 y_predict4 = model4.predict(x_test)
-r2 = r2_score(y_test,y_predict4)
+score4 = r2_score(y_test,y_predict4)
 
-print( 'r2_score4 :',r2)
-print(model4,':',model4.feature_importances_)   # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print( 'acc :',score4)
+print(model4) 
 print("===================================")
 
+
+# BaggingClassifier
+# score1 : 0.7865685604346746
+# BaggingRegressor(base_estimator=DecisionTreeRegressor(), n_estimators=100,
+#                  n_jobs=1, random_state=123)
+# ===================================
+# score2 : 0.7790456939802397
+# BaggingRegressor(base_estimator=RandomForestRegressor(), n_estimators=100,
+#                  n_jobs=1, random_state=123)
+# ===================================
+# score3 : 0.7377293548880837
+# BaggingRegressor(base_estimator=KNeighborsRegressor(), n_estimators=100,
+#                  n_jobs=1, random_state=123)
+# ===================================
+# acc : 0.7443257132757819
+# BaggingRegressor(base_estimator=XGBRFRegressor
+                 
 # 삭제후 
 
 # model.score: 0.6300146059727504

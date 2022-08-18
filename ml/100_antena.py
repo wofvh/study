@@ -8,6 +8,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.multioutput import MultiOutputRegressor
 from xgboost import XGBClassifier,XGBRegressor  
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+from sklearn.ensemble import BaggingClassifier,BaggingRegressor  # 한가지 모델을 여러번 돌리는 것(파라미터 조절).
 
 path = 'D:\study_data\_data/antena/'
 
@@ -47,7 +48,6 @@ cols = ["X_10","X_11"]
 train_x[cols] = train_x[cols].replace(0, np.nan)
 
 # MICE 결측치 보간
-
 imp = IterativeImputer(estimator = LinearRegression(), 
                        tol= 1e-10, 
                        max_iter=30, 
@@ -67,7 +67,7 @@ from sklearn.linear_model import LogisticRegression
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
 # 0.28798862985210744 
 
-model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=0.8, colsample_bytree = 1, max_depth=4) ).fit(train_x, train_y)
+model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
 # 0.098387698230517  best
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
