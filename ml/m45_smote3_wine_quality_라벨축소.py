@@ -29,6 +29,7 @@ print(pd.Series(y).value_counts())
 # 3.0      20
 # 9.0       5
 
+# <라벨축소>
 
 newlist = []
 for i in y:

@@ -72,7 +72,7 @@ print('f1_macro:',f1_score(y_test,y_predict, average='macro'))      # 이진분�
 # f1_macro: 0.8517460317460318
 
 print('=========================smote 적용 후==========================')
-smote = SMOTE(random_state=123)
+smote = SMOTE(random_state=123,k_neighbors=3)
 x_train, y_train = smote.fit_resample(x_train,y_train)
 
 
@@ -91,4 +91,4 @@ y_predict = model.predict(x_test)
 
 score = model.score(x_test,y_test)
 print('acc:', accuracy_score(y_test,y_predict))
-print('f1_macro:',f1_score(y_test,y_predict, average='macro'))
+print('f1_macro:',f1_score(y_test,y_predict, average='macro')) 
