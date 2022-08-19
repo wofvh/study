@@ -11,19 +11,20 @@ datasets =load_breast_cancer()
 # y = datasets.target
 
 df = pd.DataFrame(datasets.data,columns=[datasets.feature_names])
-print(df)
+print("1",df)
 
 # from sklearn.preprocessing import LabelEncoder
 # le = LabelEncoder()
 # datasets.target = le.fit_transform(datasets.target)
+from sklearn.cluster import KMeans
 
 kmeans =KMeans(n_clusters=2, random_state=50)
 kmeans.fit(df)
 
 
 results = kmeans.labels_
-print(results)
-print(datasets.target)
+print('2',results)
+print('3',datasets.target)
 
 df['cluster'] = kmeans.labels_
 df['target'] = datasets.target

@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(font_scale=0.3)
 sns.heatmap(data=train.corr(),square=True, annot=True, cbar=True) 
-plt.show()
+# plt.show()
 
 
 
@@ -107,7 +107,7 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 from xgboost import XGBClassifier, XGBRegressor 
 from sklearn.linear_model import LogisticRegression
-model = RandomForestClassifier()
+model =XGBClassifier()
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
@@ -121,6 +121,11 @@ y = train[['ProdTaken']]
 
 x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.8,shuffle=True,stratify=y)
 
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
+# scaler = MinMaxScaler()
+# x_train = scaler.fit_transform(x_train)
+# x_test = scaler.transform(x_test)
 
 # 모델 학습
 model.fit(x_train,y_train)
