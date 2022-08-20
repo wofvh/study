@@ -77,7 +77,7 @@ model = XGBClassifier(tree_method='gpu_hist',
                       predictor='gpu_predictor',
                       gpu_id=0)
 
-
+#
 # model = GridSearchCV(xgb, parameters, cv =kfold, n_jobs=8)
 
 import time

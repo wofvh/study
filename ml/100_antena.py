@@ -61,13 +61,13 @@ print(train_x.shape,train_y.shape)
 
 ######################모델######################################
 from sklearn.linear_model import LogisticRegression
-# model = MultiOutputRegressor(LinearRegression()).fit(train_x, train_y)
+model = MultiOutputRegressor(RandomForestRegressor()).fit(train_x, train_y)
 # 0.03932714821910016
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
 # 0.28798862985210744 
 
-model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
+# model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
 # 0.098387698230517  best
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
@@ -110,4 +110,4 @@ for idx, col in enumerate(submit.columns):
     submit[col] = preds[:,idx-1]
 print('Done.')
 
-submit.to_csv(path + 'submmit.csv', index=False)
+submit.to_csv(path + 'submmit0820_1.csv', index=False)

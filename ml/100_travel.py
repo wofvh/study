@@ -1,13 +1,15 @@
 # m36_dacon_travel.py
 import numpy as np
 import pandas as pd                               
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, KFold
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import r2_score, mean_squared_error,accuracy_score
 from tqdm import tqdm_notebook
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
+from sklearn.model_selection import GridSearchCV
+
 #1. 데이터
 path = './_data/travel/'
 train = pd.read_csv(path + 'train.csv',                 
@@ -16,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0820_3.csv')
 
 
 print(train.describe())  # DurationOfPitch, MonthlyIncome
@@ -124,13 +126,13 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
 train = train_enc.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'])  
 test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'])
-
+# 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'
 
 # 학습에 사용할 정보와 예측하고자 하는 정보를 분리합니다.
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.81,shuffle=True,stratify=y)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.88,shuffle=True,stratify=y)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
@@ -139,8 +141,35 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_siz
 # x_test = scaler.transform(x_test)
 
 # 모델 학습
-# model = XGBClassifier(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123)
-model = XGBClassifier()
+xgb = XGBClassifier(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123)
+
+
+# ##########################GridSearchCV###############################
+# n_splits = 5
+
+# parameters = {'n_estimators':[1000],
+#               'learning_rate':[0.1],
+#               'max_depth':[3],
+#               'gamma': [0],
+#             #   'min_child_weight':[1],
+#               'subsample':[1],
+#               'colsample_bytree':[1],
+#             #   'colsample_bylevel':[1],
+#             #   'colsample_byload':[1],
+#             #   'reg_alpha':[0],
+#             #   'reg_lambda':[1]
+#               }  
+
+# kfold = KFold(n_splits=n_splits ,shuffle=True, random_state=123)
+# xgb = XGBClassifier(random_state=123,
+#                     )
+
+# model = GridSearchCV(xgb,param_grid=parameters, cv =kfold, n_jobs=8)
+##########################GridSearchCV###############################
+
+
+model = RandomForestClassifier()
+
 model.fit(x_train,y_train)
 
 prediction = model.predict(x_test)
@@ -160,7 +189,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0820_3.csv',index = False)
 
 exit()
 

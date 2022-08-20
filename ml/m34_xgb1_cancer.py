@@ -33,7 +33,9 @@ kfold = StratifiedKFold(n_splits=n_splits ,shuffle=True, random_state=123)
 #'colsample_byload':[0,0.1,0.2,0.3,0.5,0.7,1]}                    # 디폴트 1 / 0-1
 # 'reg_alpha':[0,0.1,0.01,0.001,1,2,10]                           # 디폴트 0 / 0-무한대 / L1 절대값 가중치 규제 / alpha
 # 'reg_lambda':[0,0.1,0.01,0.001,1,2,10]                          # 디폴트 1 / 0-무한대 / L2 제곱값 가중치 규제 / lambda
+n_splits = 5
 
+kfold = StratifiedKFold(n_splits=n_splits ,shuffle=True, random_state=123)
 parameters = {'n_estimators':[1000],
               'learning_rate':[0.1],
               'max_depth':[3],

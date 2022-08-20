@@ -37,7 +37,7 @@ lda = LinearDiscriminantAnalysis()
 lda.fit(x,y)
 x = lda.transform(x)
 print(x)
-
+exit()
 # pca_EVR = pca.explained_variance_ratio_
 # cumsum = np.cumsum(pca_EVR)             
 # print(cumsum)
