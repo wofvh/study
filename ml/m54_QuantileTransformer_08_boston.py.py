@@ -53,21 +53,35 @@ x_train, x_test, y_train, y_test = train_test_split (x,y ,train_size=0.8,
 
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler ,RobustScaler, QuantileTransformer , PowerTransformer,MaxAbsScaler
 scaler = [StandardScaler(),MinMaxScaler(),RobustScaler(),MaxAbsScaler(),QuantileTransformer(),PowerTransformer(method='yeo-johnson')]
+models = [CatBoostRegressor(verbose=0),RandomForestRegressor(verbose=0),LinearRegression()]
 for sca in scaler :
     x_train = sca.fit_transform(x_train)
     x_test = sca.transform(x_test)
-    model = LinearRegression()
-    model.fit(x_train,y_train)
-    y_predict = model.predict(x_test)
-    result = r2_score(y_test,y_predict)
-    print('scaler: ', round(result,4),scaler)
-    
-# scaler:  0.7665 [StandardScaler(), MinMaxScaler(), RobustScaler(), MaxAbsScaler(), QuantileTransformer(), PowerTransformer()]
-# scaler:  0.7665 [StandardScaler(), MinMaxScaler(), RobustScaler(), MaxAbsScaler(), QuantileTransformer(), PowerTransformer()]
-# scaler:  0.7665 [StandardScaler(), MinMaxScaler(), RobustScaler(), MaxAbsScaler(), QuantileTransformer(), PowerTransformer()]
-# scaler:  0.7665 [StandardScaler(), MinMaxScaler(), RobustScaler(), MaxAbsScaler(), QuantileTransformer(), PowerTransformer()]
-# scaler:  0.7607 [StandardScaler(), MinMaxScaler(), RobustScaler(), MaxAbsScaler(), QuantileTransformer(), PowerTransformer()]
-# scaler:  0.7611 [StandardScaler(), MinMaxScaler(), RobustScaler(), MaxAbsScaler(), QuantileTransformer(), PowerTransformer()]    
+    for mod in models:
+        model = mod
+        model.fit(x_train,y_train)
+        y_predict = model.predict(x_test)
+        result = r2_score(y_test,y_predict)
+        print('scaler:',sca,'model:',mod,'result:', round(result,4))
+        
+# scaler: StandardScaler() model: <catboost.core.CatBoostRegressor object at 0x000002517CFE80A0> result: 0.9245
+# scaler: StandardScaler() model: RandomForestRegressor() result: 0.9162
+# scaler: StandardScaler() model: LinearRegression() result: 0.7665
+# scaler: MinMaxScaler() model: <catboost.core.CatBoostRegressor object at 0x000002517CFE80A0> result: 0.9245
+# scaler: MinMaxScaler() model: RandomForestRegressor() result: 0.9186
+# scaler: MinMaxScaler() model: LinearRegression() result: 0.7665
+# scaler: RobustScaler() model: <catboost.core.CatBoostRegressor object at 0x000002517CFE80A0> result: 0.9245
+# scaler: RobustScaler() model: RandomForestRegressor() result: 0.9201
+# scaler: RobustScaler() model: LinearRegression() result: 0.7665
+# scaler: MaxAbsScaler() model: <catboost.core.CatBoostRegressor object at 0x000002517CFE80A0> result: 0.9245
+# scaler: MaxAbsScaler() model: RandomForestRegressor() result: 0.92
+# scaler: MaxAbsScaler() model: LinearRegression() result: 0.7665
+# scaler: QuantileTransformer() model: <catboost.core.CatBoostRegressor object at 0x000002517CFE80A0> result: 0.9248
+# scaler: QuantileTransformer() model: RandomForestRegressor() result: 0.9149
+# scaler: QuantileTransformer() model: LinearRegression() result: 0.7607
+# scaler: PowerTransformer() model: <catboost.core.CatBoostRegressor object at 0x000002517CFE80A0> result: 0.9247
+# scaler: PowerTransformer() model: RandomForestRegressor() result: 0.9196
+# scaler: PowerTransformer() model: LinearRegression() result: 0.7611
 
 #2. 모델
 model = LinearRegression()

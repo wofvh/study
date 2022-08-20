@@ -107,7 +107,8 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 from xgboost import XGBClassifier, XGBRegressor 
 from sklearn.linear_model import LogisticRegression
-model =XGBClassifier()
+from lightgbm import LGBMClassifier,LGBMRegressor
+from catboost import CatBoostClassifier, CatBoostRegressor
 
 # import matplotlib.pyplot as plt
 
@@ -129,7 +130,7 @@ test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPe
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.8,shuffle=True,stratify=y)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.81,shuffle=True,stratify=y)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
@@ -138,6 +139,8 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_siz
 # x_test = scaler.transform(x_test)
 
 # 모델 학습
+# model = XGBClassifier(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123)
+model = XGBClassifier()
 model.fit(x_train,y_train)
 
 prediction = model.predict(x_test)
