@@ -168,7 +168,7 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_siz
 ##########################GridSearchCV###############################
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-
+############################0821_1####################################
 param_grid = [
               {'n_estimators':[3,10,30,35,40], 'max_features':[2,4,6,8,10,12]},
               {'bootstrap':[False],'n_estimators':[3,5,10], 'max_features':[2,3,4]}
@@ -181,6 +181,7 @@ model = GridSearchCV(forest_reg, param_grid, cv=5,
                            verbose=1,
                            return_train_score=True)
 
+############################0821_1####################################
 
 
 # model = RandomForestClassifier()
