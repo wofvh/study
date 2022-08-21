@@ -205,7 +205,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0821_1.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0821_3.csv',index = False)
 
 exit()
 

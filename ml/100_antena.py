@@ -77,7 +77,7 @@ from sklearn.linear_model import LogisticRegression
 # model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
 # 0.098387698230517  best
 
-model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 0, subsample=1, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
 # 0.0942562122814897
 
 # model = XGBRegressor().fit(train_x, train_y)

@@ -50,12 +50,12 @@ def lgb_hamsu(max_depth,min_child_sample,min_child_weight,subsample,colsample_by
              
             }
     
-    model =LGBMRegressor(**params)
+    model = XGBRFRegressor(**params)
     # ** 키워드받겠다(딕셔너리형태)
     # * 여러개의인자를 받겠다.
     model.fit(x_train,y_train,
               eval_set=[(x_train,y_train),(x_test,y_test)],
-              eval_metric='error',
+              eval_metric='merror',
               verbose=0,
             #   early_stopping_rounds=50,
               )
@@ -70,7 +70,7 @@ lgb_bo = BayesianOptimization(f=lgb_hamsu,
                               random_state=123)
 lgb_bo.maximize(init_points=5,n_iter=50)
 
-# print(lgb_bo.max)
+print(lgb_bo.max)
 
 exit()
 ##################최적의 파라미터 ##########################3
