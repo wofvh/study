@@ -30,6 +30,7 @@ train = np.array(train_df)
 # sns.set(font_scale=0.3)
 # sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
 # plt.show()
+# # 4,23,47,48
 
 precent = [0.20,0.40,0.60,0.80]
 
@@ -43,6 +44,12 @@ print(train_df.describe(percentiles=precent))
  
 train_x = train_df.filter(regex='X') # Input : X Featrue
 train_y = train_df.filter(regex='Y') # Output : Y Feature
+
+print(train_x.shape)
+print(train_y.shape)
+
+
+
 
 cols = ["X_10","X_11"]
 train_x[cols] = train_x[cols].replace(0, np.nan)
@@ -61,8 +68,8 @@ print(train_x.shape,train_y.shape)
 
 ######################모델######################################
 from sklearn.linear_model import LogisticRegression
-model = MultiOutputRegressor(RandomForestRegressor()).fit(train_x, train_y)
-# 0.03932714821910016
+# model = MultiOutputRegressor(RandomForestRegressor()).fit(train_x, train_y)
+# 0.03932714821910016  0820_1 
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
 # 0.28798862985210744 
@@ -70,7 +77,7 @@ model = MultiOutputRegressor(RandomForestRegressor()).fit(train_x, train_y)
 # model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
 # 0.098387698230517  best
 
-# model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
 # 0.0942562122814897
 
 # model = XGBRegressor().fit(train_x, train_y)
@@ -79,8 +86,12 @@ model = MultiOutputRegressor(RandomForestRegressor()).fit(train_x, train_y)
 print('Done.')
 ######################모델######################################
 
+
+
 preds = model.predict(test_x)
 print(preds)
+print(preds.shape)
+
 print(model.score(train_x, train_y))
 print('Done.')
 
@@ -110,4 +121,9 @@ for idx, col in enumerate(submit.columns):
     submit[col] = preds[:,idx-1]
 print('Done.')
 
-submit.to_csv(path + 'submmit0820_1.csv', index=False)
+submit.to_csv(path + 'submmit0821_2.csv', index=False)
+
+
+
+#0821_1 'X_04','X_23','X_47','X_48' 삭제
+#0821_2 'X_07','X_08','X_-09' 삭제

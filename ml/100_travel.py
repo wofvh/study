@@ -141,7 +141,7 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_siz
 # x_test = scaler.transform(x_test)
 
 # 모델 학습
-xgb = XGBClassifier(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123)
+# xgb = XGBClassifier(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123)
 
 
 # ##########################GridSearchCV###############################
@@ -167,8 +167,23 @@ xgb = XGBClassifier(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1,
 # model = GridSearchCV(xgb,param_grid=parameters, cv =kfold, n_jobs=8)
 ##########################GridSearchCV###############################
 
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
-model = RandomForestClassifier()
+param_grid = [
+              {'n_estimators':[3,10,30,35,40], 'max_features':[2,4,6,8,10,12]},
+              {'bootstrap':[False],'n_estimators':[3,5,10], 'max_features':[2,3,4]}
+]
+
+forest_reg = RandomForestClassifier()
+
+model = GridSearchCV(forest_reg, param_grid, cv=5,
+                           scoring='accuracy',
+                           verbose=1,
+                           return_train_score=True)
+
+
+
+# model = RandomForestClassifier()
 
 model.fit(x_train,y_train)
 
@@ -189,7 +204,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0820_3.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0821_1.csv',index = False)
 
 exit()
 
