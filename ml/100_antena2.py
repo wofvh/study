@@ -43,4 +43,14 @@ sns.histplot(data = pcb, x = "X_02", kde = True, ax = axes[0,1]).set(title = "PC
 sns.histplot(data = pcb, x = "X_05", kde = True, ax = axes[1,0]).set(title = "PCB 체결 시 단계별 누름량(3)")
 sns.histplot(data = pcb, x = "X_06", kde = True, ax = axes[1,1]).set(title = "PCB 체결 시 단계별 누름량(4)")
 
-plt.show()
+# plt.show()
+
+# 방열 재료 1 면적 및 무게
+heat = train_x[['X_03', 'X_07', 'X_08', 'X_09', 'X_10', 'X_11']]
+
+plt.figure(figsize = (15,10))
+
+sns.set(font_scale = 1.3)
+
+ax = plt.axes()
+sns.heatmap(heat.corr(),annot = True, cmap = 'Reds', ax = ax).set(title = "Heating material area and weight")
