@@ -53,7 +53,7 @@ print('====================')
 print(hist.history['val_loss'])  
 
 print("걸린시간 : ", end_time)
-
+exit()
 import matplotlib.pyplot as plt
 plt.figure(figsize=(9,6))
 plt.plot(hist.history['loss'], marker = '.', c ='red', label= 'loss')   # x빼고 y만 넣어주면 됨(순차적).
