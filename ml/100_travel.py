@@ -20,16 +20,10 @@ test = pd.read_csv(path + 'test.csv',
 
 sample_submission = pd.read_csv(path + 'sample_submission0820_3.csv')
 
-
-print(train.describe())  # DurationOfPitch, MonthlyIncome
-print("=============================상관계수 히트 맵==============")
-print(train.corr())                    # 상관관계를 확인.  
-import matplotlib.pyplot as plt 
-import seaborn as sns
-sns.set(font_scale=0.3)
-sns.heatmap(data=train.corr(),square=True, annot=True, cbar=True) 
-# plt.show()
-
+print(train.describe()) 
+print(test.describe()) 
+print(train.shape)
+print(test.shape)
 
 
 # 결측치를 처리하는 함수를 작성.
@@ -100,6 +94,17 @@ for o_col in object_columns:
 print(test)
 
 
+
+print(train_enc.describe())  # DurationOfPitch, MonthlyIncome
+print("=============================상관계수 히트 맵==============")
+print(train_enc.corr())                    # 상관관계를 확인.  
+import matplotlib.pyplot as plt 
+import seaborn as sns
+sns.set(font_scale=0.7)
+sns.heatmap(data=train_enc.corr(),square=True, annot=True, cbar=True) 
+# plt.show()
+
+
 # 모델 선언
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -132,7 +137,7 @@ test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPe
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_size=0.88,shuffle=True,stratify=y)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=123, train_size=0.85,shuffle=True)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
@@ -169,22 +174,22 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=72, train_siz
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
-param_grid = [
-              {'n_estimators':[3,10,30,35,40], 'max_features':[2,4,6,8,10,12]},
-              {'bootstrap':[False],'n_estimators':[3,5,10], 'max_features':[2,3,4]}
-]
+# param_grid = [
+#               {'n_estimators':[3,10,30,35,40], 'max_features':[2,4,6,8,10,12]},
+#               {'bootstrap':[False],'n_estimators':[3,5,10], 'max_features':[2,3,4]}
+# ]
 
-forest_reg = RandomForestClassifier()
+# forest_reg = XGBClassifier()
 
-model = GridSearchCV(forest_reg, param_grid, cv=5,
-                           scoring='accuracy',
-                           verbose=1,
-                           return_train_score=True)
+# model = GridSearchCV(forest_reg, param_grid, cv=5,
+#                            scoring='accuracy',
+#                            verbose=0,
+#                            return_train_score=True)
 
 ############################0821_1####################################
 
 
-# model = RandomForestClassifier()
+model = RandomForestClassifier()
 
 model.fit(x_train,y_train)
 
@@ -195,7 +200,7 @@ print('----------------------예측된 데이터의 상위 10개의 값 확인--
 
 print('acc : ', accuracy_score(prediction,y_test))
 
-print(prediction[:10])
+print(prediction[:20])
 # print(model.score(x_train, y_train))
 # 예측된 값을 정답파일과 병합
 print(prediction.shape)

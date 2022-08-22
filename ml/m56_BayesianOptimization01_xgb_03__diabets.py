@@ -55,13 +55,13 @@ def lgb_hamsu(max_depth,min_child_sample,min_child_weight,subsample,colsample_by
     # * 여러개의인자를 받겠다.
     model.fit(x_train,y_train,
               eval_set=[(x_train,y_train),(x_test,y_test)],
-              eval_metric='merror',
+              # eval_metric='rmse',
               verbose=0,
             #   early_stopping_rounds=50,
               )
     y_predict = model.predict(x_test)
     results = accuracy_score(y_test,y_predict)
-    
+    .
     
     return  results
 
@@ -96,8 +96,8 @@ acc= accuracy_score(y_test,y_predict)
 print('acc :',acc)
 
 ################## 그냥 ############################
-0.9666666666666667
-acc : 0.9666666666666667
+
+
 ##################최적의 파라미터 ##########################3
 # 1.0
 # acc : 1.0
