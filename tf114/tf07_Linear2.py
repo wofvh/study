@@ -21,7 +21,8 @@ train = optimizer.minimize(loss)
  
  # 3-2 훈련
 sess = tf.compat.v1.Session()
-sess.run(tf.global_variables_initializer())
+sess.run(tf.global_variables_initializer())  # 초기화
+# 변수형은 그래프를 실행하기 전에 초기화해줘야 변수에 지정이 가능하다.
  
  
 epochs = 2000

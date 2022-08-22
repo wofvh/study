@@ -151,7 +151,7 @@ axes[1,0].set_title("Antenna Gain Average 3 ")
 axes[1,1].plot(gain['Y_11'],label = gain['Y_11'], color = "yellow")
 axes[1,1].set_title("Antenna Gain Average 4")
 
-plt.show()
+# plt.show()
 # from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 
 # from autosklearn.regression import AutoSklearnRegressor 

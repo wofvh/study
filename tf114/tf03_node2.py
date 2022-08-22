@@ -11,16 +11,16 @@ node2 = tf.constant(31351351.0)
 sess = tf.Session()
 
 node3 = node1 + node2
-node3_ = tf.add(node1,node2)
+node3_ = tf.add(node1,node2)                #덧셈 node3
 
 node4 = node1 - node2
-node4_ = tf.subtract(node1,node2)
+node4_ = tf.subtract(node1,node2)           #뺄셈 node4
 
 node5 = node1 * node2
-node5_ = tf.multiply(node1,node2)
+node5_ = tf.multiply(node1,node2)           #곱셈 node5
 
 node6 = node1 / node2
-node6_ = tf.divide(node1,node2)
+node6_ = tf.divide(node1,node2)             #나눗셈 node6
 
 
 print('node3더하기',sess.run([node3, node3_]))
