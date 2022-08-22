@@ -18,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0820_3.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0822_3.csv')
 
 print(train.describe()) 
 print(test.describe()) 
@@ -137,7 +137,7 @@ test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPe
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=123, train_size=0.85,shuffle=True)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=44, train_size=0.86,shuffle=True)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
@@ -175,11 +175,11 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=123, train_si
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
 # param_grid = [
-#               {'n_estimators':[3,10,30,35,40], 'max_features':[2,4,6,8,10,12]},
-#               {'bootstrap':[False],'n_estimators':[3,5,10], 'max_features':[2,3,4]}
+#               {'n_estimators':[100], 'max_features':[10]},
+#               {'bootstrap':[False],'n_estimators':[100], 'max_features':[4]}
 # ]
 
-# forest_reg = XGBClassifier()
+# forest_reg = RandomForestClassifier()
 
 # model = GridSearchCV(forest_reg, param_grid, cv=5,
 #                            scoring='accuracy',
@@ -210,7 +210,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0821_3.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0822_3.csv',index = False)
 
 exit()
 

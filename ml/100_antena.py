@@ -23,13 +23,13 @@ train_df = pd.read_csv(path + 'train.csv')
 test_x = pd.read_csv(path + 'test.csv').drop(columns=['ID'])
 train = np.array(train_df)
 
-# print("=============================상관계수 히트 맵==============")
-# print(train_df.corr())                    # 상관관계를 확인.  
-# import matplotlib.pyplot as plt 
-# import seaborn as sns
-# sns.set(font_scale=0.3)
-# sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
-# plt.show()
+print("=============================상관계수 히트 맵==============")
+print(train_df.corr())                    # 상관관계를 확인.  
+import matplotlib.pyplot as plt 
+import seaborn as sns
+sns.set(font_scale=0.3)
+sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
+plt.show()
 # # 4,23,47,48
 
 precent = [0.20,0.40,0.60,0.80]
@@ -77,7 +77,7 @@ from sklearn.linear_model import LogisticRegression
 # model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
 # 0.098387698230517  best
 
-model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 0, subsample=1, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
 # 0.0942562122814897
 
 # model = XGBRegressor().fit(train_x, train_y)
@@ -121,7 +121,7 @@ for idx, col in enumerate(submit.columns):
     submit[col] = preds[:,idx-1]
 print('Done.')
 
-submit.to_csv(path + 'submmit0821_2.csv', index=False)
+submit.to_csv(path + 'submmit0822_1.csv', index=False)
 
 
 
