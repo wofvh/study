@@ -155,8 +155,10 @@ axes[1,1].set_title("Antenna Gain Average 4")
 # from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 
 # from autosklearn.regression import AutoSklearnRegressor 
+import sklearn
+from autosklearn.regression import AutoSklearnRegressor
+from autosklearn.metrics import mean_absolute_error as auto_mean_absolute_error
+auto =  AutoSklearnRegressor(time_left_for_this_task = 3600, per_run_time_limit = 40, n_jobs = -1)
+auto.fit(train_x,train_y)
 
-# auto =  AutoSklearnRegressor(time_left_for_this_task = 3600, per_run_time_limit = 40, n_jobs = -1)
-# auto.fit(train_x,train_y)
-
-# print(auto.sprint_statistics())
+print(auto.sprint_statistics())

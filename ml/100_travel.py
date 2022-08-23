@@ -18,12 +18,27 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0823_3.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0824_2.csv')
 
 print(train.describe()) 
 print(test.describe()) 
 print(train.shape)
 print(test.shape)
+
+train.loc[ train['Gender'] =='Fe Male' , 'Gender'] = 'Female'
+test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
+
+train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+
+# train['TypeofContact'].fillna('Self Enquiry', inplace=True)
+# test['TypeofContact'].fillna('Self Enquiry', inplace=True)
+
+train['Age'].fillna(train.groupby('Designation')['Age'].transform('mean'), inplace=True)
+test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace=True)
+
+print(train.info())
+print(test.info())
 
 
 # 결측치를 처리하는 함수를 작성.
@@ -129,15 +144,16 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
-train = train_enc.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'])  
-test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'])
+train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
+test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
 # 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'
+# 
 
 # 학습에 사용할 정보와 예측하고자 하는 정보를 분리합니다.
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.88,shuffle=True)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.87,shuffle=True)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
@@ -174,22 +190,22 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_siz
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
-# param_grid = [
-#               {'n_estimators':[100], 'max_features':[10]},
-#               {'bootstrap':[False],'n_estimators':[100], 'max_features':[4]}
-# ]
+param_grid = [
+              {'n_estimators':[10], 'max_features':[10]},
+              {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
+]
 
-# forest_reg = RandomForestClassifier()
+forest_reg = RandomForestClassifier()
 
-# model = GridSearchCV(forest_reg, param_grid, cv=5,
-#                            scoring='accuracy',
-#                            verbose=0,
-#                            return_train_score=True)
+model = GridSearchCV(forest_reg, param_grid, cv=5,
+                           scoring='accuracy',
+                           verbose=0,
+                           return_train_score=True)
 
 ############################0821_1####################################
 
 
-model = RandomForestClassifier(n_estimators=200, random_state=123)
+# model = RandomForestClassifier()
 
 model.fit(x_train,y_train)
 
@@ -210,7 +226,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0823_3.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0824_2.csv',index = False)
 
 exit()
 

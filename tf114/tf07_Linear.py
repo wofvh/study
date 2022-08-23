@@ -13,7 +13,6 @@ b = tf.Variable(11,dtype=tf.float32)
 #2. 모델
 hypothesis = x * w + b          # y= wx+b
 
-
 # 3-1. 컴파일
 loss = tf.reduce_mean(tf.square(hypothesis - y))            # mse   # square 제곱  (h-y)제곱 / n
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)               # 경사경법
