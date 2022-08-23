@@ -18,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0822_3.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0823_3.csv')
 
 print(train.describe()) 
 print(test.describe()) 
@@ -137,7 +137,7 @@ test = test.drop(columns=['TypeofContact','NumberOfChildrenVisiting','NumberOfPe
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=44, train_size=0.86,shuffle=True)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.88,shuffle=True)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
@@ -189,7 +189,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
 
 
-model = RandomForestClassifier()
+model = RandomForestClassifier(n_estimators=200, random_state=123)
 
 model.fit(x_train,y_train)
 
@@ -210,7 +210,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0822_3.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0823_3.csv',index = False)
 
 exit()
 

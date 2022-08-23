@@ -17,7 +17,7 @@ sess.close()
 #2. 초기화 두번째
 sess = tf.compat.v1.Session()
 sess.run(tf.compat.v1.global_variables_initializer())
-bbb= aa.eval(session =sess)
+bbb= aa.eval(session =sess)         # 이과정을 거처야 변수로 변환.
 print('bbb',bbb)
 sess.close()
 
@@ -27,6 +27,8 @@ sess.run(tf.compat.v1.global_variables_initializer())
 ccc = aa.eval()
 print('ccc',ccc)
 sess.close()
+
+
 
 
 
