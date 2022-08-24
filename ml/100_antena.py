@@ -16,17 +16,12 @@ import tensorflow as tf
 from catboost import CatBoostRegressor, Pool
 path = 'D:\study_data\_data/antena/'
 
-SEED = 42
+
 def seed_everything(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
-seed_everything(SEED) # Seed 고정
-# def seed_everything(seed):
-#     random.seed(seed)
-#     os.environ['PYTHONHASHSEED'] = str(seed)
-#     np.random.seed(seed)
-# seed_everything(42) # Seed 고정
+seed_everything(42) # Seed 고정
 
 train_df = pd.read_csv(path + 'train.csv')
 test_x = pd.read_csv(path + 'test.csv').drop(columns=['ID'])
@@ -38,7 +33,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(font_scale=0.3)
 sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
-# plt.show()
+plt.show()
 # # 4,23,47,48
 
 precent = [0.20,0.40,0.60,0.80]
@@ -63,7 +58,6 @@ def lg_nrmse(gt, preds):
 
 train_x = train_df.filter(regex='X') # Input : X Featrue
 train_y = train_df.filter(regex='Y') # Output : Y Feature
-test_x = test_x.filter(regex = 'X')
 
 print(train_x.shape)
 print(train_y.shape)
@@ -94,7 +88,7 @@ from sklearn.linear_model import LogisticRegression
 # model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
 # 0.098387698230517  best
 
-# model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
 # 0.0942562122814897
 
 # model = XGBRegressor().fit(train_x, train_y)
@@ -103,40 +97,8 @@ from sklearn.linear_model import LogisticRegression
 print('Done.')
 ######################모델######################################
 
-n_splits = 5
-predictions = []
-lgnrmses = []
-kfold = KFold(n_splits = n_splits, random_state = SEED, shuffle = True)
-for i, (train_idx, val_idx) in enumerate(kfold.split(train_x)):
-    preds = []
-    y_vals = []
-    predictions_ = []
-    for j in range(1, 15):
-        if j < 10:
-            train_y_ = train_y[f'Y_0{j}']
-        else:
-            train_y_ = train_y[f'Y_{j}']
-        X_train, y_train = train_x.iloc[train_idx], train_y_.iloc[train_idx]
-        X_val, y_val = train_x.iloc[val_idx], train_y_.iloc[val_idx]      
-        
-        print(f'fit {train_y.columns[j-1]}')
-        model = CatBoostRegressor(random_state = SEED)
-        model.fit(X_train, y_train, eval_set = [(X_val, y_val)], verbose = 0)
-        
-        print(f'predict {train_x.columns[j-1]}')
-        pred = model.predict(X_val)
-        prediction = model.predict(test_x)
-        #print(prediction)
-        predictions_.append(prediction)
-        #print(predictions_)
-        preds.append(pred)
-        y_vals.append(y_val)
-    predictions.append(predictions_)
-    print(predictions)
-    lgnrmse = lg_nrmse(np.array(y_vals).T, np.array(preds).T)
-    lgnrmses.append(lgnrmse)
-    print(f'Fold {i} / lg_nrmse : {lgnrmse}')
-np.mean(lgnrmse)
+
+
 preds = model.predict(test_x)
 print(preds)
 print(preds.shape)

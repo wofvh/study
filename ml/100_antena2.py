@@ -1,164 +1,138 @@
-import pandas as pd 
-import numpy as np 
-import seaborn as sns 
-import matplotlib.pyplot as plt 
-import os 
+import pandas as pd
 import random
+import os
+import numpy as np
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer,KNNImputer
+from sklearn.linear_model import LinearRegression
+from sklearn.multioutput import MultiOutputRegressor
+from xgboost import XGBClassifier,XGBRegressor  
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
+from sklearn.ensemble import BaggingClassifier,BaggingRegressor  # 한가지 모델을 여러번 돌리는 것(파라미터 조절).
+from sklearn.cluster import KMeans
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import RepeatedKFold, cross_val_score, StratifiedKFold, KFold
+import tensorflow as tf
+from catboost import CatBoostRegressor, Pool
+path = 'D:\study_data\_data/antena/'
 
-# def seed_everything(seed):
-#       random.seed(seed)
-#   os.environ['PYTHONHASHEED'] = str(seed)
-#   np.random.seed(seed)
-# seed_everything(42)
 
-train = pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/train.csv")
-test = pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/test.csv")
-submit= pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/sample_submission.csv")
+def seed_everything(seed):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+seed_everything(42) # Seed 고정
 
-print(train.head(5))
+train_df = pd.read_csv(path + 'train.csv')
+test_x = pd.read_csv(path + 'test.csv').drop(columns=['ID'])
+train = np.array(train_df)
 
-x_feature_info = pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/x_feature_info.csv")
-print(x_feature_info)
-
-y_feature_info = pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/y_feature_info.csv")
-print(y_feature_info)
-
-y_feature_spec_info = pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/y_feature_spec_info.csv")
-print(y_feature_spec_info)
-
-train_x = train.filter(regex='X')
-train_y = train.filter(regex = "Y")
-
-#test_x
-test = pd.read_csv("https://raw.githubusercontent.com/annsyj94/Data_Analytics_Portfolio/main/lg_aimers/test.csv").drop(columns = ['ID'])
-print(test.head(5))
-
-pcb = train_x[['X_01','X_02','X_05','X_06']]
-
-# PCB 체결 시 단계별 누름량
-fig, axes = plt.subplots(2,2, figsize = (15,10))
-
-sns.histplot(data = pcb, x = "X_01", kde = True, ax = axes[0,0]).set(title = "PCB 체결 시 단계별 누름량(1)")
-sns.histplot(data = pcb, x = "X_02", kde = True, ax = axes[0,1]).set(title = "PCB 체결 시 단계별 누름량(2)")
-sns.histplot(data = pcb, x = "X_05", kde = True, ax = axes[1,0]).set(title = "PCB 체결 시 단계별 누름량(3)")
-sns.histplot(data = pcb, x = "X_06", kde = True, ax = axes[1,1]).set(title = "PCB 체결 시 단계별 누름량(4)")
-
+# print("=============================상관계수 히트 맵==============")
+# print(train_df.corr())                    # 상관관계를 확인.  
+# import matplotlib.pyplot as plt 
+# import seaborn as sns
+# sns.set(font_scale=0.3)
+# sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
 # plt.show()
+# # # 4,23,47,48
 
-# 방열 재료 1 면적 및 무게
-heat = train_x[['X_03', 'X_07', 'X_08', 'X_09', 'X_10', 'X_11']]
+# precent = [0.20,0.40,0.60,0.80]
+# print(train_df.describe(percentiles=precent))
+# print(train_df.info())  
+# print(train_df.columns.values)
+# print(train_df.isnull().sum())
 
-plt.figure(figsize = (15,10))
+#  X_07, X_08, X_09
+def lg_nrmse(gt, preds):
+    # 각 Y Feature별 NRMSE 총합
+    # Y_01 ~ Y_08 까지 20% 가중치 부여
+    all_nrmse = []
+    for idx in range(0,14): # ignore 'ID'
+        rmse = mean_squared_error(gt[:,idx], preds[:,idx], squared=False)
+        nrmse = rmse/np.mean(np.abs(gt[:,idx]))
+        all_nrmse.append(nrmse)
+    score = 1.2 * np.sum(all_nrmse[:8]) + 1.0 * np.sum(all_nrmse[8:15])
+    return score
 
-sns.set(font_scale = 1.3)
+train_x = train_df.filter(regex='X') # Input : X Featrue
+train_y = train_df.filter(regex='Y') # Output : Y Feature
 
-ax = plt.axes()
-sns.heatmap(heat.corr(),annot = True, cmap = 'Reds', ax = ax).set(title = "Heating material area and weight")
-# plt.show()
+print(train_x.shape)
+print(train_y.shape)
 
-# 안테나 패드 위치
+cols = ["X_10","X_11"]
+train_x[cols] = train_x[cols].replace(0, np.nan)
 
-antenna = train_x[['X_14','X_15','X_16','X_17','X_18']]
-
-type_col = ['X_14','X_15','X_16','X_17','X_18']
-
-fig, ax = plt.subplots(5, 1, figsize=(20,15), constrained_layout = True)
-
-for i, col in enumerate(type_col):
-  sns.kdeplot(x = col, data = antenna, fill = True, alpha = 0.6, linewidth = 1.5, ax = ax[i])
-  ax[i].set_xlabel(None)
-  ax[i].set_ylabel(col, size = 14, weight = 'bold')
-
-fig.suptitle('Antenna Pad Location', size = 20, weight = 'bold')
-
-screw = train_x[['X_34','X_35','X_36','X_37']]
-
-fig, axes = plt.subplots(2,2, figsize = (25,20))
-
-sns.histplot(data = screw, x = "X_34", kde = True, ax = axes[0,0]).set(title = "Screw Torque 1")
-sns.histplot(data = screw, x = "X_35", kde = True, ax = axes[0,1]).set(title = "Screw Torque 2")
-sns.histplot(data = screw, x = "X_36", kde = True, ax = axes[1,0]).set(title = "Screw Torque 3")
-sns.histplot(data = screw, x = "X_37", kde = True, ax = axes[1,1]).set(title = "Screw Torque 4")
-
-# plt.show()
-
-# 커넥트 핀 치수 
-connector = train_x[['X_24','X_25','X_26','X_27','X_28','X_29']]
-
-sns.set(font_scale = 2)
-plt.figure(figsize = (15,8))
-sns.boxplot(data = connector)
-# plt.show()
-
-#레이돔 치수 
-
-radome = train_x[['X_41','X_42','X_43','X_44']]
+# MICE 결측치 보간
+imp = IterativeImputer(estimator = LinearRegression(), 
+                       tol= 1e-10, 
+                       max_iter=30, 
+                       verbose=2, 
+                       imputation_order='roman')
 
 
-sns.set(font_scale = 0.7)
-
-fig, axes = plt.subplots(2,2, figsize = (15,10))
-axes[0,0].plot(radome['X_41'],label = radome['X_41'], color = "orange")
-axes[0,0].set_title('Antenna No.1')
-axes[0,1].plot(radome['X_42'],label = radome['X_42'], color = "green")
-axes[0,1].set_title('Antenna No.2')
-axes[1,0].plot(radome['X_43'],label = radome['X_43'], color = "brown")
-axes[1,0].set_title('Antenna No.3')
-axes[1,1].plot(radome['X_44'],label = radome['X_44'], color = "red")
-axes[1,1].set_title('Antenna No.4')
-
-# plt.show()
-
-#하우징 PCB 안착부 치수 
-
-housing = train_x[['X_38','X_39','X_40']]
-
-sns.set(font_scale = 0.7)
+train_x = pd.DataFrame(imp.fit_transform(train_x))
+print(train_x.shape,train_y.shape)
 
 
-fig, (ax1, ax2, ax3) = plt.subplots(1,3, figsize = (20,7))
+######################모델######################################
+from sklearn.linear_model import LogisticRegression
+# model = MultiOutputRegressor(RandomForestRegressor()).fit(train_x, train_y)
+# 0.03932714821910016  0820_1 
 
-sns.histplot(data = housing, x = "X_38", kde = True, ax = ax1).set(title = "Housing PCB settlement part 1 dimension")
-sns.histplot(data = housing, x = "X_39", kde = True, ax = ax2).set(title = "Housing PCB settlement part 2 dimension")
-sns.histplot(data = housing, x = "X_40", kde = True, ax = ax3).set(title = "Housing PCB settlement part 3 dimension")
+# model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
+# 0.28798862985210744 
 
-# plt.show()
+# model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, train_y)
+# 0.098387698230517  best
 
-# RF1 part SMT lead volume
+model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(train_x, train_y)
+# 0.0942562122814897
 
-smt = train_x[[ 'X_50', 'X_51', 'X_52', 'X_54', 'X_55', 'X_56']]
+# model = XGBRegressor().fit(train_x, train_y)
+# 0.4177584378415335
 
-rf = ['X_50', 'X_51', 'X_52', 'X_54', 'X_55', 'X_56']
+print('Done.')
+######################모델######################################
 
-sns.set(font_scale = 1)
-plt.figure(figsize = (15,8))
-sns.violinplot(data = smt)
-# plt.show()
 
-#안테나 Gain 평균 (각도1, 각도2, 각도3, 각도 4) 
 
-gain = train_y[['Y_01', 'Y_05', 'Y_07','Y_11']]
+preds = model.predict(test_x)
+print(preds)
+print(preds.shape)
 
-sns.set(font_scale = 0.7)
+print(model.score(train_x, train_y))
+print('Done.')
 
-fig, axes = plt.subplots(2,2, figsize = (20,10))
-axes[0,0].plot(gain['Y_01'],label = gain['Y_01'], color = "red")
-axes[0,0].set_title('Antenna Gain Average 1')
-axes[0,1].plot(gain['Y_05'],label = gain['Y_05'], color = "orange")
-axes[0,1].set_title("Antenna Gain Average 2")
-axes[1,0].plot(gain['Y_07'],label = gain['Y_07'], color = "green")
-axes[1,0].set_title("Antenna Gain Average 3 ")
-axes[1,1].plot(gain['Y_11'],label = gain['Y_11'], color = "yellow")
-axes[1,1].set_title("Antenna Gain Average 4")
+# {'n_estimators':[1000],
+#               'learning_rate':[0.1],
+#               'max_depth':[3],
+#               'gamma': [1],
+#               'min_child_weight':[1],
+#               'subsample':[1],
+#               'colsample_bytree':[1],
+#               'colsample_bylevel':[1],
+#             #   'colsample_byload':[1],
+#               'reg_alpha':[0],
+#               'reg_lambda':[1]
+#               }  
 
-# plt.show()
-# from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor 
 
-# from autosklearn.regression import AutoSklearnRegressor 
-import sklearn
-from autosklearn.regression import AutoSklearnRegressor
-from autosklearn.metrics import mean_absolute_error as auto_mean_absolute_error
-auto =  AutoSklearnRegressor(time_left_for_this_task = 3600, per_run_time_limit = 40, n_jobs = -1)
-auto.fit(train_x,train_y)
 
-print(auto.sprint_statistics())
+
+####################제출############################
+
+submit = pd.read_csv(path + 'sample_submission.csv')
+
+for idx, col in enumerate(submit.columns):
+    if col=='ID':
+        continue
+    submit[col] = preds[:,idx-1]
+print('Done.')
+
+submit.to_csv(path + 'submmit0822_1.csv', index=False)
+
+
+
+#0821_1 'X_04','X_23','X_47','X_48' 삭제
+#0821_2 'X_07','X_08','X_-09' 삭제
