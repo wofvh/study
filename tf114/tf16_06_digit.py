@@ -69,5 +69,5 @@ print('accuracy_score : ', acc_score)
 
 sess.close()
 
-# accuracy_score :  1.0
+# accuracy_score :  0.9555555555555556
 

@@ -61,7 +61,7 @@ def lgb_hamsu(max_depth,min_child_sample,min_child_weight,subsample,colsample_by
               )
     y_predict = model.predict(x_test)
     results = accuracy_score(y_test,y_predict)
-    .
+    
     
     return  results
 
