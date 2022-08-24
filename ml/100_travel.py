@@ -9,7 +9,7 @@ from tqdm import tqdm_notebook
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import GridSearchCV
-
+from sklearn.ensemble import ExtraTreesClassifier
 #1. 데이터
 path = './_data/travel/'
 train = pd.read_csv(path + 'train.csv',                 
@@ -186,8 +186,8 @@ param_grid = [
               {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
 ]
 
-forest_reg = RandomForestClassifier()
-
+forest_reg = RandomForestClassifier(n_estimators=100, random_state=2)
+# 
 model = GridSearchCV(forest_reg, param_grid, cv=5,
                            scoring='accuracy',
                            verbose=0,

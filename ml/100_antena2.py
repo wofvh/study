@@ -27,17 +27,17 @@ train_df = pd.read_csv(path + 'train.csv')
 test_x = pd.read_csv(path + 'test.csv').drop(columns=['ID'])
 train = np.array(train_df)
 
-# print("=============================상관계수 히트 맵==============")
-# print(train_df.corr())                    # 상관관계를 확인.  
-# import matplotlib.pyplot as plt 
-# import seaborn as sns
-# sns.set(font_scale=0.3)
-# sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
-# plt.show()
-# # # 4,23,47,48
+print("=============================상관계수 히트 맵==============")
+print(train_df.corr())                    # 상관관계를 확인.  
+import matplotlib.pyplot as plt 
+import seaborn as sns
+sns.set(font_scale=0.3)
+sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
+plt.show()
+# # 4,23,47,48
 
-# precent = [0.20,0.40,0.60,0.80]
-# print(train_df.describe(percentiles=precent))
+precent = [0.20,0.40,0.60,0.80]
+print(train_df.describe(percentiles=precent))
 # print(train_df.info())  
 # print(train_df.columns.values)
 # print(train_df.isnull().sum())
@@ -95,8 +95,6 @@ model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, g
 print('Done.')
 ######################모델######################################
 
-
-
 preds = model.predict(test_x)
 print(preds)
 print(preds.shape)
@@ -118,8 +116,6 @@ print('Done.')
 #               }  
 
 
-
-
 ####################제출############################
 
 submit = pd.read_csv(path + 'sample_submission.csv')
@@ -130,9 +126,7 @@ for idx, col in enumerate(submit.columns):
     submit[col] = preds[:,idx-1]
 print('Done.')
 
-submit.to_csv(path + 'submmit0822_1.csv', index=False)
-
-
+submit.to_csv(path + 'submmit0824_1.csv', index=False)
 
 #0821_1 'X_04','X_23','X_47','X_48' 삭제
 #0821_2 'X_07','X_08','X_-09' 삭제
