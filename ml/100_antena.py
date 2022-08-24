@@ -98,7 +98,6 @@ print('Done.')
 ######################모델######################################
 
 
-
 preds = model.predict(test_x)
 print(preds)
 print(preds.shape)
@@ -118,9 +117,6 @@ print('Done.')
 #               'reg_alpha':[0],
 #               'reg_lambda':[1]
 #               }  
-
-
-
 
 ####################제출############################
 
