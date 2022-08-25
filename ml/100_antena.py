@@ -83,7 +83,7 @@ x[cols] = x[cols].replace(0, np.nan)
 # print(x.shape,y.shape)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.9,random_state=123)
-from catboost import CatBoostRegressor
+from catboost import CatBoostRegressor  
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
@@ -93,7 +93,7 @@ x_test = scaler.transform(x_test)
 n_splits = 5
 kfold = KFold(n_splits=n_splits,shuffle=True,random_state=123)
 
-cat_para =  {"learning_rate" : (0.2,0.6),
+cat_paramets = {"learning_rate" : (0.2,0.6),
                 'depth' : (7,10),
                 'od_pval' :(0.2,0.5),
                 'model_size_reg' : (0.3,0.5),
@@ -102,41 +102,39 @@ cat_para =  {"learning_rate" : (0.2,0.6),
                 # 'leaf_estimation_iterations':(1,10)
                 }
 
-
-def lgb_hamsu(learning_rate,depth,od_pval,model_size_reg,l2_leaf_reg,
-              fold_permutation_block) :
-    params ={ 
-             'n_estimators':500,
-             "learning_rate":int(round(learning_rate)), 
-             'depth': int(round(depth)),                 
-             'l2_leaf_reg' :int(round(l2_leaf_reg)),
-             'fold_permutation_block' : int(round(fold_permutation_block)),  
-             'od_pval':max(min(od_pval,1),0,),               
-             'model_size_reg':max(min(model_size_reg,1),0,), 
-             
-            }
+def xgb_hamsu(learning_rate,depth,od_pval,model_size_reg,l2_leaf_reg,
+              fold_permutation_block,
+            #   leaf_estimation_iterations
+              ) :
+    params = {
+        'n_estimators':200,
+        "learning_rate":max(min(learning_rate,1),0),
+        'depth' : int(round(depth)),  #무조건 정수
+        'l2_leaf_reg' : int(round(l2_leaf_reg)),
+        'model_size_reg' : max(min(model_size_reg,1),0), # 0~1 사이의 값이 들어가도록 한다.
+        'od_pval' : max(min(od_pval,1),0),
+        'fold_permutation_block' : int(round(fold_permutation_block)),  #무조건 정수
+        # 'leaf_estimation_iterations' : int(round(leaf_estimation_iterations)),  #무조건 정수
+                }
+    
+    # *여러개의 인자를 받겠다.
+    # **키워드 받겠다(딕셔너리형태)
     
     model = MultiOutputRegressor(CatBoostRegressor(**params))
-    # ** 키워드받겠다(딕셔너리형태)
-    # * 여러개의인자를 받겠다.
+    
     model.fit(x_train,y_train,
-            #   eval_set=[(x_train,y_train),(x_test,y_test)],
-            #   eval_metric='rmse',
-              verbose=0,
-              early_stopping_rounds=50,
-              )
+              verbose=0 )
     y_predict = model.predict(x_test)
-    results = accuracy_score(y_test,y_predict)
+    results = r2_score(y_test,y_predict)
     
-    
-    return  results
-
-lgb_bo = BayesianOptimization(f=lgb_hamsu,
-                              pbounds= cat_para,
+    return results
+xgb_bo = BayesianOptimization(f=xgb_hamsu,
+                              pbounds=cat_paramets,
                               random_state=123)
-lgb_bo.maximize()
+xgb_bo.maximize(init_points=2,
+                n_iter=200)
+print(xgb_bo.max)
 
-print(lgb_bo.max)
 exit()
 ######################모델######################################
 from sklearn.linear_model import LogisticRegression
