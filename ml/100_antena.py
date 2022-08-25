@@ -63,24 +63,22 @@ def lg_nrmse(gt, preds):
 x = train_df.filter(regex='X') # Input : X Featrue
 y = train_df.filter(regex='Y') # Output : Y Feature
 
-
-
 print(x.shape)
 print(y.shape)
 
 cols = ["X_10","X_11"]
 x[cols] = x[cols].replace(0, np.nan)
 
-# # MICE 결측치 보간
-# imp = IterativeImputer(estimator = LinearRegression(), 
-#                        tol= 1e-10, 
-#                        max_iter=30, 
-#                        verbose=2, 
-#                        imputation_order='roman')
+# MICE 결측치 보간
+imp = IterativeImputer(estimator = LinearRegression(), 
+                       tol= 1e-10, 
+                       max_iter=30, 
+                       verbose=2, 
+                       imputation_order='roman')
 
 
-# x = pd.DataFrame(imp.fit_transform(x))
-# print(x.shape,y.shape)
+x = pd.DataFrame(imp.fit_transform(x))
+print(x.shape,y.shape)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,train_size=0.9,random_state=123)
 from catboost import CatBoostRegressor  
@@ -93,52 +91,85 @@ x_test = scaler.transform(x_test)
 n_splits = 5
 kfold = KFold(n_splits=n_splits,shuffle=True,random_state=123)
 
-cat_paramets = {"learning_rate" : (0.2,0.6),
-                'depth' : (7,10),
-                'od_pval' :(0.2,0.5),
-                'model_size_reg' : (0.3,0.5),
-                'l2_leaf_reg' :(4,8),
-                'fold_permutation_block':(1,10),
-                # 'leaf_estimation_iterations':(1,10)
-                }
 
-def xgb_hamsu(learning_rate,depth,od_pval,model_size_reg,l2_leaf_reg,
-              fold_permutation_block,
-            #   leaf_estimation_iterations
-              ) :
-    params = {
-        'n_estimators':200,
-        "learning_rate":max(min(learning_rate,1),0),
-        'depth' : int(round(depth)),  #무조건 정수
-        'l2_leaf_reg' : int(round(l2_leaf_reg)),
-        'model_size_reg' : max(min(model_size_reg,1),0), # 0~1 사이의 값이 들어가도록 한다.
-        'od_pval' : max(min(od_pval,1),0),
-        'fold_permutation_block' : int(round(fold_permutation_block)),  #무조건 정수
-        # 'leaf_estimation_iterations' : int(round(leaf_estimation_iterations)),  #무조건 정수
-                }
-    
-    # *여러개의 인자를 받겠다.
-    # **키워드 받겠다(딕셔너리형태)
-    
-    model = MultiOutputRegressor(CatBoostRegressor(**params))
-    
-    model.fit(x_train,y_train,
-              verbose=0 )
-    y_predict = model.predict(x_test)
-    results = r2_score(y_test,y_predict)
-    
-    return results
-xgb_bo = BayesianOptimization(f=xgb_hamsu,
-                              pbounds=cat_paramets,
-                              random_state=123)
-xgb_bo.maximize(init_points=2,
-                n_iter=200)
-print(xgb_bo.max)
+#############################################################################################
+# cat_paramets = {"learning_rate" : (0.2,0.6),
+#                 'depth' : (7,10),
+#                 'od_pval' :(0.2,0.5),
+#                 'model_size_reg' : (0.3,0.5),
+#                 'l2_leaf_reg' :(4,8),
+#                 'fold_permutation_block':(1,10),
+#                 # 'leaf_estimation_iterations':(1,10)
+#                 }
 
-exit()
+# def xgb_hamsu(learning_rate,depth,od_pval,model_size_reg,l2_leaf_reg,
+#               fold_permutation_block,
+#             #   leaf_estimation_iterations
+#               ) :
+#     params = {
+#         'n_estimators':200,
+#         "learning_rate":max(min(learning_rate,1),0),
+#         'depth' : int(round(depth)),  #무조건 정수
+#         'l2_leaf_reg' : int(round(l2_leaf_reg)),
+#         'model_size_reg' : max(min(model_size_reg,1),0), # 0~1 사이의 값이 들어가도록 한다.
+#         'od_pval' : max(min(od_pval,1),0),
+#         'fold_permutation_block' : int(round(fold_permutation_block)),  #무조건 정수
+#         # 'leaf_estimation_iterations' : int(round(leaf_estimation_iterations)),  #무조건 정수
+#                 }
+    
+#     # *여러개의 인자를 받겠다.
+#     # **키워드 받겠다(딕셔너리형태)
+    
+#     model = MultiOutputRegressor(CatBoostRegressor(**params))
+    
+#     model.fit(x_train,y_train,
+#               verbose=0 )
+#     y_predict = model.predict(x_test)
+#     results = r2_score(y_test,y_predict)
+    
+#     return results
+# xgb_bo = BayesianOptimization(f=xgb_hamsu,
+#                               pbounds=cat_paramets,
+#                               random_state=123)
+# xgb_bo.maximize(init_points=2,
+#                 n_iter=200)
+# print(xgb_bo.max)
+
+################################################################################################
+from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
+# lr = MultiOutputRegressor(CatBoostRegressor(random_state=1234,verbose=False))
+# import time
+# start_time = time.time()
+# end_time = time.time()-start_time
+# Multi_parameters= {'n_jobs':[-1]}
+# cat = MultiOutputRegressor(CatBoostRegressor(random_state=123,
+#                         verbose=False,
+#                         learning_rate=0.2,
+#                         depth= 8,
+#                         od_pval =0.5,
+#                         fold_permutation_block = 10,
+#                         model_size_reg =0.3,
+#                         l2_leaf_reg =7.246964487506609,
+#                         n_estimators=500))
+# model = RandomizedSearchCV(cat,Multi_parameters,cv=kfold,n_jobs=-1)
+
+
+#################################################################
+
+param_grid = [
+              {'n_estimators':[10], 'max_features':[10]},
+              {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
+]
+
+forest_reg = RandomForestRegressor(n_estimators=100, random_state=2)
+# 
+model = GridSearchCV(forest_reg, param_grid, cv=5,
+                           scoring='accuracy',
+                           verbose=0,
+                           return_train_score=True)
 ######################모델######################################
 from sklearn.linear_model import LogisticRegression
-# model = MultiOutputRegressor(RandomForestRegressor()).fit(x, y)
+model = MultiOutputRegressor(RandomForestRegressor()).fit(x, y)
 # 0.03932714821910016  0820_1 
 
 # model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.08, gamma = 0, subsample=0.75, colsample_bytree = 1, max_depth=7) ).fit(train_x, y)
@@ -147,7 +178,7 @@ from sklearn.linear_model import LogisticRegression
 # model = BaggingRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=4,random_state=123) ).fit(train_x, y)
 # 0.098387698230517  best
 
-model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(x, y)
+# model = MultiOutputRegressor(XGBRegressor(n_estimators=100, learning_rate=0.1, gamma = 1, subsample=1, colsample_bytree = 1, max_depth=3) ).fit(x, y)
 # 0.0942562122814897
 
 # model = XGBRegressor().fit(train_x, y)
@@ -162,7 +193,7 @@ y_predict = model.predict(x_test)
 r2 = r2_score(y_test,y_predict)
 print('r2_score:',r2)
 
-print(model.score(x, y))
+# print(model.score(x, y))
 print('Done.')
 
 # {'n_estimators':[1000],
@@ -190,7 +221,7 @@ for idx, col in enumerate(submit.columns):
     submit[col] = y_summit[:,idx-1]
 print('Done.')
 
-submit.to_csv(path + 'submmit0822_1.csv', index=False)
+submit.to_csv(path + 'submmit0825_2.csv', index=False)
 print('제출성공')
 
 

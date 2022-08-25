@@ -18,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0824_2.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0825_1.csv')
 
 print(train.describe()) 
 print(test.describe()) 
@@ -27,9 +27,6 @@ print(test.shape)
 
 train.loc[ train['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
-
-train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
-test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
 
 train['Age'].fillna(train.groupby('Designation')['Age'].transform('mean'), inplace=True)
 test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace=True)
@@ -108,7 +105,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(font_scale=0.7)
 sns.heatmap(data=train_enc.corr(),square=True, annot=True, cbar=True) 
-# plt.show()
+plt.show()
 
 
 # 모델 선언
@@ -135,8 +132,8 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
-train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
-test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
+train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
+test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
 # 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'
 # 
 
@@ -186,7 +183,7 @@ param_grid = [
               {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
 ]
 
-forest_reg = RandomForestClassifier(n_estimators=100, random_state=2)
+forest_reg = RandomForestClassifier()
 # 
 model = GridSearchCV(forest_reg, param_grid, cv=5,
                            scoring='accuracy',
@@ -217,7 +214,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0824_2.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0825_1.csv',index = False)
 
 exit()
 

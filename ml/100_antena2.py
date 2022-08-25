@@ -139,7 +139,6 @@ lgb_bo.maximize(init_points=5,n_iter=50)
 
 print(lgb_bo.max)
 
-exit()
 ######################모델######################################
 from sklearn.linear_model import LogisticRegression
 # model = MultiOutputRegressor(RandomForestRegressor()).fit(x, y)
