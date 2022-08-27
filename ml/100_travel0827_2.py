@@ -18,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0828_1.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0827_2.csv')
 
 print(train.describe()) 
 print(test.describe()) 
@@ -30,21 +30,6 @@ test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 
 train['Age'].fillna(train.groupby('Designation')['Age'].transform('mean'), inplace=True)
 test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace=True)
-
-train['TypeofContact'].fillna('Self Enquiry', inplace=True)
-test['TypeofContact'].fillna('Self Enquiry', inplace=True)
-
-train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
-test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
-
-train['DurationOfPitch']=train['DurationOfPitch'].fillna(0)
-test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
-
-train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
-test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
-
-train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
-test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
 
 print(train.info())
 print(test.info())
@@ -147,8 +132,8 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
-train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
-test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
+train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
+test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
 # 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'
 # 
 
@@ -230,7 +215,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0828_1.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0827_2.csv',index = False)
 
 exit()
 
