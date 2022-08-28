@@ -20,6 +20,15 @@ test = pd.read_csv(path + 'test.csv',
 
 sample_submission = pd.read_csv(path + 'sample_submission0827_2.csv')
 
+
+import random
+import os
+def seed_everything(seed):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+seed_everything(42) # Seed 고정
+
 print(train.describe()) 
 print(test.describe()) 
 print(train.shape)

@@ -36,7 +36,7 @@ median = data.median()
 print("평균:",median)
 data3 =data.fillna(median)
 print(data3)
-
+exit()
 #2-2 특정값 - ffill,bill
 print('-------------결측지 처리ffill----------------') # 앞에 값으로 채운다. 
 data4 = data.fillna(method='ffill')

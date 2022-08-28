@@ -215,7 +215,8 @@ submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!
                      )
 submit = pd.read_csv(path + 'sample_submission.csv')
 
-for idx, col in enumerate(submit.columns):
+for idx, col in enumerate(submit.columns):  # index값이 같이 필요할 때 enumerate를 사용 (열거하다)
+                                            # 평소에는 iterater는 값만 .                (반복하다)
     if col=='ID':
         continue
     submit[col] = y_summit[:,idx-1]
