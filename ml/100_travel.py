@@ -19,7 +19,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0828_2.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0829_1.csv')
 
 import random
 import os
@@ -291,7 +291,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission[:15])
 
-sample_submission.to_csv(path+'sample_submission0828_2.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0829_1.csv',index = False)
 
 exit()
 
