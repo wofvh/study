@@ -19,7 +19,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0828_3.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0828_2.csv')
 
 import random
 import os
@@ -27,7 +27,7 @@ def seed_everything(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
-seed_everything(42) # Seed 고정
+seed_everything(72) # Seed 고정
 
 print(train.describe()) 
 print(test.describe()) 
@@ -63,8 +63,8 @@ print(train.isnull().sum())
 # train['NumberOfFollowups'] = train['NumberOfFollowups'].fillna(train.groupby('Designation')['NumberOfFollowups'].transform('mean'), inplace=True)
 # test['NumberOfFollowups'] = test['NumberOfFollowups'].fillna(test.groupby('Designation')['NumberOfFollowups'].transform('mean'), inplace=True)
 
-train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
-test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
+train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
+test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
 
 train.loc[ train['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
@@ -75,8 +75,8 @@ test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace
 train['TypeofContact'].fillna('Self Enquiry', inplace=True)
 test['TypeofContact'].fillna('Self Enquiry', inplace=True)
 
-train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
-test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
+test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
 
 # train['DurationOfPitch']=train['DurationOfPitch'].fillna(train['DurationOfPitch'].median())
 # test['DurationOfPitch']=test['DurationOfPitch'].fillna(test['DurationOfPitch'].median())
@@ -84,11 +84,11 @@ test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transf
 train['DurationOfPitch']=train['DurationOfPitch'].fillna(0)
 test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
 
-train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
-test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
+# train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
+# test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
 
-# train['PreferredPropertyStar'].fillna(0)
-# test['PreferredPropertyStar'].fillna(0)
+train['PreferredPropertyStar'].fillna(0)
+test['PreferredPropertyStar'].fillna(0)
 
 print(train.isnull().sum())
 
@@ -291,7 +291,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission[:15])
 
-sample_submission.to_csv(path+'sample_submission0828_3.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0828_2.csv',index = False)
 
 exit()
 
