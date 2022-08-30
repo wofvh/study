@@ -19,7 +19,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0829_1.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0830_1.csv')
 
 import random
 import os
@@ -89,6 +89,15 @@ test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
 
 train['PreferredPropertyStar'].fillna(0)
 test['PreferredPropertyStar'].fillna(0)
+
+combine = [train,test]
+for dataset in combine:    
+    dataset.loc[ dataset['Age'] <= 26.6, 'Age'] = 0
+    dataset.loc[(dataset['Age'] > 26.6) & (dataset['Age'] <= 35.2), 'Age'] = 1
+    dataset.loc[(dataset['Age'] > 35.2) & (dataset['Age'] <= 43.8), 'Age'] = 2
+    dataset.loc[(dataset['Age'] > 43.8) & (dataset['Age'] <= 52.4), 'Age'] = 3
+    dataset.loc[ dataset['Age'] > 52.4, 'Age'] = 4
+
 
 print(train.isnull().sum())
 
@@ -291,7 +300,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission[:15])
 
-sample_submission.to_csv(path+'sample_submission0829_1.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0830_1.csv',index = False)
 
 exit()
 
