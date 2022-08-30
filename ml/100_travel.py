@@ -27,7 +27,7 @@ def seed_everything(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
-seed_everything(72) # Seed 고정
+seed_everything(2022) # Seed 고정
 
 print(train.describe()) 
 print(test.describe()) 

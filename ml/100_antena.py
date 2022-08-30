@@ -38,7 +38,7 @@ import seaborn as sns
 sns.set(font_scale=0.3)
 sns.heatmap(data=train_df.corr(),square=True, annot=True, cbar=True) 
 # plt.show()
-# # 4,23,47,48
+# # 4,23,47,48...
 
 precent = [0.20,0.40,0.60,0.80]
 
