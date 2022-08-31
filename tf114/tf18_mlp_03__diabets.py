@@ -1,5 +1,5 @@
 from sklearn import datasets
-from sklearn.datasets import load_breast_cancer, load_diabetes, load_boston
+from sklearn.datasets import load_breast_cancer, load_diabetes
 import tensorflow as tf
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 tf.set_random_seed(123)
 
 #1. 데이터
-datasets = load_boston()
+datasets = load_diabetes()
 x_data = datasets.data
 y_data = datasets.target
 
@@ -24,14 +24,35 @@ y = tf.compat.v1.placeholder(tf.float32,shape=[None, 1])
 w = tf.compat.v1.Variable(tf.compat.v1.random_normal([x_data.shape[1],1],dtype=tf.float32))
 b = tf.compat.v1.Variable(tf.compat.v1.random_normal([1],dtype=tf.float32))
 
-hypothesis = tf.matmul(x,w) +b
-# hypothesis = tf.sigmoid(tf.matmul(x,w) +b)
+###############################################################
+# w1 =tf.compat.v1.Variable(tf.random_normal([2, 20]))
+# b1= tf.compat.v1.Variable(tf.random_normal([20]))
+
+h1 = tf.matmul(x,w)+b
+
+w2 =tf.compat.v1.Variable(tf.random_normal([y_data.shape[1], 30]))
+b2= tf.compat.v1.Variable(tf.zeros([30]))
+
+h2 =tf.nn.sigmoid(tf.matmul(h1,w2)+b2)
+
+w3 =tf.compat.v1.Variable(tf.random_normal([30, 20]))
+b3= tf.compat.v1.Variable(tf.zeros([20]))
+
+h3 =tf.nn.sigmoid(tf.matmul(h2,w3)+b3)
+
+#output layer
+w4 = tf.compat.v1.Variable(tf.random_normal([20, 1]))
+b4= tf.compat.v1.Variable(tf.zeros([1]))
+
+hypothesis = tf.nn.sigmoid(tf.matmul(h3,w4) +b4)
+
+#############################################
 
 loss = tf.reduce_mean(tf.square(hypothesis-y))   
 #loss = 'categorical_crossentropy'
 
 # optimizer = tf.train.AdamOptimizer(learning_rate= 1e-6)
-train = tf.train.AdamOptimizer(learning_rate=0.95).minimize(loss)
+train = tf.train.AdamOptimizer(learning_rate=5).minimize(loss)
 
 #3-2. 훈련
 sess = tf.compat.v1.Session()
@@ -62,7 +83,8 @@ print('r2 : ', r2)
 
 sess.close()
 
-# r2 :  0.5677100547051643
+
+# r2 :  0.5554865457825053
 
 
 

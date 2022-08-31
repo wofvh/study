@@ -21,7 +21,7 @@ CFG = {
     'EPOCHS':5,
     'LEARNING_RATE':1e-3,
     'BATCH_SIZE':16,
-    'SEED':41
+    'SEED':2022
 }
 
 def seed_everything(seed):

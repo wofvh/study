@@ -15,29 +15,51 @@ y_data = y_data.reshape(-1,1)
 
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data,
                                                     train_size=0.8, shuffle=True, random_state=123)
-
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 # y_train =np.array(y_train, dtype='float32')
 
 #2. 모델구성 // 시작 
 x = tf.compat.v1.placeholder(tf.float32,shape=[None, x_data.shape[1]])
 y = tf.compat.v1.placeholder(tf.float32,shape=[None, 1])
-w = tf.compat.v1.Variable(tf.compat.v1.random_normal([x_data.shape[1],1],dtype=tf.float32))
-b = tf.compat.v1.Variable(tf.compat.v1.random_normal([1],dtype=tf.float32))
+w = tf.compat.v1.Variable(tf.compat.v1.random_normal([x_data.shape[1],1]))
+b = tf.compat.v1.Variable(tf.compat.v1.random_normal([1]))
+###############################################################
+# w1 =tf.compat.v1.Variable(tf.random_normal([2, 20]))
+# b1= tf.compat.v1.Variable(tf.random_normal([20]))
 
-hypothesis = tf.matmul(x,w) +b
-# hypothesis = tf.sigmoid(tf.matmul(x,w) +b)
+h1 = tf.matmul(x,w)+b
+
+w2 =tf.compat.v1.Variable(tf.random_normal([y_data.shape[1], 30]))
+b2= tf.compat.v1.Variable(tf.random_normal([30]))
+
+h2 =tf.matmul(h1,w2)+b2
+
+w3 =tf.compat.v1.Variable(tf.random_normal([30, 20]))
+b3= tf.compat.v1.Variable(tf.random_normal([20]))
+
+h3 =tf.matmul(h2,w3)+b3
+
+#output layer
+w4 = tf.compat.v1.Variable(tf.random_normal([20, 1]))
+b4= tf.compat.v1.Variable(tf.random_normal([1]))
+
+hypothesis = tf.matmul(h3,w4) +b4
+
+#############################################
 
 loss = tf.reduce_mean(tf.square(hypothesis-y))   
 #loss = 'categorical_crossentropy'
-
 # optimizer = tf.train.AdamOptimizer(learning_rate= 1e-6)
-train = tf.train.AdamOptimizer(learning_rate=0.95).minimize(loss)
+train = tf.train.AdamOptimizer(learning_rate=0.0095).minimize(loss)
 
 #3-2. 훈련
 sess = tf.compat.v1.Session()
 sess.run(tf.compat.v1.global_variables_initializer())
 
-for epochs in range(200):
+for epochs in range(3000):
   
     _, loss_val, h_val = sess.run([train, loss, hypothesis], 
                                                    feed_dict={x:x_train,y:y_train})
@@ -64,5 +86,7 @@ sess.close()
 
 # r2 :  0.5677100547051643
 
+# mlp후
+# r2 :  0.6598876703997456
 
 

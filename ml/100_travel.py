@@ -10,7 +10,6 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import ExtraTreesClassifier
-
 #1. 데이터
 path = './_data/travel/'
 train = pd.read_csv(path + 'train.csv',                 
@@ -19,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0830_2.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0831_1.csv')
 
 import random
 import os
@@ -27,44 +26,13 @@ def seed_everything(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
-seed_everything(2022) # Seed 고정
+seed_everything(42) # Seed 고정
+
 
 print(train.describe()) 
 print(test.describe()) 
 print(train.shape)
 print(test.shape)
-
-print(train.isnull().sum())
-# Age                          94
-# TypeofContact                10
-# CityTier                      0
-# DurationOfPitch             102
-# Occupation                    0
-# Gender                        0
-# NumberOfPersonVisiting        0
-# NumberOfFollowups            13
-# ProductPitched                0
-# PreferredPropertyStar        10
-# MaritalStatus                 0
-# NumberOfTrips                57
-# Passport                      0
-# PitchSatisfactionScore        0
-# OwnCar                        0
-# NumberOfChildrenVisiting     27
-# Designation                   0
-# MonthlyIncome               100
-# ProdTaken                     0
-# median = data.median()
-# print("평균:",median)
-# data3 =data.fillna(median)
-# print(data3)
-
-
-# train['NumberOfFollowups'] = train['NumberOfFollowups'].fillna(train.groupby('Designation')['NumberOfFollowups'].transform('mean'), inplace=True)
-# test['NumberOfFollowups'] = test['NumberOfFollowups'].fillna(test.groupby('Designation')['NumberOfFollowups'].transform('mean'), inplace=True)
-
-train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
-test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
 
 train.loc[ train['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
@@ -75,34 +43,17 @@ test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace
 train['TypeofContact'].fillna('Self Enquiry', inplace=True)
 test['TypeofContact'].fillna('Self Enquiry', inplace=True)
 
-train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
-test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
-
-# train['DurationOfPitch']=train['DurationOfPitch'].fillna(train['DurationOfPitch'].median())
-# test['DurationOfPitch']=test['DurationOfPitch'].fillna(test['DurationOfPitch'].median())
+train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
 
 train['DurationOfPitch']=train['DurationOfPitch'].fillna(0)
 test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
 
-# train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
-# test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
+train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
+test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
 
-train['PreferredPropertyStar'].fillna(0)
-test['PreferredPropertyStar'].fillna(0)
-
-# combine = [train,test]
-# for dataset in combine:    
-#     dataset.loc[ dataset['Age'] <= 26.6, 'Age'] = 0
-#     dataset.loc[(dataset['Age'] > 26.6) & (dataset['Age'] <= 35.2), 'Age'] = 1
-#     dataset.loc[(dataset['Age'] > 35.2) & (dataset['Age'] <= 43.8), 'Age'] = 2
-#     dataset.loc[(dataset['Age'] > 43.8) & (dataset['Age'] <= 52.4), 'Age'] = 3
-#     dataset.loc[ dataset['Age'] > 52.4, 'Age'] = 4
-
-
-print(train.isnull().sum())
-
-# 탐색경로', '후속조치수', '프리젠테이션기간', '선호숙박등급', '연간여행횟수', '미취학아동' median()
-# 'TypeofContact', 'NumberOfFollowups','DurationOfPitch', 'PreferredPropertyStar','NumberOfChildrenVisiting','NumberOfTrips'  
+train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
+test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
 
 print(train.info())
 print(test.info())
@@ -201,31 +152,18 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 # plt.ylabel('data')
 # plt.show()
 
+# exit()
+
 # 분석할 의미가 없는 칼럼을 제거합니다.
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
-train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups','Designation'])  
-test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups','Designation'])
-# 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncoe'
-
-# 탐색경로', '후속조치수', '프리젠테이션기간', '선호숙박등급', '연간여행횟수', '미취학아동' median()
-# 'TypeofContact', 'NumberOfFollowups','DurationOfPitch', 'PreferredPropertyStar','NumberOfChildrenVisiting','NumberOfTrips'  
+train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
+test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
+# 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome'
+# 
 
 # 학습에 사용할 정보와 예측하고자 하는 정보를 분리합니다.
-
-
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
-
-print(x.isnull().sum())
-
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer,KNNImputer,SimpleImputer
-imp = IterativeImputer(estimator = LinearRegression(), 
-                       tol= 1e-10, 
-                       max_iter=30, 
-                       verbose=2, 
-                       imputation_order='roman')
-x = pd.DataFrame(imp.fit_transform(x))
 
 x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.87,shuffle=True)
 
@@ -258,6 +196,7 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_siz
 # kfold = KFold(n_splits=n_splits ,shuffle=True, random_state=123)
 # xgb = XGBClassifier(random_state=123,
 #                     )
+
 # model = GridSearchCV(xgb,param_grid=parameters, cv =kfold, n_jobs=8)
 ##########################GridSearchCV###############################
 
@@ -265,10 +204,10 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
 param_grid = [
               {'n_estimators':[10], 'max_features':[10]},
-              {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
+              {'bootstrap':[False],'n_estimators':[400], 'max_features':[3]}
 ]
 
-forest_reg =  RandomForestClassifier()
+forest_reg = RandomForestClassifier()
 # 
 model = RandomizedSearchCV(forest_reg, param_grid, cv=5,
                            scoring='accuracy',
@@ -290,7 +229,7 @@ print('----------------------예측된 데이터의 상위 10개의 값 확인--
 
 print('acc : ', accuracy_score(prediction,y_test))
 
-print(prediction[0:11])
+print(prediction[:20])
 # print(model.score(x_train, y_train))
 # 예측된 값을 정답파일과 병합
 print(prediction.shape)
@@ -298,93 +237,8 @@ print(prediction.shape)
 sample_submission['ProdTaken'] = prediction1
 
 # 정답파일 데이터프레임 확인
-print(sample_submission[:15])
+print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0830_2.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0831_1.csv',index = False)
 
 exit()
-
-
-drop_cols = [ 'Age', 'NumberOfTrips' ,'MonthlyIncome' ,'TypeofContact','Occupation','ProductPitched','MaritalStatus','Passport']
-
-train_set.drop(drop_cols, axis = 1, inplace =True)
-test_set.drop(drop_cols, axis = 1, inplace =True)
-
-submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!!
-                       index_col=0)
-
-print(train_set.describe()) 
-print(train_set.columns.values)
-
-# ['Age' 'TypeofContact' 'CityTier' 'DurationOfPitch' 'Occupation' 'Gender'
-#  'NumberOfPersonVisiting' 'NumberOfFollowups' 'ProductPitched'
-#  'PreferredPropertyStar' 'MaritalStatus' 'NumberOfTrips' 'Passport'
-#  'PitchSatisfactionScore' 'OwnCar' 'NumberOfChildrenVisiting'
-#  'Designation' 'MonthlyIncome' 'ProdTaken']
-# Age / NumberOfTrips /MonthlyIncome 열 삭제 
-# TypeofContact / DurationOfPitch /NumberOfFollowups /PreferredPropertyStar /NumberOfTrips  /NumberOfChildrenVisiting /MonthlyIncome  nan값 해결
-###### 결측치 처리 1.제거##### dropna 사용
-train_set.astype(float)
-test_set.astype(float)
-
-print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
-train_set = train_set.fillna(train_set.median())
-print(train_set.isnull().sum())
-print(train_set.shape)
-test_set = test_set.fillna(test_set.median())
-print(train_set.shape)  # (1955, 19)
-print(test_set.shape)   # (2933, 18)
-
-
-
-x = train_set.drop(['ProdTaken'],axis=1)  
-print(x.shape) #(1955, 10)
-y = train_set['ProdTaken']
-print(y.shape) #(1955,)
-
-y = np.array(y).reshape(-1, 1)
-from sklearn.model_selection import train_test_split
-
-x_train, x_test, y_train, y_test = train_test_split(x,y,
-                                                    test_size=0.25,
-                                                    random_state=58525
-                                                    )
-
-print(x_train.shape) # (712, 7)
-print(y_train.shape) # (712, 1)
-print(x_test.shape) # (179, 7)
-print(y_test.shape) # (179, 1)
-
-
-#2. 모델구성
-model = Sequential()
-model.add(Dense(10, activation='selu', input_dim=7))
-model.add(Dense(100, activation='selu'))
-model.add(Dense(80, activation='selu'))
-model.add(Dense(15, activation='selu'))
-model.add(Dense(1, activation='sigmoid'))
-
-#3. 컴파일, 훈련
-
-from tensorflow.python.keras.callbacks import EarlyStopping
-earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1, 
-                              restore_best_weights=True)
-
-
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=100, batch_size=34, verbose=1, 
-          validation_split=0.2, callbacks=[earlyStopping])
-
-
-#4. 평가, 예측
-
-loss, acc = model.evaluate(x_test, y_test)
-print('loss : ', loss)
-print('accuracy : ', acc)
-
-y_predict = model.predict(x_test)
-y_predict = np.argmax(y_predict, axis= 1)
-y_test = np.argmax(y_test, axis= 1)
-
-acc1 = accuracy_score(y_test, y_predict) 
-print('acc1 : ', acc1) 
