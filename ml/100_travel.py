@@ -19,7 +19,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0830_1.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0830_2.csv')
 
 import random
 import os
@@ -90,13 +90,13 @@ test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
 train['PreferredPropertyStar'].fillna(0)
 test['PreferredPropertyStar'].fillna(0)
 
-combine = [train,test]
-for dataset in combine:    
-    dataset.loc[ dataset['Age'] <= 26.6, 'Age'] = 0
-    dataset.loc[(dataset['Age'] > 26.6) & (dataset['Age'] <= 35.2), 'Age'] = 1
-    dataset.loc[(dataset['Age'] > 35.2) & (dataset['Age'] <= 43.8), 'Age'] = 2
-    dataset.loc[(dataset['Age'] > 43.8) & (dataset['Age'] <= 52.4), 'Age'] = 3
-    dataset.loc[ dataset['Age'] > 52.4, 'Age'] = 4
+# combine = [train,test]
+# for dataset in combine:    
+#     dataset.loc[ dataset['Age'] <= 26.6, 'Age'] = 0
+#     dataset.loc[(dataset['Age'] > 26.6) & (dataset['Age'] <= 35.2), 'Age'] = 1
+#     dataset.loc[(dataset['Age'] > 35.2) & (dataset['Age'] <= 43.8), 'Age'] = 2
+#     dataset.loc[(dataset['Age'] > 43.8) & (dataset['Age'] <= 52.4), 'Age'] = 3
+#     dataset.loc[ dataset['Age'] > 52.4, 'Age'] = 4
 
 
 print(train.isnull().sum())
@@ -203,8 +203,8 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 
 # 분석할 의미가 없는 칼럼을 제거합니다.
 # 상관계수 그래프를 통해 연관성이 적은것과 - 인것을 빼준다.
-train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])  
-test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups'])
+train = train_enc.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups','Designation'])  
+test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncome', 'NumberOfTrips','NumberOfFollowups','Designation'])
 # 'TypeofContact','NumberOfChildrenVisiting','NumberOfPersonVisiting','OwnCar', 'MonthlyIncoe'
 
 # 탐색경로', '후속조치수', '프리젠테이션기간', '선호숙박등급', '연간여행횟수', '미취학아동' median()
@@ -300,7 +300,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission[:15])
 
-sample_submission.to_csv(path+'sample_submission0830_1.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0830_2.csv',index = False)
 
 exit()
 

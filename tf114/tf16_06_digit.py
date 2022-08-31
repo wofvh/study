@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-tf.set_random_seed(66)
+# tf.set_random_seed(66)
 
 #1. 데이터
 datasets = load_digits()
