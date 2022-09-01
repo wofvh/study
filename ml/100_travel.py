@@ -37,14 +37,14 @@ print(test.shape)
 train.loc[ train['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 
-train['Age'].fillna(train.groupby('Designation')['Age'].transform('mean'), inplace=True)
-test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace=True)
+train['Age'].fillna(train.groupby('Designation')['Age'].transform('median'), inplace=True)
+test['Age'].fillna(test.groupby('Designation')['Age'].transform('median'), inplace=True)
 
 train['TypeofContact'].fillna('Self Enquiry', inplace=True)
 test['TypeofContact'].fillna('Self Enquiry', inplace=True)
 
-train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
-test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
+test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
 
 train['DurationOfPitch']=train['DurationOfPitch'].fillna(0)
 test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
@@ -58,6 +58,7 @@ test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredProper
 print(train.info())
 print(test.info())
 
+print(train.isnull().sum())
 
 # 결측치를 처리하는 함수를 작성.
 def handle_na(data):
@@ -88,7 +89,7 @@ print(test.shape)
 
 from sklearn.preprocessing import LabelEncoder
 encoder = LabelEncoder()
-encoder.fit(train_nona['TypeofContact'])
+encoder.fit(train_nona['TypeofContact','Designation'])
 
 #학습된 encoder를 사용하여 문자형 변수를 숫자로 변환
 encoder.transform(train_nona['TypeofContact'])
@@ -218,13 +219,13 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
 param_grid = [
-              {'n_estimators':[10], 'max_features':[10]},
-              {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
+              {'n_estimators':[10], 'max_features':[6]},
+              {'bootstrap':[False],'n_estimators':[123], 'max_features':[6]}
 ]
 
 forest_reg = RandomForestClassifier()
 # 
-model = RandomizedSearchCV(forest_reg, param_grid, cv=5,
+model = RandomizedSearchCV(forest_reg, param_grid, cv=6,
                            scoring='accuracy',
                            verbose=0,
                            return_train_score=True)
