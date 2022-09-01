@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-# tf.set_random_seed(66)
+tf.set_random_seed(66)
 
 #1. 데이터
 datasets = load_digits()
@@ -15,7 +15,7 @@ from tensorflow.keras.utils import to_categorical
 y_data = to_categorical(y_data)
 
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data,
-                                                    train_size=0.9, shuffle=True, random_state=123,stratify=y_data)
+                                                    train_size=0.8, shuffle=True, random_state=123,stratify=y_data)
 
 # y_train =np.array(y_train, dtype='float32')
 
@@ -26,12 +26,10 @@ print(y_data.shape[1]) #10
 
 #2. 모델구성 // 시작 
 x = tf.compat.v1.placeholder(tf.float32,shape=[None, x_data.shape[1]])
+y = tf.compat.v1.placeholder(tf.float32,shape=[None, y_data.shape[1]])
 
 w = tf.compat.v1.Variable(tf.compat.v1.random_normal([x_data.shape[1],y_data.shape[1]]))
 b = tf.compat.v1.Variable(tf.compat.v1.random_normal([1,y_data.shape[1]]))
-
-y = tf.compat.v1.placeholder(tf.float32,shape=[None, y_data.shape[1]])
-
 ###############################################################
 # w1 =tf.compat.v1.Variable(tf.random_normal([2, 20]))
 # b1= tf.compat.v1.Variable(tf.random_normal([20]))
@@ -60,7 +58,7 @@ hypothesis = tf.nn.softmax(tf.matmul(h3,w4) +b4)
 loss = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y,logits=tf.matmul(x,w) +b)  
 
 # optimizer = tf.train.AdamOptimizer(learning_rate= 1e-6)
-train = tf.train.AdamOptimizer(learning_rate= 0.01).minimize(loss)
+train = tf.train.AdamOptimizer(learning_rate=  1e-6).minimize(loss)
 
 #3-2. 훈련
 sess = tf.compat.v1.Session()
@@ -94,6 +92,6 @@ print('accuracy_score : ', acc_score)
 # print('mse : ', mse)
 
 sess.close()
-
+# accuracy_score :  0.08333333333333333
 # accuracy_score :  0.9555555555555556
 

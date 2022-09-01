@@ -238,7 +238,7 @@ loss = tf.reduce_mean(tf.square(hypothesis-y))
 #loss = 'categorical_crossentropy'
 
 # optimizer = tf.train.AdamOptimizer(learning_rate= 1e-6)
-train = tf.train.AdamOptimizer(learning_rate=0.098).minimize(loss)
+train = tf.train.AdamOptimizer(learning_rate=0.0098).minimize(loss)
 
 #3-2. 훈련
 sess = tf.compat.v1.Session()
@@ -270,6 +270,8 @@ print('r2 : ', r2)
 sess.close()
 
 # r2 :  0.8507201800428608
+#mlp 후
+# r2 :  0.8501149157303256
 
 
 

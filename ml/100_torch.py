@@ -19,9 +19,9 @@ device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cp
 
 CFG = {
     'EPOCHS':5,
-    'LEARNING_RATE':1e-3,
+    'LEARNING_RATE':1e-2,
     'BATCH_SIZE':16,
-    'SEED':2022
+    'SEED':41
 }
 
 def seed_everything(seed):
@@ -69,6 +69,7 @@ class CustomDataset(Dataset):
             for label in target_df["rate"]:
                 self.label_list.append(label)
         print('Done.')
+        print()
               
     def __getitem__(self, index):
         data = self.data_list[index]
@@ -77,7 +78,7 @@ class CustomDataset(Dataset):
             return data, label
         else:
             return data
-        
+            
     def __len__(self):
         return len(self.data_list)
     

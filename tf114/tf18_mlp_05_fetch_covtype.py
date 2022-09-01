@@ -57,13 +57,13 @@ hypothesis = tf.nn.softmax(tf.matmul(h3,w4) +b4)
 loss = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y,logits=tf.matmul(x,w) +b)  
 
 # optimizer = tf.train.AdamOptimizer(learning_rate= 1e-6)
-train = tf.train.AdamOptimizer(learning_rate= 0.1).minimize(loss)
+train = tf.train.AdamOptimizer(learning_rate= 0.001).minimize(loss)
 
 #3-2. 훈련
 sess = tf.compat.v1.Session()
 sess.run(tf.compat.v1.global_variables_initializer())
 
-for epochs in range(2000):
+for epochs in range(20000):
   
     _, loss_val, h_val = sess.run([train, loss, hypothesis], 
                                                    feed_dict={x:x_train,y:y_train})

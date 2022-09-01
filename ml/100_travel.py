@@ -18,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0831_1.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0901_1.csv')
 
 import random
 import os
@@ -49,11 +49,11 @@ test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transf
 train['DurationOfPitch']=train['DurationOfPitch'].fillna(0)
 test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
 
-train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
-test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
+train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
+test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
 
-train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
-test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
+train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
+test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
 
 print(train.info())
 print(test.info())
@@ -165,9 +165,9 @@ test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','O
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.87,shuffle=True)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.88,shuffle=True)
 
-# from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
 # scaler = MinMaxScaler()
 # x_train = scaler.fit_transform(x_train)
@@ -198,13 +198,28 @@ x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_siz
 #                     )
 
 # model = GridSearchCV(xgb,param_grid=parameters, cv =kfold, n_jobs=8)
-##########################GridSearchCV###############################
 
+############################pca####################################
+# param_grid = [
+#               {'n_estimators':[10], 'max_features':[10]},
+#               {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
+# ]
+
+# forest_reg = RandomForestClassifier()
+# from sklearn.decomposition import PCA
+# from sklearn.pipeline import make_pipeline
+
+# model = make_pipeline(StandardScaler(),PCA(),RandomizedSearchCV(forest_reg, param_grid, cv=5,
+#                            scoring='accuracy',
+#                            verbose=0,
+#                            return_train_score=True))
+
+############################pca####################################
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 ############################0821_1####################################
 param_grid = [
               {'n_estimators':[10], 'max_features':[10]},
-              {'bootstrap':[False],'n_estimators':[400], 'max_features':[3]}
+              {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
 ]
 
 forest_reg = RandomForestClassifier()
@@ -213,8 +228,6 @@ model = RandomizedSearchCV(forest_reg, param_grid, cv=5,
                            scoring='accuracy',
                            verbose=0,
                            return_train_score=True)
-
-############################0821_1####################################
 
 # model = RandomForestClassifier()
 
@@ -239,6 +252,91 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0831_1.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0901_1.csv',index = False)
 
 exit()
+
+
+drop_cols = [ 'Age', 'NumberOfTrips' ,'MonthlyIncome' ,'TypeofContact','Occupation','ProductPitched','MaritalStatus','Passport']
+
+train_set.drop(drop_cols, axis = 1, inplace =True)
+test_set.drop(drop_cols, axis = 1, inplace =True)
+
+submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!!
+                       index_col=0)
+
+print(train_set.describe()) 
+print(train_set.columns.values)
+
+# ['Age' 'TypeofContact' 'CityTier' 'DurationOfPitch' 'Occupation' 'Gender'
+#  'NumberOfPersonVisiting' 'NumberOfFollowups' 'ProductPitched'
+#  'PreferredPropertyStar' 'MaritalStatus' 'NumberOfTrips' 'Passport'
+#  'PitchSatisfactionScore' 'OwnCar' 'NumberOfChildrenVisiting'
+#  'Designation' 'MonthlyIncome' 'ProdTaken']
+# Age / NumberOfTrips /MonthlyIncome 열 삭제 
+# TypeofContact / DurationOfPitch /NumberOfFollowups /PreferredPropertyStar /NumberOfTrips  /NumberOfChildrenVisiting /MonthlyIncome  nan값 해결
+###### 결측치 처리 1.제거##### dropna 사용
+train_set.astype(float)
+test_set.astype(float)
+
+print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
+train_set = train_set.fillna(train_set.median())
+print(train_set.isnull().sum())
+print(train_set.shape)
+test_set = test_set.fillna(test_set.median())
+print(train_set.shape)  # (1955, 19)
+print(test_set.shape)   # (2933, 18)
+
+
+
+x = train_set.drop(['ProdTaken'],axis=1)  
+print(x.shape) #(1955, 10)
+y = train_set['ProdTaken']
+print(y.shape) #(1955,)
+
+y = np.array(y).reshape(-1, 1)
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(x,y,
+                                                    test_size=0.25,
+                                                    random_state=58525
+                                                    )
+
+print(x_train.shape) # (712, 7)
+print(y_train.shape) # (712, 1)
+print(x_test.shape) # (179, 7)
+print(y_test.shape) # (179, 1)
+
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(10, activation='selu', input_dim=7))
+model.add(Dense(100, activation='selu'))
+model.add(Dense(80, activation='selu'))
+model.add(Dense(15, activation='selu'))
+model.add(Dense(1, activation='sigmoid'))
+
+#3. 컴파일, 훈련
+
+from tensorflow.python.keras.callbacks import EarlyStopping
+earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1, 
+                              restore_best_weights=True)
+
+
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=100, batch_size=34, verbose=1, 
+          validation_split=0.2, callbacks=[earlyStopping])
+
+
+#4. 평가, 예측
+
+loss, acc = model.evaluate(x_test, y_test)
+print('loss : ', loss)
+print('accuracy : ', acc)
+
+y_predict = model.predict(x_test)
+y_predict = np.argmax(y_predict, axis= 1)
+y_test = np.argmax(y_test, axis= 1)
+
+acc1 = accuracy_score(y_test, y_predict) 
+print('acc1 : ', acc1) 
