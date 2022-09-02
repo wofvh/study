@@ -25,15 +25,15 @@ test_set['Age']=np.round(test_set['Age'],0).astype(int)
 
 
 
-train_set['MonthlyIncome'].fillna(train_set.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
-test_set['MonthlyIncome'].fillna(test_set.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+train_set['MonthlyIncome'].fillna(train_set.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
+test_set['MonthlyIncome'].fillna(test_set.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
 print(train_set.describe) #(1955, 19)
 print(train_set[train_set['MonthlyIncome'].notnull()].groupby(['Designation'])['MonthlyIncome'].mean())
 
-train_set['NumberOfChildrenVisiting'].fillna(train_set.groupby('MaritalStatus')['NumberOfChildrenVisiting'].transform('mean'), inplace=True)
-test_set['NumberOfChildrenVisiting'].fillna(test_set.groupby('MaritalStatus')['NumberOfChildrenVisiting'].transform('mean'), inplace=True)
-train_set['NumberOfFollowups'].fillna(train_set.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
-test_set['NumberOfFollowups'].fillna(test_set.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
+train_set['NumberOfChildrenVisiting'].fillna(train_set.groupby('MaritalStatus')['NumberOfChildrenVisiting'].transform('median'), inplace=True)
+test_set['NumberOfChildrenVisiting'].fillna(test_set.groupby('MaritalStatus')['NumberOfChildrenVisiting'].transform('median'), inplace=True)
+train_set['NumberOfFollowups'].fillna(train_set.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
+test_set['NumberOfFollowups'].fillna(test_set.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
 # combine = [train_set,test_set]
 # for dataset in combine:    
 #     dataset.loc[ dataset['NumberOfChildrenVisiting'] < 1, 'NumberOfChildrenVisiting'] = 0
@@ -192,7 +192,7 @@ n_splits = 6
 # 최상의 점수 :  0.9044520547945205
 # acc : 0.954248366013072
 # 걸린 시간 : 5.827547073364258 
-kfold = StratifiedKFold(n_splits=n_splits,shuffle=True,random_state=123)
+kfold = StratifiedKFold(n_splits=n_splits,shuffle=True,random_state=1234)
 # {'target': 0.9825581395348837, 
 #  'params': {'depth': 9.870692750101593,
 #             'fold_permutation_block': 8.315144786179879, 
@@ -220,7 +220,7 @@ cat_paramets = {"learning_rate" : [0.01],
                 # 'model_size_reg': [0.44979263197508923],
                 'fold_permutation_block': [142],
                 'l2_leaf_reg' :[0.33021257848638497]}
-cat = CatBoostClassifier(random_state=84,verbose=False,n_estimators=1304)
+cat = CatBoostClassifier(random_state=72,verbose=False,n_estimators=1400)
 model = RandomizedSearchCV(cat,cat_paramets,cv=kfold,n_jobs=-1,)
 
 import time 
@@ -241,7 +241,7 @@ submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!
                       )
 submission['ProdTaken'] = y_summit
 
-submission.to_csv('test0902_1.csv',index=False)
+submission.to_csv('test0902_2.csv',index=False)
 print('완료')
 
 
