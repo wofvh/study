@@ -181,7 +181,7 @@ print(x.shape) #1911,13
 
 
 
-x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.91,shuffle=True,random_state=1234,stratify=y)
+x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.92,shuffle=True,random_state=1234,stratify=y)
 
 from sklearn.metrics import accuracy_score
 from catboost import CatBoostClassifier
@@ -220,7 +220,7 @@ cat_paramets = {"learning_rate" : [0.01],
                 # 'model_size_reg': [0.44979263197508923],
                 'fold_permutation_block': [142],
                 'l2_leaf_reg' :[0.33021257848638497]}
-cat = CatBoostClassifier(random_state=72,verbose=False,n_estimators=1400)
+cat = CatBoostClassifier(random_state=72,verbose=False,n_estimators=1304)
 model = RandomizedSearchCV(cat,cat_paramets,cv=kfold,n_jobs=-1,)
 
 import time 
@@ -241,7 +241,7 @@ submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!
                       )
 submission['ProdTaken'] = y_summit
 
-submission.to_csv('test0902_2.csv',index=False)
+submission.to_csv('test0902_3.csv',index=False)
 print('완료')
 
 
