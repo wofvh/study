@@ -11,7 +11,7 @@ datasets = load_iris()
 # y = datasets.target
 
 df = pd.DataFrame(datasets.data,columns=[datasets.feature_names])
-print(df)
+print("df1",df)
 
 # from sklearn.preprocessing import LabelEncoder
 # le = LabelEncoder()
@@ -19,10 +19,10 @@ print(df)
 
 kmeans =KMeans(n_clusters=3, random_state=1234)
 kmeans.fit(df)
-
+print('df2',df)
 
 results = kmeans.labels_
-print(results)
+print('2',results)
 print(datasets.target)
 
 df['cluster'] = kmeans.labels_

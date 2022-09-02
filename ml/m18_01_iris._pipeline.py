@@ -31,7 +31,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # model = RandomForestClassifier()
 # model = make_pipeline(MinMaxScaler(),RandomForestClassifier())             #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
 pipe = Pipeline([('minmax',MinMaxScaler()),('RF',RandomForestClassifier())],verbose=1)
-
+model = RandomizedSearchCV(pipe ,parameters, cv =5 ,verbose= 1)
 
 #3. 컴파일 훈련
 from sklearn.experimental import enable_halving_search_cv

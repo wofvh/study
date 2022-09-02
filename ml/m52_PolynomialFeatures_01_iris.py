@@ -35,10 +35,11 @@ print('CVn빵:',np.mean(scores))
 
 #######################################PolymialFeatures 후 ############################################
 
-
+print(x.shape)
 pf = PolynomialFeatures(degree=2,include_bias=False)
 xp = pf.fit_transform(x)
 print(xp.shape)
+exit()
 
 
 x_train, x_test, y_train, y_test = train_test_split (xp,y ,train_size=0.8,random_state=123,shuffle=True)

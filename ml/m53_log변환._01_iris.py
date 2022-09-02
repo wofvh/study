@@ -48,10 +48,10 @@ print(df)
 # plt.ylabel('데이터값')
 # plt.show()
 
-# print(df['B'].head())                 #  그냥 결과 :  0.7665
+print(df['sepal width (cm)'].head())                 #  그냥 결과 :  0.7665
 df['sepal width (cm)'] = np.log1p(df['sepal width (cm)'])           #  그냥 결과 :  0.7711
-# print(df['B'].head())
-
+print(df['sepal width (cm)'].head())
+exit()
 # df['CRIM'] = np.log1p(df['CRIM'])   # 로그변환 결과 :  0.7596
 # df['ZN'] = np.log1p(df['ZN'])       # 로그변환 결과 :  0.7734
 # df['TAX'] = np.log1p(df['TAX'])     # 로그변환 결과 :  0.7669

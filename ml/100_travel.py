@@ -10,6 +10,11 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import ExtraTreesClassifier
+import tensorflow as tf
+import keras
+import time
+import autokeras as ak
+
 #1. 데이터
 path = './_data/travel/'
 train = pd.read_csv(path + 'train.csv',                 
@@ -89,7 +94,7 @@ print(test.shape)
 
 from sklearn.preprocessing import LabelEncoder
 encoder = LabelEncoder()
-encoder.fit(train_nona['TypeofContact','Designation'])
+encoder.fit(train_nona['TypeofContact'])
 
 #학습된 encoder를 사용하여 문자형 변수를 숫자로 변환
 encoder.transform(train_nona['TypeofContact'])
@@ -216,25 +221,28 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 #                            return_train_score=True))
 
 ############################pca####################################
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-############################0821_1####################################
-param_grid = [
-              {'n_estimators':[10], 'max_features':[6]},
-              {'bootstrap':[False],'n_estimators':[123], 'max_features':[6]}
-]
+# from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+# param_grid = [
+#               {'n_estimators':[10], 'max_features':[6]},
+#               {'bootstrap':[False],'n_estimators':[123], 'max_features':[6]}
+# ]
 
-forest_reg = RandomForestClassifier()
-# 
-model = RandomizedSearchCV(forest_reg, param_grid, cv=6,
-                           scoring='accuracy',
-                           verbose=0,
-                           return_train_score=True)
-
+# forest_reg = RandomForestClassifier()
+# # 
+# model = RandomizedSearchCV(forest_reg, param_grid, cv=6,
+#                            scoring='accuracy',
+#                            verbose=0,
+#                            return_train_score=True)
+####################################################################
+model = ak.StructuredDataClassifier(             #  StructuredDataClassifier
+    overwrite=True,
+    max_trials=2           #시도횟수
+)
 # model = RandomForestClassifier()
 
 # model = ExtraTreesClassifier(n_estimators=100, random_state=2022)
 
-model.fit(x_train,y_train)
+model.fit(x_train,y_train,epochs=10000)
 
 prediction = model.predict(x_test)
 prediction1 = model.predict(test)

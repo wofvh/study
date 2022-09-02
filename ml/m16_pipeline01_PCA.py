@@ -26,8 +26,9 @@ from sklearn.pipeline import make_pipeline
 # model = RandomForestClassifier()
 
 # model = make_pipeline( MinMaxScaler(),StandardScaler(), RandomForestClassifier())             #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
-model = make_pipeline( MinMaxScaler(),PCA(), RandomForestClassifier())             #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
-
+model = make_pipeline( MinMaxScaler(),PCA(), RandomForestClassifier())            
+ #make_pipeline 은 fit할 때, 스케일러와 모델이 같이된다.
+ 
 #3. 컴파일 훈련
 import time
 start_time = time.time()

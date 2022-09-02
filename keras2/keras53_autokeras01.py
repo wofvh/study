@@ -26,3 +26,8 @@ results =model.evaluate(x_test,y_test)
 print('걸린시간:',round(end-start,4))
 
 print('결과:',results)
+
+
+# ccuracy: 0.9877  
+# 걸린시간: 3264.0582
+# 결과: [0.035007115453481674, 0.9876999855041504]

@@ -38,7 +38,8 @@ acc = accuracy_score(y_test,y_predict)
 
 print( 'accuracy_score :',acc)
 print("===================================")
-print(model,':',model.feature_importances_)           # 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
+print(model,':',model.feature_importances_)           
+# 중요한 피쳐를 구분하는 것 중요성이 떨어지는것을 버린다. 
 print(model)
 
 # DecisionTreeClassifier() : [0.03338202 0.         0.56740948 0.39920851]

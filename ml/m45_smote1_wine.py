@@ -20,6 +20,7 @@ print(type(x))              # <class 'numpy.ndarray'>
 print(np.unique(y, return_counts=True))         # (array([0, 1, 2]), array([59, 71, 48], dtype=int64))
 print(pd.Series(y).value_counts())
 print(y)
+
 # [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 #  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 #  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1

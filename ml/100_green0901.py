@@ -95,7 +95,7 @@ model.summary()
 import time
 start_time = time.time()
 #3. 컴파일, 훈련
-model.compile(loss='mae', optimizer='adam',metrics=['r2'])
+model.compile(loss='mae', optimizer='adam',metrics=['r2_score'])
 # "".join은 " "사이에 있는 문자열을 합치겠다는 기능
 hist = model.fit(x_train, y_train, epochs=50, batch_size=500, 
                 validation_data=(val_data, val_target),
