@@ -10,11 +10,6 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import ExtraTreesClassifier
-import tensorflow as tf
-import keras
-import time
-import autokeras as ak
-
 #1. 데이터
 path = './_data/travel/'
 train = pd.read_csv(path + 'train.csv',                 
@@ -23,7 +18,7 @@ train = pd.read_csv(path + 'train.csv',
 test = pd.read_csv(path + 'test.csv',                                   
                        index_col=0)
 
-sample_submission = pd.read_csv(path + 'sample_submission0901_1.csv')
+sample_submission = pd.read_csv(path + 'sample_submission0828_1.csv')
 
 import random
 import os
@@ -42,28 +37,27 @@ print(test.shape)
 train.loc[ train['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 test.loc[ test['Gender'] =='Fe Male' , 'Gender'] = 'Female'
 
-train['Age'].fillna(train.groupby('Designation')['Age'].transform('median'), inplace=True)
-test['Age'].fillna(test.groupby('Designation')['Age'].transform('median'), inplace=True)
+train['Age'].fillna(train.groupby('Designation')['Age'].transform('mean'), inplace=True)
+test['Age'].fillna(test.groupby('Designation')['Age'].transform('mean'), inplace=True)
 
 train['TypeofContact'].fillna('Self Enquiry', inplace=True)
 test['TypeofContact'].fillna('Self Enquiry', inplace=True)
 
-train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
-test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('median'), inplace=True)
+train['MonthlyIncome'].fillna(train.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
+test['MonthlyIncome'].fillna(test.groupby('Designation')['MonthlyIncome'].transform('mean'), inplace=True)
 
 train['DurationOfPitch']=train['DurationOfPitch'].fillna(0)
 test['DurationOfPitch']=test['DurationOfPitch'].fillna(0)
 
-train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
-test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('median'), inplace=True)
+train['NumberOfFollowups'].fillna(train.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
+test['NumberOfFollowups'].fillna(test.groupby('NumberOfChildrenVisiting')['NumberOfFollowups'].transform('mean'), inplace=True)
 
-train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
-test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('median'), inplace=True)
+train['PreferredPropertyStar'].fillna(train.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
+test['PreferredPropertyStar'].fillna(test.groupby('Occupation')['PreferredPropertyStar'].transform('mean'), inplace=True)
 
 print(train.info())
 print(test.info())
 
-print(train.isnull().sum())
 
 # 결측치를 처리하는 함수를 작성.
 def handle_na(data):
@@ -171,9 +165,9 @@ test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','O
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.88,shuffle=True)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=1234, train_size=0.87,shuffle=True)
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold
 # scaler = MinMaxScaler()
 # x_train = scaler.fit_transform(x_train)
@@ -204,45 +198,65 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 #                     )
 
 # model = GridSearchCV(xgb,param_grid=parameters, cv =kfold, n_jobs=8)
+##########################GridSearchCV###############################
 
-############################pca####################################
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+############################0821_1####################################
 # param_grid = [
 #               {'n_estimators':[10], 'max_features':[10]},
 #               {'bootstrap':[False],'n_estimators':[400], 'max_features':[6]}
 # ]
 
 # forest_reg = RandomForestClassifier()
-# from sklearn.decomposition import PCA
-# from sklearn.pipeline import make_pipeline
-
-# model = make_pipeline(StandardScaler(),PCA(),RandomizedSearchCV(forest_reg, param_grid, cv=5,
-#                            scoring='accuracy',
-#                            verbose=0,
-#                            return_train_score=True))
-
-############################pca####################################
-# from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-# param_grid = [
-#               {'n_estimators':[10], 'max_features':[6]},
-#               {'bootstrap':[False],'n_estimators':[123], 'max_features':[6]}
-# ]
-
-# forest_reg = RandomForestClassifier()
 # # 
-# model = RandomizedSearchCV(forest_reg, param_grid, cv=6,
+# model = RandomizedSearchCV(forest_reg, param_grid, cv=5,
 #                            scoring='accuracy',
 #                            verbose=0,
 #                            return_train_score=True)
-####################################################################
-model = ak.StructuredDataClassifier(             #  StructuredDataClassifier
-    overwrite=True,
-    max_trials=2           #시도횟수
-)
+
+############################0821_1####################################
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import StratifiedKFold
+n_splits = 6
+# 최상의 점수 :  0.9044520547945205
+# acc : 0.954248366013072
+# 걸린 시간 : 5.827547073364258 
+kfold = StratifiedKFold(n_splits=n_splits,shuffle=True,random_state=123)
+# {'target': 0.9825581395348837, 
+#  'params': {'depth': 9.870692750101593,
+#             'fold_permutation_block': 8.315144786179879, 
+#             'l2_leaf_reg': 5.182351079272809, 
+#             'learning_rate': 0.20711118811391716, 
+#             'model_size_reg': 0.44979263197508923, 
+#             'od_pval': 0.442501612764838}}
+
+#  Trial 2 finished with value: 1.0 and parameters: 
+# {'n_estimators': 1872, 
+# 'depth': 14, 
+# 'fold_permutation_block': 137, 
+# 'od_pval': 0.4558538849228756, 
+# 'l2_leaf_reg': 0.32453261538080636}. 
+
+# Best trial : score 1.0,
+# params {'n_estimators': 1304,
+# 'depth': 8, 'fold_permutation_block': 142, 
+# 'learning_rate': 0.21616891196578603, 
+# 'od_pval': 0.12673190617341812, 
+# 'l2_leaf_reg': 0.33021257848638497}
+cat_paramets = {"learning_rate" : [0.01],
+                'depth' : [8],
+                'od_pval' : [0.12673190617341812],
+                # 'model_size_reg': [0.44979263197508923],
+                'fold_permutation_block': [142],
+                'l2_leaf_reg' :[0.33021257848638497]}
+cat = CatBoostClassifier(random_state=1127,verbose=False,n_estimators=1304)
+model = RandomizedSearchCV(cat,cat_paramets,cv=kfold,n_jobs=-1,)
+
 # model = RandomForestClassifier()
 
 # model = ExtraTreesClassifier(n_estimators=100, random_state=2022)
 
-model.fit(x_train,y_train,epochs=10000)
+model.fit(x_train,y_train)
 
 prediction = model.predict(x_test)
 prediction1 = model.predict(test)
@@ -261,91 +275,7 @@ sample_submission['ProdTaken'] = prediction1
 # 정답파일 데이터프레임 확인
 print(sample_submission)
 
-sample_submission.to_csv(path+'sample_submission0901_1.csv',index = False)
+sample_submission.to_csv(path+'sample_submission0828_1.csv',index = False)
 
 exit()
 
-
-drop_cols = [ 'Age', 'NumberOfTrips' ,'MonthlyIncome' ,'TypeofContact','Occupation','ProductPitched','MaritalStatus','Passport']
-
-train_set.drop(drop_cols, axis = 1, inplace =True)
-test_set.drop(drop_cols, axis = 1, inplace =True)
-
-submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!!
-                       index_col=0)
-
-print(train_set.describe()) 
-print(train_set.columns.values)
-
-# ['Age' 'TypeofContact' 'CityTier' 'DurationOfPitch' 'Occupation' 'Gender'
-#  'NumberOfPersonVisiting' 'NumberOfFollowups' 'ProductPitched'
-#  'PreferredPropertyStar' 'MaritalStatus' 'NumberOfTrips' 'Passport'
-#  'PitchSatisfactionScore' 'OwnCar' 'NumberOfChildrenVisiting'
-#  'Designation' 'MonthlyIncome' 'ProdTaken']
-# Age / NumberOfTrips /MonthlyIncome 열 삭제 
-# TypeofContact / DurationOfPitch /NumberOfFollowups /PreferredPropertyStar /NumberOfTrips  /NumberOfChildrenVisiting /MonthlyIncome  nan값 해결
-###### 결측치 처리 1.제거##### dropna 사용
-train_set.astype(float)
-test_set.astype(float)
-
-print(train_set.isnull().sum()) #각 컬럼당 결측치의 합계
-train_set = train_set.fillna(train_set.median())
-print(train_set.isnull().sum())
-print(train_set.shape)
-test_set = test_set.fillna(test_set.median())
-print(train_set.shape)  # (1955, 19)
-print(test_set.shape)   # (2933, 18)
-
-
-
-x = train_set.drop(['ProdTaken'],axis=1)  
-print(x.shape) #(1955, 10)
-y = train_set['ProdTaken']
-print(y.shape) #(1955,)
-
-y = np.array(y).reshape(-1, 1)
-from sklearn.model_selection import train_test_split
-
-x_train, x_test, y_train, y_test = train_test_split(x,y,
-                                                    test_size=0.25,
-                                                    random_state=58525
-                                                    )
-
-print(x_train.shape) # (712, 7)
-print(y_train.shape) # (712, 1)
-print(x_test.shape) # (179, 7)
-print(y_test.shape) # (179, 1)
-
-
-#2. 모델구성
-model = Sequential()
-model.add(Dense(10, activation='selu', input_dim=7))
-model.add(Dense(100, activation='selu'))
-model.add(Dense(80, activation='selu'))
-model.add(Dense(15, activation='selu'))
-model.add(Dense(1, activation='sigmoid'))
-
-#3. 컴파일, 훈련
-
-from tensorflow.python.keras.callbacks import EarlyStopping
-earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='min', verbose=1, 
-                              restore_best_weights=True)
-
-
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=100, batch_size=34, verbose=1, 
-          validation_split=0.2, callbacks=[earlyStopping])
-
-
-#4. 평가, 예측
-
-loss, acc = model.evaluate(x_test, y_test)
-print('loss : ', loss)
-print('accuracy : ', acc)
-
-y_predict = model.predict(x_test)
-y_predict = np.argmax(y_predict, axis= 1)
-y_test = np.argmax(y_test, axis= 1)
-
-acc1 = accuracy_score(y_test, y_predict) 
-print('acc1 : ', acc1) 
