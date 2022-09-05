@@ -84,7 +84,7 @@ for i in optimizers :
     earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True) 
     
-    model.fit(x_train,y_train,epochs=20,batch_size=50,verbose=1, validation_split=0.2,
+    model.fit(x_train,y_train,epochs=2,batch_size=50,verbose=1, validation_split=0.2,
               callbacks=[earlystopping])
     
     results = model.evaluate(x_test,y_test)
