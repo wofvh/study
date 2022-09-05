@@ -22,14 +22,8 @@ print(test.isnull().sum())
 x = train.drop(['Segmentation'], axis=1)
 y = train['Segmentation']
 
-
 print(x.shape,y.shape)
 
-from sklearn.preprocessing import StandardScaler,MinMaxScaler
-scaler = MinMaxScaler()
-# y = scaler.fit_transform(y)
-# y = scaler.transform(y.reshape(-1,1))
-y = y.reshape(-1,1)
 
 
 x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.91,shuffle=True,random_state=1234,stratify=y)

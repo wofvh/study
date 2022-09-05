@@ -165,7 +165,7 @@ test = test.drop(columns=['NumberOfChildrenVisiting','NumberOfPersonVisiting','O
 x = train.drop(columns=['ProdTaken'])
 y = train[['ProdTaken']]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=1234, train_size=0.87,shuffle=True)
+x_train,x_test,y_train,y_test = train_test_split(x,y, random_state=42, train_size=0.87,shuffle=True)
 
 # from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # from sklearn.model_selection import train_test_split, KFold , StratifiedKFold

@@ -1,64 +1,62 @@
-from sklearn import datasets
-from sklearn.datasets import load_breast_cancer, load_iris, load_wine
+import imp
 import tensorflow as tf
+import keras
 import numpy as np
-from sklearn.model_selection import train_test_split
 
-tf.set_random_seed(66)
+
+tf.compat.v1.set_random_seed(123)
+
 
 #1. 데이터
-datasets = load_wine()
-x_data = datasets.data
-y_data = datasets.target
 
-from tensorflow.keras.utils import to_categorical
-y_data = to_categorical(y_data)
+from keras.datasets import mnist
+(x_train, y_train), (x_test,y_test) =mnist.load_data()
 
-x_train, x_test, y_train, y_test = train_test_split(x_data, y_data,
-                                                    train_size=0.9, shuffle=True, random_state=123,stratify=y_data)
+from keras.utils import to_categorical
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
 
-# y_train =np.array(y_train, dtype='float32')
-print(x_data.shape)     # (178, 13)
-print(y_data.shape)     # (178, 3)
+print(x_train.shape)
+print(x_test.shape)
 
+x_train = x_train.reshape(60000,28*28).astype('float32')/255.
+x_test = x_test.reshape(10000,28*28).astype('float32')/255.
 
+x = tf.compat.v1.placeholder(tf.float32,shape=[None, 28*28])
 
-#2. 모델구성 // 시작 
-x = tf.compat.v1.placeholder(tf.float32,shape=[None, x_data.shape[1]])
+w = tf.compat.v1.Variable(tf.compat.v1.random_normal([28*28,10]))
+b = tf.compat.v1.Variable(tf.compat.v1.random_normal([10]))
 
-w = tf.compat.v1.Variable(tf.compat.v1.random_normal([x_data.shape[1],y_data.shape[1]]))
-b = tf.compat.v1.Variable(tf.compat.v1.random_normal([1,y_data.shape[1]]))
-
-y = tf.compat.v1.placeholder(tf.float32,shape=[None, y_data.shape[1]])
+y = tf.compat.v1.placeholder(tf.float32,shape=[None, 10])
 ###############################################################
 # w1 =tf.compat.v1.Variable(tf.random_normal([2, 20]))
 # b1= tf.compat.v1.Variable(tf.random_normal([20]))
 
 h1 = tf.matmul(x,w)+b
 
-w2 =tf.compat.v1.Variable(tf.random_normal([y_data.shape[1], 30]))
-b2= tf.compat.v1.Variable(tf.zeros([30]))
+w2 =tf.compat.v1.Variable(tf.random_normal([10, 28]))
+b2= tf.compat.v1.Variable(tf.random_normal([28]))
 
 h2 =tf.nn.sigmoid(tf.matmul(h1,w2)+b2)
 
-w3 =tf.compat.v1.Variable(tf.random_normal([30, 20]))
-b3= tf.compat.v1.Variable(tf.zeros([20]))
+w3 =tf.compat.v1.Variable(tf.random_normal([28, 20]))
+b3= tf.compat.v1.Variable(tf.random_normal([20]))
 
 h3 =tf.nn.sigmoid(tf.matmul(h2,w3)+b3)
 
 #output layer
-w4 = tf.compat.v1.Variable(tf.random_normal([20, 1]))
-b4= tf.compat.v1.Variable(tf.zeros([1]))
+w4 = tf.compat.v1.Variable(tf.random_normal([20, 10]))
+b4= tf.compat.v1.Variable(tf.random_normal([10]))
 
 hypothesis = tf.nn.softmax(tf.matmul(h3,w4) +b4)
 
 #############################################
 
 # loss = tf.reduce_mean(tf.reduce_sum(y*tf.log(hypothesis),axis=1))  
-loss = tf.nn.softmax_cross_entropy_with_logits_v2(labels=y,logits=tf.matmul(x,w) +b)  
+loss = tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=tf.matmul(x,w) +b)  
 
 # optimizer = tf.train.AdamOptimizer(learning_rate= 1e-6)
-train = tf.train.AdamOptimizer(learning_rate= 0.1).minimize(loss)
+train = tf.train.AdamOptimizer(learning_rate= 0.001).minimize(loss)
 
 #3-2. 훈련
 sess = tf.compat.v1.Session()
@@ -93,5 +91,14 @@ print('accuracy_score : ', acc_score)
 
 sess.close()
 
-# accuracy_score :  1.0
-
+# model = Sequential()
+# # model.add(Dense(64, input_shape =(28*28, )))
+# # # model.add(Dense(64, input_shape =(784,)))
+# # # model = Sequential()
+# model.add(Dense(units=10, input_shape=(28 * 28,)))   
+# model.add(Dense(100, activation= 'relu'))
+# model.add(Dense(80, activation= 'relu'))
+# model.add(Dense(80, activation= 'relu'))
+# model.add(Dense(80, activation= 'relu'))
+# model.add(Dense(10, activation= 'softmax'))
+# model.summary()

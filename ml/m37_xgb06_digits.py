@@ -1,7 +1,7 @@
 from sklearn.datasets import load_breast_cancer ,fetch_covtype, load_digits
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold,StratifiedKFold,train_test_split
-from sklearn.preprocessing import StandardScaler,MinMaxScaler
+
 from xgboost import XGBClassifier, XGBRegressor
 import time 
 
@@ -13,7 +13,7 @@ y = datasets.target
 print(x.shape,y.shape)          # (569, 30) (569,)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=123, stratify = y )
-
+from sklearn.preprocessing import StandardScaler,MinMaxScaler
 scaler = MinMaxScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
