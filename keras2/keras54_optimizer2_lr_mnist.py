@@ -10,6 +10,7 @@ from sklearn.metrics import r2_score, accuracy_score
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler, StandardScaler  
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, LSTM, Conv1D #Flatten평평하게해라.  # 이미지 작업 conv2D 
 
 #1. 데이터
 (x_train, y_train), (x_test, y_test) =mnist.load_data()
@@ -36,11 +37,11 @@ x_train = scaler.transform(x_train)
 # array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8), array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949],
 #       dtype=int64))
 
-x_train = x_train.reshape(60000, 28, 28)
-x_test = x_test.reshape(10000, 28, 28)
+x_train = x_train.reshape(60000, 28, 28,1)
+x_test = x_test.reshape(10000, 28, 28,1)
 
-y_train = pd.get_dummies((y_train))
-y_test = pd.get_dummies((y_test))
+# y_train = pd.get_dummies((y_train))
+# y_test = pd.get_dummies((y_test))
 
 print(x_train.shape)
 print(y_train.shape)
@@ -52,15 +53,17 @@ print(y_train)
 
 #2. 모델구성 
 
-model = Sequential()
-model.add(LSTM(50, input_shape=(28, 28)))      # [batch, timesteps(몇개씩 자르는지), feature=1(input_dim)]
+                                            
+model = Sequential()    
+model.add(Conv1D(128, 2, input_shape=(28,28,1)))
+model.add(Flatten())
 model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='swish'))
+model.add(Dense(32, activation='relu'))
 model.add(Dense(16, activation='relu'))
-model.add(Dense(8, activation='swish'))
-model.add(Dense(4, activation='swish'))
-model.add(Dense(10, activation='softmax'))
-model.summary()
+model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(2, activation='relu'))
+model.add(Dense(10, activation='softmax')) 
 
 
 #3. 컴파일, 훈련
@@ -69,30 +72,37 @@ from tensorflow.python.keras.optimizer_v2 import adam, adadelta,adagrad,adamax,r
 
 learning_rate = 0.001
 
-optimizers = [adam.Adam(lr=learning_rate) ,adadelta.Adadelta(lr=learning_rate ),adagrad.Adagrad(lr=learning_rate ),
-              adamax.Adamax(lr=learning_rate) ,rmsprop.RMSprop(lr=learning_rate ) ,nadam.Nadam(lr=learning_rate ) ]
+optimizers = [adam.Adam ,adadelta.Adadelta,adagrad.Adagrad,
+              adamax.Adamax ,rmsprop.RMSprop ,nadam.Nadam]
 aa = []
 for i in optimizers :
-    model.compile(loss='categorical_crossentropy',optimizer = i, metrics=['accuracy'])
+    model.compile(loss='sparse_categorical_crossentropy',optimizer = i(lr=learning_rate), metrics=['accuracy'])
     earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True) 
     
-    model.fit(x_train,y_train,epochs=2,batch_size=5000,verbose=1, validation_split=0.2,
+    model.fit(x_train,y_train,epochs=100,batch_size=5000,verbose=1, validation_split=0.2,
               callbacks=[earlystopping])
-    y_test = tf.argmax(y_test,axis=1) 
+    
     results = model.evaluate(x_test,y_test)
     y_predict = model.predict(x_test)
     y_predict = tf.argmax(y_predict,axis=1) 
     
     
+    # print(y_predict.shape,y_test.shape)
+    # exit()
+    
     acc = accuracy_score(y_test,y_predict)
     
     
     print('results:',results,i,'acc:',acc)
+    aa.append(i.__name__)
     aa.append(acc)
     print(aa)
     
 exit()
+
+acc: 0.9526
+[0.8462, 0.8463, 0.8555, 0.9463, 0.9483, 0.9526]
 model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
