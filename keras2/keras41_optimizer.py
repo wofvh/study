@@ -41,7 +41,7 @@ for i in optimizers :
     
     print('loss:',round(loss,4),i,':',learning_rate ,'결과:',y_predict)
     
-    aa.append(y_predict[0])
+    aa.append(y_predict)
     print(aa)
 exit()
 

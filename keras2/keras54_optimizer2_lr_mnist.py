@@ -80,7 +80,7 @@ for i in optimizers :
     earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
               verbose=1, restore_best_weights = True) 
     
-    model.fit(x_train,y_train,epochs=100,batch_size=5000,verbose=1, validation_split=0.2,
+    model.fit(x_train,y_train,epochs=15,batch_size=50,verbose=1, validation_split=0.2,
               callbacks=[earlystopping])
     
     results = model.evaluate(x_test,y_test)
@@ -100,9 +100,8 @@ for i in optimizers :
     print(aa)
     
 exit()
+# ['Adam', 0.9442, 'Adadelta', 0.95, 'Adagrad', 0.9539, 'Adamax', 0.9572, 'RMSprop', 0.9531, 'Nadam', 0.9583]
 
-acc: 0.9526
-[0.8462, 0.8463, 0.8555, 0.9463, 0.9483, 0.9526]
 model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
 earlystopping =EarlyStopping(monitor='loss', patience=15, mode='auto', 
