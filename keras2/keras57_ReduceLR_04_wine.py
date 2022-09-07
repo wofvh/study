@@ -51,31 +51,31 @@ y_test = to_categorical(y_test)
 
 #2. 모델 
 
-# drop=0.2
-# optimizer ='adam'
-# activation='relu'
+drop=0.2
+optimizer ='adam'
+activation='relu'
 
-# inputs = Input(shape=(4,1,1),name='input')
-# x = Conv2D(64,(2,2), padding='valid',
-#            activation=activation,name='hidden1')(inputs)    #27,27,128
+inputs = Input(shape=(4,1,1),name='input')
+x = Conv2D(64,(2,2), padding='valid',
+           activation=activation,name='hidden1')(inputs)    #27,27,128
+x = Dropout(drop)(x)
+# x = Conv2D(64,(2,2), padding='same',                        #27,27,64
+#            activation=activation,name='hidden2')(x)
 # x = Dropout(drop)(x)
-# # x = Conv2D(64,(2,2), padding='same',                        #27,27,64
-# #            activation=activation,name='hidden2')(x)
-# # x = Dropout(drop)(x)
-# x = MaxPool2D(2,2)(x)
-# x = Conv2D(32,(3,3), padding='valid',                       #25,25,32
-#            activation=activation,name='hidden3')(x)
-# x = Dropout(drop)(x)
+x = MaxPool2D(2,2)(x)
+x = Conv2D(32,(3,3), padding='valid',                       #25,25,32
+           activation=activation,name='hidden3')(x)
+x = Dropout(drop)(x)
 
-# # x = Flatten()(x)                                              # (None,25*25*32) =20000
-# x = GlobalAveragePooling2D()(x)
-# # flatten에 연산량이 많아진다는 문제를 해결하는 방법  / 평균으로 뽑아낸다 
-# x = Dense(1, activation=activation,name='hidden4')(x)
-# x = Dropout(drop)(x)
+# x = Flatten()(x)                                              # (None,25*25*32) =20000
+x = GlobalAveragePooling2D()(x)
+# flatten에 연산량이 많아진다는 문제를 해결하는 방법  / 평균으로 뽑아낸다 
+x = Dense(1, activation=activation,name='hidden4')(x)
+x = Dropout(drop)(x)
 
-# outputs = Dense(3, activation='softmax',name ='outputs')(x)
-# model= Model(inputs=inputs, outputs=outputs)
-# model.summary()
+outputs = Dense(3, activation='softmax',name ='outputs')(x)
+model= Model(inputs=inputs, outputs=outputs)
+model.summary()
 #################################################
 model = Sequential()
 # model.add(SimpleRNN(units= 10, input_shape=(3,1)))      # [batch, timesteps(몇개씩 자르는지), feature=1(input_dim)]
@@ -127,7 +127,7 @@ print('걸린시간',end)
 print('loss',loss)
 print('acc',acc)
 
-# 걸린시간 13.163007974624634
-# loss 0.13757725059986115
-# acc 0.9333333373069763
+# 걸린시간 15.781590700149536
+# loss 0.11197677254676819
+# acc 1.0
 

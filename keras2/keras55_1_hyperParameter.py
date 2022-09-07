@@ -23,7 +23,7 @@ from keras.utils import to_categorical
 
 
 #2. 모델 
-
+learning_rate = 0.0001
 def build_model(drop=0.5,optimizer ='adam',activation='relu'):
     inputs = Input(shape=(28*28),name='input')
     x = Dense(512,activation=activation,name='hidden1')(inputs)
