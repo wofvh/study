@@ -74,7 +74,7 @@ es = EarlyStopping(monitor='val_loss',patience=20,mode='min',verbose=1)
 reduced_lr = ReduceLROnPlateau(monitor='val_loss',patience=10,mode='auto',verbose=1,factor=0.5)
 
 start = time.time()
-model.fit(x_train,y_train, epochs=100, batch_size=128,validation_split=0.2,callbacks=[es,reduced_lr])
+model.fit(x_train,y_train, epochs=10, batch_size=256,validation_split=0.2,callbacks=[es,reduced_lr])
 end = time.time()-start
 
 loss,acc = model.evaluate(x_test,y_test)
@@ -88,3 +88,22 @@ y_predict = model.predict(x_test)
 print('걸린시간',end)
 print('loss',loss)
 print('acc',acc)
+
+# true
+# 걸린시간 102.19508481025696
+# loss 0.8402001857757568
+# acc 0.7710000276565552
+
+# vgg16.trainable=False
+# 걸린시간 43.2375750541687
+# loss 1.1996043920516968
+# acc 0.583899974822998
+
+# model.trainable = False
+# 걸린시간 42.695852756500244
+# loss 2.679347515106201
+# acc 0.09059999883174896
+
+# False False
+
+
