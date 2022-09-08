@@ -98,7 +98,7 @@ es = EarlyStopping(monitor='val_loss',patience=20,mode='min',verbose=1)
 reduced_lr = ReduceLROnPlateau(monitor='val_loss',patience=10,mode='auto',verbose=1,factor=0.5)
 
 start = time.time()
-model.fit(x_train,y_train, epochs=10, batch_size=256,validation_split=0.2,callbacks=[es,reduced_lr])
+model.fit(x_train,y_train, epochs=100, batch_size=256,validation_split=0.2,callbacks=[es,reduced_lr])
 end = time.time()-start
 
 loss,acc = model.evaluate(x_test,y_test)

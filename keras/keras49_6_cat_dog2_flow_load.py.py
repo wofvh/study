@@ -49,7 +49,7 @@ model.add(Dense(1,activation='sigmoid'))
 #3. 컴파일
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics= ['accuracy'])
-hist = model.fit(x_train, y_train, epochs=5, batch_size=5,verbose=2,
+hist = model.fit(x_train, y_train, epochs=1, batch_size=5,verbose=2,
                  validation_split=0.3)
                   
 
