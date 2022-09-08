@@ -16,7 +16,6 @@ from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 
 #1. 데이터
 
-
 men2 = np.load('d:/study_data/_save/_npy/keras52_1_men1.npy')
 x_train = np.load('d:/study_data/_save/_npy/keras49_9_train_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/keras49_9_train_y.npy')
@@ -42,7 +41,7 @@ models = VGG16(weights='imagenet',include_top=False)
 model =Sequential()
 model.add(models)
 model.add(Flatten())
-model.add(Dense(100,activation='relu'))
+model.add(Dense(2,activation='relu'))
 # model.add(Dropout(0.3))
 # model.add(Dropout(0.3))
 model.add(Dense(1,activation='sigmoid'))
@@ -52,7 +51,7 @@ model.add(Dense(1,activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics= ['accuracy'])
 # model.fit(xy_train[0][0],xy_train[0][1])          # 배치를 최대로 잡으면 가능
-hist = model.fit(x_train,y_train, epochs=50,validation_split=0.3,verbose=2,batch_size=3) 
+hist = model.fit(x_train,y_train, epochs=10,validation_split=0.3,verbose=2) 
                     # steps_per_epoch=32,  # steps_per_epoch=32 데이터를 batch size로 나눈것. 160/5 =32 
                     # validation_data=xy_test,
                     # validation_steps=4)
