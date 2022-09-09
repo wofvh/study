@@ -27,6 +27,20 @@ from keras.applications import VGG16
 # Non-trainable params: 0
 model = VGG16(weights='imagenet',include_top=False,
               input_shape=(32,32,3))
+#####################include_top =False#############################
+# flatten하단이 다없어짐. fully conected layer 하단이 없어지는것. >커스터마이징
+# input_shape(32,32,3)
+# 
+#  input_1 (InputLayer)        [(None, 32, 32, 3)]       0
+
+#  block1_conv1 (Conv2D)       (None, 32, 32, 64)        1792
+#  -----------------------------------------------------------------
+#  block5_pool (MaxPooling2D)  (None, 1, 1, 512)         0
+
+# =================================================================
+# Total params: 14,714,688
+# Trainable params: 14,714,688
+# Non-trainable params: 0
 
 
 model_cnn = Sequential([

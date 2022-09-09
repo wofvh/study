@@ -1,7 +1,7 @@
 x = 10
 y = 10
 w = 0.5
-lr = 100
+lr = 0.001
 epochs = 500
 
 for i in range(epochs):

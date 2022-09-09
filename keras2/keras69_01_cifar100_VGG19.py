@@ -13,28 +13,15 @@
 # NasNetMobile
 # EfficeintNetB0
 
-from gc import callbacks
-from tabnanny import verbose
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras.layers import GlobalAveragePooling2D
-from keras.applications import VGG16,VGG19
-
-print(tf.__version__)
-
-
-from gc import callbacks
-from tabnanny import verbose
-import numpy as np
-from tensorflow.keras.datasets import mnist, cifar100
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPool2D, Input, Dropout
-from tensorflow.keras.layers import GlobalAveragePooling2D
-import tensorflow as tf
-from tensorflow.keras.layers import GlobalAveragePooling2D
-
-print(tf.__version__)
-
+from keras.models import Sequential
+from keras.layers import Dense, Flatten
+from keras.datasets import cifar100
+from sklearn.preprocessing import MinMaxScaler
+from keras.utils import to_categorical
+from keras.optimizers import Adam
+from tensorflow.python.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from sklearn.metrics import accuracy_score
 
 #1. 데이터
 
@@ -69,7 +56,7 @@ models.trainable=False
 
 model =Sequential()
 model.add(models)
-model.add(GlobalAveragePooling2D())
+model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(100,activation='softmax'))
 
@@ -106,28 +93,16 @@ loss,acc = model.evaluate(x_test,y_test)
 
 # print('model.score:',model.score)
 from sklearn.metrics import accuracy_score
+loss = model.evaluate(x_test, y_test)
+y_pred = model.predict(x_test)
+acc = accuracy_score(y_test, np.argmax(y_pred, axis=1))
 
-y_predict = model.predict(x_test)
-# y_predict = np.argmax(model.predict(x_test),axis=1)
-# y_test =np.argmax(y_test)
-print('걸린시간',end)
-print('loss',loss)
-print('acc',acc)
+print('loss: ', loss)
+print('acc: ', acc)
 
-# true
-# 걸린시간 103.6434736251831
-# loss 2.4836130142211914
-# acc 0.359499990940094
-
-# vgg16.trainable=False
-# 걸린시간 43.168771743774414
-# loss 2.63523268699646
-# acc 0.3431999981403351
-
-# model.trainable = False
-# 걸린시간 42.45200252532959
-# loss 4.895547866821289
-# acc 0.014299999922513962
+# 걸린시간 50.16588020324707
+# loss 2.7248916625976562
+# acc 0.3190000057220459
 
 
 

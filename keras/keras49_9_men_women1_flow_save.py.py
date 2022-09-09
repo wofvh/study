@@ -47,7 +47,7 @@ test_datagen =ImageDataGenerator(               # 평가데이터는 증폭하�
 xy = train_datagen.flow_from_directory(
     'D:\study_data\_data\image\men_women',
     target_size=(100,100),                       # 사진을 가져올때 사이즈 조정. 
-    batch_size=10000,
+    batch_size=100,
     class_mode='binary',                         # 흑백이라 binary, 칼라 catagorical
     shuffle=True,
                          # color_mode 디폴트 칼라. 

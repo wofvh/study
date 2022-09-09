@@ -63,7 +63,9 @@ print('predict : ',y_predict[-1])
 # val_accuracy :  0.5
 
 # VGG16
-# loss :  0.0
-# val_loss :  729.1527099609375
+# loss :  9.190500790956513e-12
+# val_loss :  12.051128387451172
 # accuracy :  1.0
 # val_accuracy :  0.5
+# 1/1 [==============================] - 0s 273ms/step - loss: 10.3885 - accuracy: 0.6000
+# predict :  [1.]

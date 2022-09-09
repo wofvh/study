@@ -104,6 +104,6 @@ print('acc',acc)
 # loss 2.679347515106201
 # acc 0.09059999883174896
 
-# False False
+
 
 

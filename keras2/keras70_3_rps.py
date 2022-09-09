@@ -33,7 +33,6 @@ model.add(Dense(100,activation='relu'))
 # model.add(Dropout(0.3))
 model.add(Dense(3,activation='softmax'))
     
-
 #3. 컴파일.
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics= ['accuracy'])

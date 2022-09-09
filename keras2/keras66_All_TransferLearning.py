@@ -119,3 +119,15 @@ for i in list :
 
 print('전체 가중치 갯수:',ad)
 print('훈련가능 가중치 갯수:',ad2)
+
+# 전체 가중치 갯수: ['VGG16', 36, 'VGG19', 42, 'ResNet50', 324, 'ResNet152V2', 820, 'ResNet101', 630,
+#             'ResNet101V2', 548, 'ResNet152', 936, 'InceptionV3', 382, 'InceptionResNetV2', 902,
+#             'DenseNet169', 850, 'MobileNet', 141, 'MobileNetV2', 266, 'MobileNetV3Small', 214,
+#             'MobileNetV3Large', 270, 'NASNetLarge', 1550, 'NASNetMobile', 1130, 'EfficientNetB0',318,
+#             'EfficientNetB1', 446, 'EfficientNetB7', 1044, 'Xception', 240]
+
+# 훈련가능 가중치 갯수: ['VGG16', 36, 'VGG19', 42, 'ResNet50', 218, 'ResNet152V2', 518, 'ResNet101',
+#               422, 'ResNet101V2', 348, 'ResNet152', 626, 'InceptionV3', 194, 'InceptionResNetV2', 494,
+#               'DenseNet169', 512, 'MobileNet', 87, 'MobileNetV2', 162, 'MobileNetV3Small', 146,
+#               'MobileNetV3Large', 178, 'NASNetLarge', 1022, 'NASNetMobile', 746, 'EfficientNetB0', 217,
+#               'EfficientNetB1', 305, 'EfficientNetB7', 715, 'Xception', 160]

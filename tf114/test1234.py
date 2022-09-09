@@ -81,4 +81,9 @@ z = x +y
 print(z)
 print(z.to('cpu',torch.double))
 
+# cuda
+# tensor([1.], device='cuda:0')
+# tensor([-1.6460], device='cuda:0')
+# tensor([-0.6460], device='cuda:0')
+# tensor([-0.6460], dtype=torch.float64)
 

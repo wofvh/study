@@ -14,3 +14,6 @@ y= relu2(x)
 plt.plot(x,y)
 plt.grid()
 plt.show()
+
+
+# elu,selu,reaky relu 

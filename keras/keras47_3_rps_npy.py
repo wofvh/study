@@ -1,11 +1,5 @@
 # https://www.kaggle.com/c/dogs-vs-vats/data
-from matplotlib.pyplot import hist
-import numpy as np
-from keras.preprocessing.image import ImageDataGenerator
-from sklearn import datasets
-from sklearn.preprocessing import MinMaxScaler, StandardScaler  
-from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
-from sklearn.model_selection import train_test_split
+
 # from tensorflow.python.keras.preprocessing.image import 
 # from PIL import Image
 # from IPython.display import Image
@@ -54,7 +48,13 @@ from sklearn.model_selection import train_test_split
 
 # print(x_train.shape, x_train.shape) # (4, 100, 100, 3) (4, 100, 100, 3)
 # print(y_test.shape, y_test.shape)   # (1,) (1,)                                    
-
+from matplotlib.pyplot import hist
+import numpy as np
+from keras.preprocessing.image import ImageDataGenerator
+from sklearn import datasets
+from sklearn.preprocessing import MinMaxScaler, StandardScaler  
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler 
+from sklearn.model_selection import train_test_split
 x_train = np.load('d:/study_data/_save/_npy/keras47_3_train_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/keras47_3_train_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/keras47_3_test_x.npy')

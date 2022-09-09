@@ -18,9 +18,8 @@ model.add(Dense(1))
 # Non-trainable params: 17
 
 model.layers[0].trainable=False     #Dense
-model.layers[1].trainable=False     #Dense_1
-model.layers[2].trainable=False     #Dense_2 
- 
+# model.layers[1].trainable=False     #Dense_1
+# model.layers[2].trainable=False     #Dense_2 
  
 # Total params: 17
 # Trainable params: 11
@@ -28,5 +27,8 @@ model.layers[2].trainable=False     #Dense_2
 
 model.summary()
 print(model.layers)
+# [<keras.layers.core.dense.Dense object at 0x0000026BC0BB8700>,
+# <keras.layers.core.dense.Dense object at 0x0000026BCD269F10>,
+# <keras.layers.core.dense.Dense object at 0x0000026BCD269F70>]
 
 

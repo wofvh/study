@@ -70,3 +70,4 @@ y_predict = model.predict(x_test)
 print('걸린시간',end)
 print('loss',loss)
 print('acc',acc)
+
