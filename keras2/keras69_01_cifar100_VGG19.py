@@ -39,8 +39,8 @@ x_train = x_train.reshape(50000,32,32,3)
 x_test = x_test.reshape(10000,32,32,3)
 
 from keras.utils import to_categorical
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
+# y_train = to_categorical(y_train)
+# y_test = to_categorical(y_test)
 
 import numpy as np
 from sklearn.cluster import k_means
@@ -76,7 +76,7 @@ results = pd.DataFrame(layers,columns=['Layer Type','Layer Name','Layer Trainabl
 print(results)
 
 model.compile(optimizer='adam',metrics=['acc'],
-                loss='categorical_crossentropy')
+                loss='sparse_categorical_crossentropy')
     
 
 import time
