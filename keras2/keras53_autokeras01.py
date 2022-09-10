@@ -23,7 +23,7 @@ end = time.time()
 #4. 예측결과
 y_predict = model.predict(x_test)
 results =model.evaluate(x_test,y_test)
-print('걸린시간:',round(end-start,4))
+# print('걸린시간:',round(end-start,4))
 
 print('결과:',results)
 
