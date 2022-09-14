@@ -28,6 +28,7 @@ cap = cv2.VideoCapture(0)
 
 while cap.isOpened():
     ret, img = cap.read()
+    ##
     if not ret:
         continue
 
